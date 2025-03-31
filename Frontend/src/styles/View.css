@@ -1,0 +1,49 @@
+
+.view-title{
+    margin-top: 2%;
+    text-align: center;
+    font-size: xx-large;
+}
+
+.view-header {
+    justify-content: space-around;
+    margin-top: 2%;
+    border-top: solid;
+    border-color:  #494747;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .view-header1{
+    border-top: solid;
+    border-color:  #979797;
+    margin-bottom: 1%;
+  }
+
+  .notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .note-item {
+    padding: 15px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #575757;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .note-title {
+    font-size: 1.5rem;
+    color: #34f3e9;
+    margin-bottom: 10px;
+  }
+  
+  .note-body {
+    font-size: 1rem;
+    color: #ffffff;
+  }

@@ -1,0 +1,85 @@
+.delete-title{
+    margin-top: 2%;
+    text-align: center;
+    font-size: xx-large;
+}
+
+.delete-header{
+    justify-content: space-around;
+    margin-top: 2%;
+    border-top: solid;
+    border-color:  #494747;
+    display: flex;
+    flex-direction: row;
+}
+
+.delete-header {
+    margin-bottom: 20px;
+  }
+
+  .delete-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Две колонки */
+    gap: 10px; /* Разстояние между елементите */
+    margin-top: 20px;
+  }
+  
+  .delete-item {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #484848;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center; /* Центриране на текста */
+  }
+  
+  .delete-item:hover {
+    background-color: #727272;
+  }
+  
+  .delete-massage {
+    color: #43f178;
+    font-size: large;
+  }
+
+  .delete-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 3%;
+    margin-bottom: 4%;
+    
+  }
+
+     .delete-title1{
+      font-size: x-large;
+      text-align: center;
+     }
+  
+
+  .delete-form{
+    color: rgb(6, 255, 255);
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-color: #ccc;
+    border-radius: 6px;
+    background-color: #494747;
+    width: 30%;
+  }
+
+  .delete-warning{
+    border: solid;
+    border-color: #ccc;
+    border-radius: 6px;
+    background-color: #494747;
+    width: 60%;
+
+  }
+
+  .delete-warningt{
+    margin-left: 2%;
+    margin-top: 1%;
+    font-size: large;
+  }
