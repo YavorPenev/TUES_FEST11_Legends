@@ -65,14 +65,13 @@ function Home() {
           My Account
         </button>
 
-        {/* Calculator Button */}
         <button
           className="relative p-3 rounded-2xl bg-blue-100 hover:scale-110 transition-transform duration-200"
           onClick={CalcMenuChange}
         >
           <img src="/calclogo.png" alt="Calculator" className="h-7" />
         </button>
-        {/* Calculator Menu */}
+
         <div
           ref={calcmenuref}
           className="absolute top-full mt-0 flex-col rounded-b-xl bg-blue-800 border-b-4 border-r-4 border-l-4 border-blue-950 right-[9.5%] p-2 gap-2 w-25 text-center text-blue-100 shadow-lg"
