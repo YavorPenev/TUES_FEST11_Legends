@@ -75,32 +75,33 @@ function Home() {
                 onClick={CalcMenuChange}
               >
                 <img src="/calclogo.png" alt="Calculator" className="h-7" />
-                {/* Calculator Menu */}
-                <div
+                
+              </button>
+              {/* Calculator Menu */}
+              <div
                   ref={calcmenuref}
-                  className="absolute right-0 top-full mt-2 flex-col rounded-xl bg-blue-800 border-4 border-blue-950 p-2 gap-2 w-20 text-center text-blue-100 shadow-lg"
+                  className="absolute top-full mt-0 flex-col rounded-b-xl bg-blue-800 border-b-4 border-r-4 border-l-4 border-blue-950 right-[9.5%] p-2 gap-2 w-25 text-center text-blue-100 shadow-lg"
                   style={{ display: 'none' }}
                 >
                   <Link
                     className="bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200"
                     to="/calcloan"
                   >
-                    Loan Calculator
+                    Loan Calc.
                   </Link>
                   <Link
                     className="bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200"
                     to="/calcstocks"
                   >
-                    Stocks Calculator
+                    Stocks Calc.
                   </Link>
                   <Link
                     className="bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200"
                     to="/calcexch"
                   >
-                    Currency Exchanger
+                    Currency Exch.
                   </Link>
                 </div>
-              </button>
 
               <button
                 onClick={() => navigate('/faq')}
@@ -113,7 +114,7 @@ function Home() {
             {/* AI Menu */}
             <div
               ref={aimenuref}
-              className="flex-col-reverse rounded-t-full fixed right-5 bottom-15 pb-18 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
+              className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
               style={{ display: 'none' }}
             >
               <Link
