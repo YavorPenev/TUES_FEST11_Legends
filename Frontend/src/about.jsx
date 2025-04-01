@@ -1,9 +1,10 @@
 function About() {
     return (
+        
         <div className="p-5">
             <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">About Us</h1>
 
-            {/* Секция за отбора */}
+
             <div className="container mx-auto mb-16 bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
                     src="team.png"
@@ -19,7 +20,6 @@ function About() {
                 </p>
             </div>
 
-            {/* Секция 1 */}
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
                     src="imgqvor.png"
@@ -42,7 +42,7 @@ function About() {
                 </div>
             </div>
 
-            {/* Секция 2 */}
+    
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
                     src="imgvelinov.png"
@@ -65,7 +65,7 @@ function About() {
                 </div>
             </div>
 
-            {/* Секция 3 */}
+      
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
                     src="imgmih.png"
@@ -89,7 +89,7 @@ function About() {
                 </div>
             </div>
 
-            {/* Секция 4 */}
+     
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
                     src="img77.png"
@@ -113,7 +113,7 @@ function About() {
                 </div>
             </div>
 
-            {/* Секция 5 */}
+
             <div className="container mx-auto flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
                     src="imgdein.png"
