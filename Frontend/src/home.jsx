@@ -1,9 +1,13 @@
-
 import { useState, useRef } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import About from './about';
 import FAQ from './FAQ';
 import Law from './law';
+import AdviceAI from './adviceAI';
+import InvestAI from './InvestAI';
+import InvestCalc from './InvCalc';
+import NorCalcs from './NorCalcs';
+import  CurrencyCalc from './CurenCalc';
 import './styles/index.css';
 
 function Home() {
@@ -73,6 +77,7 @@ function Home() {
           <img src="/calclogo.png" alt="Calculator" className="h-7" />
         </button>
 
+        {/* Calculator Menu */}
         <div
           ref={calcmenuref}
           className="absolute top-full mt-0 flex-col rounded-b-xl bg-blue-800 border-b-4 border-r-4 border-l-4 border-blue-950 right-[9.5%] p-2 gap-2 w-25 text-center text-blue-100 shadow-lg"
@@ -109,7 +114,7 @@ function Home() {
         </Link>
       </header>
 
-
+      {/* Основно съдържание */}
       <div className="pt-20">
         <Routes>
           {/* Главна страница */}
@@ -117,7 +122,7 @@ function Home() {
             path="/"
             element={
               <>
- 
+                {/* AI Menu */}
                 <div
                   ref={aimenuref}
                   className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
@@ -139,6 +144,7 @@ function Home() {
                   </Link>
                 </div>
 
+                {/* AI Button */}
                 <button
                   className="w-25 h-25 text-3xl pb-23 font-extrabold rounded-full border-blue-950 border-4 bg-blue-800 text-blue-100 fixed bottom-5 right-5 cursor-pointer hover:scale-110 transition-transform duration-200"
                   onClick={AiMenuChange}
@@ -148,7 +154,7 @@ function Home() {
                   <b>AI</b>
                 </button>
 
-
+                {/* Main Content */}
                 <img
                   className="mt-2 w-full border-b-8 border-b-blue-900"
                   src="/mainpic-above.png"
@@ -169,27 +175,19 @@ function Home() {
                 </div>
 
                 <img className="w-full" src="/mainpic-bottom.png" alt="Footer Visual" />
-
-                <footer className="flex bg-blue-800 bg-gradient-to-b from-transparent to-gray-800 text-blue-100 p-5 justify-evenly flex-wrap items-center">
-        <p>©legends Development Team</p>
-        <Link className='hover:underline' to="/learnmore">Learn More Page</Link>
-        <Link className='hover:underline' to="/articles">Articles Page</Link>
-        <Link className='align-baseline hover:underline' to="/faq">FAQ Page</Link>
-        <div className='flex-col flex-nowrap justify-evenly gap-2 items-center justify-items-center'>
-          <a><img className='aspect-auto h-15' src='/youtube.png'/></a>
-          <p>+39 06 6988 4857</p>
-          <p>yavorpen@gmail.com</p>
-        </div>
-        <Link className='hover:underline' to="/stockai">To Stocks AI Assistant</Link>
-        <Link to="/about" className="hover:underline">About</Link>
-  </footer>
               </>
             }
           />
-          {/*tuk se swyrzwat wsi`ki stranci  */}
+          {/* Други страници */}
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/law" element={<Law />} />
+          <Route path="/advice," element={<AdviceAI />} />
+          <Route path="/invest" element={<InvestAI />} />
+          <Route path="/investcalc" element={<InvestCalc />} />
+          <Route path="/Calculators" element={<NorCalcs />} />
+          <Route path="/CurrencyCalculator" element={< CurrencyCalc />} />
+        
         </Routes>
       </div>
     </>
