@@ -1,31 +1,36 @@
 import { useState, useRef } from 'react';
-import { Link } from 'react-router';
+import { Routes, Route, useNavigate, Link } from 'react-router-dom';
+import About from './about';
+import FAQ from './FAQ';
+import Law from './law';
 import './styles/index.css';
 
 function Home() {
+  const navigate = useNavigate();
   const aimenuref = useRef(null);
   const calcmenuref = useRef(null);
-  const [AiStatus, SetAiStatus] = useState(0);
-  const [CalcStatus, SetCalcStatus] = useState(0);
+  const [AiStatus, SetAiStatus] = useState(false);
+  const [CalcStatus, SetCalcStatus] = useState(false);
 
   const AiMenuChange = () => {
-    SetAiStatus((prevStatus) => (prevStatus + 1) % 2);
+    SetAiStatus(!AiStatus);
     if (aimenuref.current) {
-      aimenuref.current.style.display = AiStatus === 0 ? 'flex' : 'none';
+      aimenuref.current.style.display = AiStatus ? 'none' : 'flex';
     }
   };
 
   const CalcMenuChange = () => {
-    SetCalcStatus((prevStatus) => (prevStatus + 1) % 2);
+    SetCalcStatus(!CalcStatus);
     if (calcmenuref.current) {
-      calcmenuref.current.style.display = CalcStatus === 0 ? 'flex' : 'none';
+      calcmenuref.current.style.display = CalcStatus ? 'none' : 'flex';
     }
   };
 
   return (
     <>
-      <header className="pl-5 pr-5 fixed top-0 left-0 w-full bg-blue-800 border-blue-900 flex justify-between p-4 border-b-4 bg-gradient-to-b from-gray-800 to-transparent items-center">
-        <Link to="/about" className="bg-blue-100 pr-[1%] pl-[1%] pt-[0.4%] pb-[0.4%] rounded-xl hover:scale-110 transition-transform duration-200">
+      {/* тук Хедърът се показва на всички страници */}
+      <header className="pl-5 pr-5 fixed top-0 left-0 w-full bg-blue-800 border-blue-900 flex justify-between p-4 border-b-4 bg-gradient-to-b from-gray-800 to-transparent items-center z-50">
+        <Link to="/" className="bg-blue-100 pr-[1%] pl-[1%] pt-[0.4%] pb-[0.4%] rounded-xl hover:scale-110 transition-transform duration-200">
           <img
             title="SmartBudget"
             alt="logo"
@@ -157,7 +162,7 @@ function Home() {
         </Link>
       </div>
 
-      <img className="w-full" src="/mainpic-bottom.png" />
+          <img className="w-full" src="/mainpic-bottom.png" />
 
       <footer className="flex bg-blue-800 bg-gradient-to-b from-transparent to-gray-800 text-blue-100 p-5 justify-evenly flex-wrap items-center">
         <p>©legends Development Team</p>
