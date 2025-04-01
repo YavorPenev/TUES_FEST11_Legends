@@ -32,10 +32,7 @@ function Home() {
         element={
           <>
             <header className="pl-5 pr-5 fixed top-0 left-0 w-full bg-blue-800 border-blue-900 flex justify-between p-4 border-b-4 bg-gradient-to-b from-gray-800 to-transparent items-center">
-              <Link
-                className="bg-blue-100 pr-[1%] pl-[1%] pt-[0.4%] pb-[0.4%] rounded-xl hover:scale-110 transition-transform duration-200"
-                to="/learnmore"
-              >
+              <Link to="/about" className="bg-blue-100 pr-[1%] pl-[1%] pt-[0.4%] pb-[0.4%] rounded-xl hover:scale-110 transition-transform duration-200">
                 <img
                   title="SmartBudget"
                   alt="logo"
@@ -43,6 +40,7 @@ function Home() {
                   className="max-h-12 aspect-auto"
                 />
               </Link>
+
               <h1 className="text-white font-bold text-3xl ml-4">SmartBudget</h1>
               <button
                 onClick={() => navigate('/articles')}
