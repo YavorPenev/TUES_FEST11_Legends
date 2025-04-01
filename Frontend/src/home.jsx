@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import About from './about';
+import FAQ from './FAQ';
 import './styles/index.css';
 
 function Home() {
@@ -172,7 +173,7 @@ function Home() {
       <Route path="/about" element={<About />} />
       <Route path="/learnmore" element={<div>Learn More Page</div>} />
       <Route path="/articles" element={<div>Articles Page</div>} />
-      <Route path="/faq" element={<div>FAQ Page</div>} />
+      <Route path="/faq" element={<FAQ/>} />
     </Routes>
   );
 }
