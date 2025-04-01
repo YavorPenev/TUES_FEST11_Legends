@@ -40,19 +40,19 @@ function Home() {
         <Link className='bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200' to="/account">My Account</Link>
         
         {/* Calculator Button */}
-        <button className="relative p-3 rounded-2xl bg-blue-100 hover:scale-110 transition-transform duration-200" onClick={CalcMenuChange}>
-          <img src='/calclogo.png' alt="Calculator" className='h-7'/>
-          {/* Calculator Menu */}
-          <div
+        <button className="p-3 rounded-2xl bg-blue-100 hover:scale-110 transition-transform duration-200" onClick={CalcMenuChange}>
+          <img src='/calclogo.png' alt="Calculator" className='h-6'/>
+        </button>
+        {/* Calculator Menu */}
+        <div
             ref={calcmenuref}
-            className='absolute right-0 top-full mt-2 flex-col rounded-xl bg-blue-800 border-4 border-blue-950 p-2 gap-2 w-20 text-center text-blue-100 shadow-lg'
+            className='absolute right-[9.5%] top-full mt-0 flex-col rounded-b-xl bg-blue-800 border-b-4 border-l-4 border-r-4 border-blue-950 p-2 gap-2 w-25 text-center text-blue-100 shadow-lg'
             style={{ display: "none" }}
           >
-            <Link className='bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200' to="/calcloan">Loan Calculator</Link>
-            <Link className='bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200' to="/calcstocks">Stocks Calculator</Link>
-            <Link className='bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200' to="/calcexch">Currency Exchanger</Link>
+            <Link className='bg-blue-100 text-blue-950 rounded-lg pb-2 pt-2 hover:scale-110 transition-transform duration-200' to="/calcloan">Loan Calc.</Link>
+            <Link className='bg-blue-100 text-blue-950 rounded-lg pb-2 pt-2 hover:scale-110 transition-transform duration-200' to="/calcstocks">Stocks Calc.</Link>
+            <Link className='bg-blue-100 text-blue-950 rounded-lg pb-2 pt-2 hover:scale-110 transition-transform duration-200' to="/calcexch">Currency Exch.</Link>
           </div>
-        </button>
 
         <Link className='bg-blue-100 pt-2 pb-2 pr-5 pl-5 rounded-2xl text-2xl font-extrabold text-blue-950 hover:scale-110 transition-transform duration-200' to="/faq">?</Link>
       </header>
