@@ -174,6 +174,7 @@ function Home() {
                   </Link>
                 </div>
 
+                <img className="w-full" src="/mainpic-bottom.png" alt="Footer Visual" />
                 <footer className="flex bg-blue-800 bg-gradient-to-b from-transparent to-gray-800 text-blue-100 p-5 justify-evenly flex-wrap items-center">
         <p>©legends Development Team</p>
         <Link className='hover:underline' to="/learnmore">Learn More Page</Link>
@@ -187,7 +188,6 @@ function Home() {
         <Link className='hover:underline' to="/stockai">To Stocks AI Assistant</Link>
         <Link to="/about" className="hover:underline">About</Link>
   </footer>
-
               </>
             }
           />
@@ -195,7 +195,7 @@ function Home() {
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/law" element={<Law />} />
-          <Route path="/advice," element={<AdviceAI />} />
+          <Route path="/advice, " element={<AdviceAI />} />
           <Route path="/invest" element={<InvestAI />} />
           <Route path="/investcalc" element={<InvestCalc />} />
           <Route path="/Calculators" element={<NorCalcs />} />
