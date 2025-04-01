@@ -6,7 +6,7 @@ function About() {
             {/* Секция за отбора */}
             <div className="container mx-auto mb-16 bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
-                    src="/public/team.png"
+                    src="team.png"
                     alt="Our Team"
                     className="w-full h-64 object-cover rounded-lg shadow-lg mb-5"
                 />
@@ -22,7 +22,7 @@ function About() {
             {/* Секция 1 */}
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
-                    src="/public/imgqvor.png"
+                    src="imgqvor.png"
                     alt="Our Mission"
                     className="w-1/3 h-64 object-cover rounded-lg shadow-lg mr-5"
                 />
@@ -45,7 +45,7 @@ function About() {
             {/* Секция 2 */}
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
-                    src="/public/imgvelinov.png"
+                    src="imgvelinov.png"
                     alt="Our Vision"
                     className="w-1/3 h-64 object-cover rounded-lg shadow-lg mr-5"
                 />
@@ -68,7 +68,7 @@ function About() {
             {/* Секция 3 */}
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
-                    src="/public/imgmih.png"
+                    src="imgmih.png"
                     alt="Our Team"
                     className="w-1/3 h-64 object-cover rounded-lg shadow-lg mr-5"
                 />
@@ -92,7 +92,7 @@ function About() {
             {/* Секция 4 */}
             <div className="container mx-auto mb-16 flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
-                    src="/public/img77.png"
+                    src="img77.png"
                     alt="Our Values"
                     className="w-1/3 h-64 object-cover rounded-lg shadow-lg mr-5"
                 />
@@ -116,7 +116,7 @@ function About() {
             {/* Секция 5 */}
             <div className="container mx-auto flex items-center bg-blue-400 p-5 rounded-lg shadow-lg">
                 <img
-                    src="/public/imgdein.png"
+                    src="imgdein.png"
                     alt="Our Commitment"
                     className="w-1/3 h-64 object-cover rounded-lg shadow-lg mr-5"
                 />
