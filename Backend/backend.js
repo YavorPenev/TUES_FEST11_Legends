@@ -1,19 +1,18 @@
 const express = require("express");
 const mysql = require("mysql2");
 require("dotenv").config();
-const app = express();
 const cors = require("cors");
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const session = require('express-session');
-const path = require('path');
+//const nodemailer = require('nodemailer');
+//const crypto = require('crypto');
+//const session = require('express-session');
+//const path = require('path');
 
 const app = express();
 
 app.use(express.json()); //Middleware за парсване на JSON
 
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: 'securekey', resave: false, saveUninitialized: true }));
+//app.use(session({ secret: 'securekey', resave: false, saveUninitialized: true }));
 
 ////////////////////////////////////////////////////
 
@@ -125,7 +124,7 @@ app.put("/edit", (req, res) => {
 });
 
 //////////////////////////////////////////////////////////////
-const transporter = nodemailer.createTransport({
+/*const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     port: 587,
@@ -190,7 +189,7 @@ app.get('/homepage/:token', (req, res) => { //Proverete go dali e homepage(to ne
     } else {
         res.status(403).send('Достъпът е отказан! Моля, използвайте линка за верификация.');
     }
-});
+});*/
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
