@@ -17,7 +17,7 @@ function Home() {
 
   return (
     <>
-      <header className='pl-5 pr-5 fixed top-0 left-0 w-full bg-blue-800 border-blue-900 flex justify-between p-4 border-b-4 bg-gradient-to-b from-gray-900 to-transparent items-center'>
+      <header className='pl-5 pr-5 fixed top-0 left-0 w-full bg-blue-800 border-blue-900 flex justify-between p-4 border-b-4 bg-gradient-to-b from-gray-800 to-transparent items-center'>
         <Link className='bg-blue-100 pr-[1%] pl-[1%] pt-[0.4%] pb-[0.4%] rounded-xl hover:scale-110 transition-transform duration-200' to="/learnmore">
           <img title='SmartBudget' alt='logo' src='/logo2.png' className='max-h-12 aspect-auto' />
         </Link>
@@ -52,6 +52,10 @@ function Home() {
       </div>
 
       <img className='w-full' src='/mainpic-bottom.png' />
+
+      <footer className='flex bg-blue-800 bg-gradient-to-b from-transparent to-gray-800 text-blue-100 p-5 justify-between'>
+        <p>©legends Development Team</p>
+      </footer>
     </>
   );
 }
