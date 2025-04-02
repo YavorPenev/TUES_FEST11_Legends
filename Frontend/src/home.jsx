@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
+import './styles/index.css';
 import About from './about';
 import FAQ from './FAQ';
 import Law from './law';
@@ -8,7 +9,7 @@ import InvestAI from './InvestAI';
 import InvestCalc from './InvCalc';
 import NorCalcs from './NorCalcs';
 import  CurrencyCalc from './CurenCalc';
-import './styles/index.css';
+
 
 function Home() {
   const navigate = useNavigate();
