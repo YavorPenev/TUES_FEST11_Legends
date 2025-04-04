@@ -133,7 +133,7 @@ app.put("/edit", (req, res) => {
 
 //////////////////////////////////////////////////////////////
 
-async function fetchAllSymbols(){
+async function fetchAllStockSymbols(){
     const exchanges = ["US", "LSE", "HKEX", "BSE", "SSE", "TSE", "KOSDAQ"];
 
 let allsymbols = [];
