@@ -65,5 +65,43 @@ const fetchAPI = async (setArray) => {
     }
   };
   ////////////////////////////////////////////////////////////////////
+  const AdviceAI = async() => {
+    const response = await axios.get("http://localhost:8000/advice")
+    document.getElementById("getAdviceButton").addEventListener("click", async function () {
+      const income = parseInt(document.getElementById("income").value.trim());
+      const expenses = parseInt(document.getElementById("expenses").value.trim());
+      const goals = document.getElementById("goals").value.trim().split(",").map(goal => goal.trim());
 
-export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote };// funkciite koito se wry]at
+      if (!income || !expenses || goals.length === 0) {
+          alert("Please fill in all fields!");
+          return;
+      }
+
+      const userProfile = {
+          income: income,
+          expenses: expenses,
+          goals: goals
+      };
+
+      try {
+          const response = await fetch("/advice", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ userProfile })
+          });
+
+          if (!response.ok) {
+              throw new Error("Failed to fetch advice");
+          }
+
+          const data = await response.json();
+          document.getElementById("investmentAdvice").textContent = data.advice;
+      } catch (error) {
+          console.error("Error:", error);
+          alert("Something went wrong. Check the console.");
+      }
+  });
+  }
+
+  ////////////////////////////////////////////////////////////////////
+export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, AdviceAI };// funkciite koito se wry]at

@@ -1,7 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2");
-require("dotenv").config();
-const cors = require("cors");
+const bcrypt = require("bcrypt");
+const path = require("path");
+const axios = require("axios");
+const nodemailer = require("nodemailer");
+const { OpenAI } = require("openai");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const cors = require('cors');
+const nodemon = require('nodemon');
+const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 const app = express();
 
@@ -121,6 +133,89 @@ app.put("/edit", (req, res) => {
 
 //////////////////////////////////////////////////////////////
 
+async function fetchAllSymbols(){
+    const exchanges = ["US", "LSE", "HKEX", "BSE", "SSE", "TSE", "KOSDAQ"];
+
+let allsymbols = [];
+
+for(const exchange of exchanges){
+    try{
+        const response = await axios.get(`https://finnhub.io/api/v1/stock/symbol?exchange=${exchange}&token=${FINNHUB_API_KEY}`);
+        const symbols = response.data
+        allsymbols = [...allsymbols, ...symbols];
+        console.log(`Fetched ${symbols.length} symbols from exchange: ${exchange}`);
+    }
+    catch(error){
+        console.error(`Error fetching stock symbols for exchange ${exchange}:`, error.message);
+    }
+}
+console.log('Total symbols fetched:', allSymbols.length);
+return allSymbols;
+}
+
+async function getStockData(symbol) {
+    try {
+        const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+        const data = response.data;
+
+        if (!data) throw new Error("No data found for symbol");
+
+        return {
+            symbol: symbol,
+            currentPrice: data.c,
+            high: data.h,
+            low: data.l,
+            open: data.o,
+            close: data.pc,
+        };
+    } catch (err) {
+        console.error("Error fetching stock data:", err.message);
+        return null;
+    }
+}
+async function getInvestmentAdvice(userProfile) {
+    const stockSymbols = await fetchAllStockSymbols(); // Fetch all stock symbols
+
+    const stockDataPromises = stockSymbols.slice(0, 5).map(symbol => getStockData(symbol.symbol)); // Only first 5 symbols
+
+    try {
+        const stockData = await Promise.all(stockDataPromises);
+        const filteredStockData = stockData.filter(data => data !== null);
+
+        const prompt = `
+        Based on the following stock data for the given stocks:
+
+        ${filteredStockData.map(data => `
+        Stock: ${data.symbol}
+        Current Price: ${data.currentPrice}
+        High: ${data.high}
+        Low: ${data.low}
+        Open: ${data.open}
+        Close: ${data.close}`).join("\n")}
+
+        and the user's financial profile:
+        Income: ${userProfile.income}
+        Expenses: ${userProfile.expenses}
+        Goals: ${userProfile.goals.join(", ")}
+
+        Provide a detailed recommendation on which stock(s) would be the best investment for the user.
+        Consider factors such as stock performance, risk, and user preferences.
+        `;
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        return response.choices[0].message.content;
+    } catch (err) {
+        console.error("Error getting investment advice:", err.message);
+        return "An error occurred while processing the investment advice.";
+    }
+}
+
+
+/////////////////////////////////////////////////////////////
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);// port na backend
