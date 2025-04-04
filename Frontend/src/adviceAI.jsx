@@ -13,7 +13,7 @@ function AdviceAI() {
   };
 
   return (
-    <div>
+    <div className="pt-24">
       <div>
         <h2>Get Investment Advice</h2>
         <label htmlFor="income">Enter Your Income ($):</label>

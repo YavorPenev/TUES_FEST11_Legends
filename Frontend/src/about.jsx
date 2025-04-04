@@ -1,8 +1,8 @@
 function About() {
     return (
         
-        <div className="p-5">
-            <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">About Us</h1>
+        <div className="p-5 pt-24">
+            <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">-- About Us --</h1>
 
 
             <div className="container mx-auto mb-16 bg-blue-400 p-5 rounded-lg shadow-lg">

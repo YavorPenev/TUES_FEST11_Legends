@@ -92,4 +92,46 @@ const fetchAPI = async (setArray) => {
     }
   };
   ////////////////////////////////////////////////////////////////////
-export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice };// funkciite koito se wry]at
+
+  const login1 = async (username, password) => {
+    try {
+      const response = await axios.post("http://localhost:8000/login", {
+        username,
+        password,
+      });
+  
+      if (response.status !== 200) {
+        throw new Error(`Login failed: ${response.data.error}`);
+      }
+  
+      return response.data.user;
+    } catch (error) {
+      console.error("Error during login:", error);
+      throw error; 
+    }
+  };
+
+  ////////////////////////////////////////////////////////////////////
+
+  const signup1 = async (username, email, password) => {
+    try {
+      const response = await axios.post("http://localhost:8000/signup", {
+        username,
+        email,
+        password,
+      });
+  
+      if (response.status !== 201) {
+        throw new Error(`Signup failed: ${response.data.error}`);
+      }
+      
+      return response.data.message;
+    } catch (error) {
+      console.error("Error during signup:", error);
+      throw error;
+    }
+  };
+
+  ////////////////////////////////////////////////////////////////////
+
+export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice, login1, signup1 };// funkciite koito se wry]at

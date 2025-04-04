@@ -31,7 +31,7 @@ function CurrencyCalc() {
   };
 
   return (
-    <div className="p-5" style={{ margin: '0 10%' }}>
+    <div className="p-5 pt-24" style={{ margin: '0 10%' }}>
       <h1 className="text-3xl font-bold mb-6 text-center">Currency Calculator</h1>
       {error && <p className="text-red-500 text-center">{error}</p>}
       {rates ? (

@@ -9,7 +9,6 @@ const { OpenAI } = require("openai");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cors = require('cors');
-//const nodemon = require('nodemon');
 const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -51,7 +50,7 @@ db.connect((err) => {
 
 /////////////////////////////////////////////////////
 
-app.post("/add", (req, res) => {
+/*app.post("/add", (req, res) => {
     const { title, body } = req.body;// превеъща в json формат
 
     if (!title || !body) {
@@ -131,7 +130,7 @@ app.put("/edit", (req, res) => {
     });
 });
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////*/
 
 async function fetchAllStockSymbols(){
     const exchanges = ["US", "LSE", "HKEX", "BSE", "SSE", "TSE", "KOSDAQ"];
@@ -231,6 +230,74 @@ app.post("/advice", async (req, res) => {
   });
 
 /////////////////////////////////////////////////////////////
+
+app.post("/signup", async (req, res) => {
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        db.query(sql, [username, email, hashedPassword], (err, result) => {
+            if (err) {
+                if (err.code === "ER_DUP_ENTRY") {
+                    return res.status(400).json({ error: "Username or email already exists" });
+                }
+                console.error("Error inserting user:", err);
+                return res.status(500).json({ error: "Failed to create user" });
+            }
+            res.status(201).json({ message: "User created successfully" });
+        });
+    } catch (error) {
+        console.error("Error during signup:", error.message);
+        res.status(500).json({ error: "Failed to create user" });
+    }
+});
+
+/////////////////////////////////////////////////////////////
+
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+    }
+
+    try {
+        const sql = "SELECT * FROM users WHERE username = ?";
+        db.query(sql, [username], async (err, results) => {
+            if (err) {
+                console.error("Error fetching user:", err);
+                return res.status(500).json({ error: "Failed to fetch user" });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            const user = results[0];
+
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ error: "Invalid credentials" });
+            }
+
+            res.status(200).json({
+                message: "Login successful",
+                user: { id: user.id, username: user.username, email: user.email },
+            });
+        });
+    } catch (error) {
+        console.error("Error during login:", error.message);
+        res.status(500).json({ error: "Failed to log in" });
+    }
+});
+
+///////////////////////////////////////////////////////////////
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);// port na backend

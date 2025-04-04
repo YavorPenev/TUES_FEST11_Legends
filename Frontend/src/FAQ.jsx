@@ -61,7 +61,7 @@ function FAQ() {
   ];
 
   return (
-    <div className="p-5 ">
+    <div className="p-5 pt-24 ">
       <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">
         -- Frequently Asked Questions --
       </h1>
