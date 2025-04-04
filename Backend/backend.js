@@ -9,7 +9,7 @@ const { OpenAI } = require("openai");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cors = require('cors');
-const nodemon = require('nodemon');
+//const nodemon = require('nodemon');
 const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -133,7 +133,7 @@ app.put("/edit", (req, res) => {
 
 //////////////////////////////////////////////////////////////
 
-async function fetchAllSymbols(){
+async function fetchAllStockSymbols(){
     const exchanges = ["US", "LSE", "HKEX", "BSE", "SSE", "TSE", "KOSDAQ"];
 
 let allsymbols = [];
