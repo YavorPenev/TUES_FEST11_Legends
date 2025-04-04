@@ -214,6 +214,16 @@ async function getInvestmentAdvice(userProfile) {
     }
 }
 
+app.post("/advice", async (req, res) => {
+    try {
+        const userProfile = req.body;
+        const advice = await getInvestmentAdvice(userProfile);
+        res.json({ advice });
+    } catch (error) {
+        console.error("Error generating advice:", error.message);
+        res.status(500).json({ error: "Failed to generate investment advice." });
+    }
+});
 
 /////////////////////////////////////////////////////////////
 const PORT = process.env.PORT || 8000;
