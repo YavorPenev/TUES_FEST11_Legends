@@ -196,7 +196,7 @@ function Home() {
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/law" element={<Law />} />
-          <Route path="/advice, " element={<AdviceAI />} />
+          <Route path="/advice" element={<AdviceAI />} />
           <Route path="/invest" element={<InvestAI />} />
           <Route path="/investcalc" element={<InvestCalc />} />
           <Route path="/Calculators" element={<NorCalcs />} />

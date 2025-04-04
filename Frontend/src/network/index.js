@@ -64,15 +64,15 @@ const fetchAPI = async (setArray) => {
     }
   };
   ////////////////////////////////////////////////////////////////////
-  const AdviceAI = async (income, expenses, goals, setAdvice) => {
-    if (!income || !expenses || goals.length === 0) {
-      alert("Please fill in all fields!");
+  const Advice = async (income, expenses, goals, setAdvice) => {
+    if (!income || isNaN(income) || !expenses || isNaN(expenses) || goals.length === 0) {
+      alert("Please fill in all fields with valid values!");
       return;
     }
   
     const userProfile = {
-      income: income,
-      expenses: expenses,
+      income: parseInt(income),
+      expenses: parseInt(expenses),
       goals: goals,
     };
   
@@ -82,14 +82,14 @@ const fetchAPI = async (setArray) => {
       });
   
       if (response.status !== 200) {
-        throw new Error("Failed to fetch advice");
+        throw new Error(`Failed to fetch advice: ${response.statusText}`);
       }
   
       setAdvice(response.data.advice);
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong. Check the console.");
+      alert(`Something went wrong: ${error.message}`);
     }
   };
   ////////////////////////////////////////////////////////////////////
-export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, AdviceAI };// funkciite koito se wry]at
+export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice };// funkciite koito se wry]at

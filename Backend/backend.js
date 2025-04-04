@@ -149,8 +149,8 @@ for(const exchange of exchanges){
         console.error(`Error fetching stock symbols for exchange ${exchange}:`, error.message);
     }
 }
-console.log('Total symbols fetched:', allSymbols.length);
-return allSymbols;
+console.log('Total symbols fetched:', allsymbols.length);
+return allsymbols;
 }
 
 async function getStockData(symbol) {
@@ -215,15 +215,20 @@ async function getInvestmentAdvice(userProfile) {
 }
 
 app.post("/advice", async (req, res) => {
-    try {
-        const userProfile = req.body;
-        const advice = await getInvestmentAdvice(userProfile);
-        res.json({ advice });
-    } catch (error) {
-        console.error("Error generating advice:", error.message);
-        res.status(500).json({ error: "Failed to generate investment advice." });
+    const { income, expenses, goals } = req.body;
+  
+    if (!income || !expenses || !goals) {
+      return res.status(400).json({ error: "Income, expenses, and goals are required" });
     }
-});
+  
+    try {
+      const advice = await getInvestmentAdvice({ income, expenses, goals });
+      res.status(200).json({ advice });
+    } catch (error) {
+      console.error("Error generating advice:", error.message);
+      res.status(500).json({ error: "Failed to generate advice" });
+    }
+  });
 
 /////////////////////////////////////////////////////////////
 const PORT = process.env.PORT || 8000;

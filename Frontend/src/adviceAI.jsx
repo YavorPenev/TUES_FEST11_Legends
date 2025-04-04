@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { AdviceAI } from "./network/index";
+import { Advice } from "./network/index";
 
-function AdviceAIComponent() {
+function AdviceAI() {
   const [income, setIncome] = useState("");
   const [expenses, setExpenses] = useState("");
   const [goals, setGoals] = useState("");
@@ -9,7 +9,7 @@ function AdviceAIComponent() {
 
   const handleGetAdvice = () => {
     const goalsArray = goals.split(",").map((goal) => goal.trim());
-    AdviceAI(parseInt(income), parseInt(expenses), goalsArray, setAdvice);
+    Advice(parseInt(income), parseInt(expenses), goalsArray, setAdvice);
   };
 
   return (
@@ -52,4 +52,4 @@ function AdviceAIComponent() {
   );
 }
 
-export default AdviceAIComponent;
+export default AdviceAI;
