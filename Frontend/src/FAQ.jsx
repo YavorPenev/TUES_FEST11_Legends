@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Header from './header';
+import Footer from './footer';
 
 function FAQ() {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -61,31 +63,35 @@ function FAQ() {
   ];
 
   return (
-    <div className="p-5 pt-24 ">
-      <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">
-        -- Frequently Asked Questions --
-      </h1>
-      {questions.map((item, index) => (
-        <div
-          key={index}
-          className="section mb-5 bg-blue-200 p-4 rounded-lg shadow-lg"
-          style={{  margin: '3%'}} 
-      
-        >
+    <>
+      <Header/>
+      <div className="p-5 pt-24 ">
+        <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">
+          -- Frequently Asked Questions --
+        </h1>
+        {questions.map((item, index) => (
           <div
-            className="question font-bold text-lg cursor-pointer text-left"
-            onClick={() => toggleAnswer(index)}
+            key={index}
+            className="section mb-5 bg-blue-200 p-4 rounded-lg shadow-lg"
+            style={{ margin: '3%' }}
+
           >
-            ⮞ {item.question}
-          </div>
-          {activeIndex === index && (
-            <div className="answer mt-3 text-gray-700 text-left">
-              {item.answer}
+            <div
+              className="question font-bold text-lg cursor-pointer text-left"
+              onClick={() => toggleAnswer(index)}
+            >
+              ⮞ {item.question}
             </div>
-          )}
-        </div>
-      ))}
-    </div>
+            {activeIndex === index && (
+              <div className="answer mt-3 text-gray-700 text-left">
+                {item.answer}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <Footer/>
+    </>
   );
 }
 

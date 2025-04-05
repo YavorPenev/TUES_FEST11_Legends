@@ -1,6 +1,11 @@
+import React from 'react';
+import Header from './header';
+import Footer from './footer';
+
 function About() {
     return (
-        
+        <>
+        <Header/>        
         <div className="p-5 pt-24">
             <h1 className="text-blue-500 text-4xl font-bold mb-10 text-center">-- About Us --</h1>
 
@@ -135,6 +140,8 @@ function About() {
                 </div>
             </div>
         </div>
+        <Footer/>
+        </>
     );
 }
 

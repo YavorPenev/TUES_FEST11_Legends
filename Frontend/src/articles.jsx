@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Header from './header';
+import Footer from './footer';
 
 const articles = [
     {
@@ -92,6 +94,7 @@ const articles = [
   function Articles() {
     return (
       <div className="min-h-screen bg-gray-100 text-gray-800 mt-5">
+        <Header/>
         <header className="text-black text-3xl font-bold p-6 text-center">
           ARTICLES
         </header>
@@ -121,6 +124,7 @@ const articles = [
             ))}
           </div>
         </main>
+        <Footer/>
       </div>
     );
   }

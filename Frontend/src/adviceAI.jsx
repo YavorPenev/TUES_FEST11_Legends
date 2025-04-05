@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Advice } from "./network/index";
+import Header from './header';
+import Footer from './footer';
 
 function AdviceAI() {
   const [income, setIncome] = useState("");
@@ -13,6 +15,8 @@ function AdviceAI() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="pt-24">
       <div>
         <h2>Get Investment Advice</h2>
@@ -49,6 +53,8 @@ function AdviceAI() {
       <h2 id="inv2">Investment Advice:</h2>
       <pre id="investmentAdvice">{advice}</pre>
     </div>
+    <Footer/>
+    </>
   );
 }
 

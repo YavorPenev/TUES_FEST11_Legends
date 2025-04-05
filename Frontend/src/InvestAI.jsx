@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Invest } from "./network/index";
+import Header from './header';
+import Footer from './footer';
 
 function InvestAI() {
   const [symbols, setSymbols] = useState("");
@@ -44,6 +46,7 @@ function InvestAI() {
 
   return (
     <div className="p-5 bg-gray-100 min-h-screen flex flex-col items-center">
+      <Header/>
       <h1 className="text-blue-600 text-4xl font-bold mb-10 text-center">
         -- InvestAI --
       </h1>
@@ -86,6 +89,7 @@ function InvestAI() {
           <p className="text-gray-700 whitespace-pre-line">{result}</p>
         </div>
       )}
+      <Footer/>
     </div>
   );
 }
