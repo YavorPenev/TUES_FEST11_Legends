@@ -119,38 +119,38 @@ function Home() {
         </header>
       )}
 
-    <Routes>
-  <Route
-    path="/"
-    element={
-     <div className="pt-20">
-        <div
-          ref={aimenuref}
-          className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
-          style={{ display: 'none' }}
-        >
-          <Link
-            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/invest"
-          >
-            Investment<br />
-            advisor
-          </Link>
-          <Link
-            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/advice"
-          >
-            Stocks<br />
-            Advisor
-          </Link>
-          <Link
-            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/budgetplaner"
-          >
-            Budget<br />
-            Planner
-          </Link>
-        </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="pt-20">
+              <div
+                ref={aimenuref}
+                className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
+                style={{ display: 'none' }}
+              >
+                <Link
+                  className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+                  to="/invest"
+                >
+                  Investment<br />
+                  advisor
+                </Link>
+                <Link
+                  className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+                  to="/advice"
+                >
+                  Stocks<br />
+                  Advisor
+                </Link>
+                <Link
+                  className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+                  to="/budgetplaner"
+                >
+                  Budget<br />
+                  Planner
+                </Link>
+              </div>
 
 
               <button
@@ -172,7 +172,7 @@ function Home() {
                 <img className="w-[30%]" src="/SmartBudget.png" alt="SmartBudget Logo" />
                 <Link
                   to="/faq"
-                  className="absolute top-[45%] right-4 bg-blue-900 pt-2 pb-2 pr-5 pl-5 rounded-2xl text-2xl font-extrabold text-blue-100 hover:scale-110 transition-transform duration-200"
+                  className="absolute top-[42%] right-4 bg-blue-900 pt-2 pb-2 pr-5 pl-5 rounded-2xl text-2xl font-extrabold text-blue-100 hover:scale-110 transition-transform duration-200"
                 >
                   ?
                 </Link>
@@ -194,20 +194,20 @@ function Home() {
           }
         />
 
-  <Route path="/about" element={<About />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/law" element={<Law />} />
-  <Route path="/advice" element={<AdviceAI />} />
-  <Route path="/invest" element={<InvestAI />} />
-  <Route path="/investcalc" element={<InvestCalc />} />
-  <Route path="/calcloan" element={<LoanCalc />} />
-  <Route path="/CurrencyCalculator" element={<CurrencyCalc />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/signup" element={<SignUP />} />
-  <Route path="/articles" element={<Articles />} />
-  <Route path="/article" element={<ArticleDetails />} />
-</Routes>
-    
+        <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/law" element={<Law />} />
+        <Route path="/advice" element={<AdviceAI />} />
+        <Route path="/invest" element={<InvestAI />} />
+        <Route path="/investcalc" element={<InvestCalc />} />
+        <Route path="/calcloan" element={<LoanCalc />} />
+        <Route path="/CurrencyCalculator" element={<CurrencyCalc />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUP />} />
+        <Route path="/articles" element={<Articles />} />
+        <Route path="/article" element={<ArticleDetails />} />
+      </Routes>
+
 
 
       {!hideHeader && (
@@ -217,7 +217,9 @@ function Home() {
           <Link className="hover:underline" to="/articles">Articles Page</Link>
           <Link className="align-baseline hover:underline" to="/faq">FAQ Page</Link>
           <div className="flex-col flex-nowrap justify-evenly gap-2 items-center justify-items-center">
-            <a><img className="aspect-auto h-15" src="/youtube.png" alt="YouTube" /></a>
+            <a
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              target="_blank"><img className="aspect-auto h-15" src="/youtube.png" alt="YouTube" /></a>
             <p>+39 06 6988 4857</p>
             <p>yavorpen@gmail.com</p>
           </div>
