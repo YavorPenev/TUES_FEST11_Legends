@@ -18,6 +18,9 @@ import ArticleDetails from './ArticleDetails';
 import './styles/index.css';
 
 //tuk se importwa samo home
+// da ne se slusha gorniq komentar, wsi`ko se importwa tuk
+// saamo tuk wsi`ko se importwa i nikude drugade
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
