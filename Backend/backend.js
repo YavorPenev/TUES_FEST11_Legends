@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 ////////////////////////////////////////////////////
 
 const corsOptions = {
-origin:"http://localhost:5173",// wruzka s frontend
+    origin: "http://localhost:5173",// wruzka s frontend
 };
 
 app.use(cors(corsOptions));
@@ -132,24 +132,24 @@ app.put("/edit", (req, res) => {
 
 //////////////////////////////////////////////////////////////*/
 
-async function fetchAllStockSymbols(){
+async function fetchAllStockSymbols() {
     const exchanges = ["US", "LSE", "HKEX", "BSE", "SSE", "TSE", "KOSDAQ"];
 
-let allsymbols = [];
+    let allsymbols = [];
 
-for(const exchange of exchanges){
-    try{
-        const response = await axios.get(`https://finnhub.io/api/v1/stock/symbol?exchange=${exchange}&token=${FINNHUB_API_KEY}`);
-        const symbols = response.data
-        allsymbols = [...allsymbols, ...symbols];
-        console.log(`Fetched ${symbols.length} symbols from exchange: ${exchange}`);
+    for (const exchange of exchanges) {
+        try {
+            const response = await axios.get(`https://finnhub.io/api/v1/stock/symbol?exchange=${exchange}&token=${FINNHUB_API_KEY}`);
+            const symbols = response.data
+            allsymbols = [...allsymbols, ...symbols];
+            console.log(`Fetched ${symbols.length} symbols from exchange: ${exchange}`);
+        }
+        catch (error) {
+            console.error(`Error fetching stock symbols for exchange ${exchange}:`, error.message);
+        }
     }
-    catch(error){
-        console.error(`Error fetching stock symbols for exchange ${exchange}:`, error.message);
-    }
-}
-console.log('Total symbols fetched:', allsymbols.length);
-return allsymbols;
+    console.log('Total symbols fetched:', allsymbols.length);
+    return allsymbols;
 }
 
 async function getStockData(symbol) {
@@ -215,19 +215,19 @@ async function getInvestmentAdvice(userProfile) {
 
 app.post("/advice", async (req, res) => {
     const { income, expenses, goals } = req.body;
-  
+
     if (!income || !expenses || !goals) {
-      return res.status(400).json({ error: "Income, expenses, and goals are required" });
+        return res.status(400).json({ error: "Income, expenses, and goals are required" });
     }
-  
+
     try {
-      const advice = await getInvestmentAdvice({ income, expenses, goals });
-      res.status(200).json({ advice });
+        const advice = await getInvestmentAdvice({ income, expenses, goals });
+        res.status(200).json({ advice });
     } catch (error) {
-      console.error("Error generating advice:", error.message);
-      res.status(500).json({ error: "Failed to generate advice" });
+        console.error("Error generating advice:", error.message);
+        res.status(500).json({ error: "Failed to generate advice" });
     }
-  });
+});
 
 /////////////////////////////////////////////////////////////
 
@@ -297,6 +297,55 @@ app.post("/login", async (req, res) => {
 });
 
 ///////////////////////////////////////////////////////////////
+
+app.post("/invest", async (req, res) => {
+    const { symbols, amount } = req.body;
+
+    if (!symbols || typeof symbols !== "string" || !amount || isNaN(amount)) {
+        return res.status(400).json({ error: "Invalid symbols or amount provided." });
+    }
+
+    const symbolList = symbols.split(",").map(s => s.trim().toUpperCase());
+
+    try {
+        const stockDataPromises = symbolList.map(symbol => getStockData(symbol));
+        const stockData = await Promise.all(stockDataPromises);
+        const validData = stockData.filter(data => data !== null);
+
+        if (validData.length === 0) {
+            return res.status(404).json({ error: "No valid stock data found." });
+        }
+
+        const prompt =
+            `You are a professional financial advisor. The user invested $${amount} in the following stocks:
+
+${validData.map(data => `
+Symbol: ${data.symbol}
+Current Price: ${data.currentPrice}
+High: ${data.high}
+Low: ${data.low}
+Open: ${data.open}
+Close: ${data.close}
+`).join("\n")}
+
+Evaluate how reliable these investments are and whether the user made a wise decision. Suggest if they should hold, sell, or consider alternatives.
+        `;
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        const gptReply = response.choices[0].message.content;
+        res.status(200).json({ invest: gptReply });
+
+    } catch (error) {
+        console.error("Error in /invest:", error.message);
+        res.status(500).json({ error: "Failed to process investment analysis." });
+    }
+});
+
+////////////////////////////////////////////////////////////////
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

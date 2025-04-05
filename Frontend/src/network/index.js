@@ -124,7 +124,7 @@ const fetchAPI = async (setArray) => {
       if (response.status !== 201) {
         throw new Error(`Signup failed: ${response.data.error}`);
       }
-      
+
       return response.data.message;
     } catch (error) {
       console.error("Error during signup:", error);
@@ -134,4 +134,34 @@ const fetchAPI = async (setArray) => {
 
   ////////////////////////////////////////////////////////////////////
 
-export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice, login1, signup1 };// funkciite koito se wry]at
+  const Invest = async (symbols, amount, setInvest) => {
+    if (!symbols||symbols.trim() === "") {
+      alert("Please enter stock symbols.");
+      return;
+    }
+
+    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+      alert("Please enter a valid investment amount.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:8000/invest", {
+        symbols,
+        amount,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`Failed to fetch advice: ${response.statusText}`);
+      }
+
+      setInvest(response.data.invest);
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Something went wrong: ${error.message}`);
+    }
+  };
+
+  ////////////////////////////////////////////////////////////////////
+
+export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice, login1, signup1, Invest };// funkciite koito se wry]at
