@@ -297,63 +297,67 @@
     });
 
     ///////////////////////////////////////////////////////////////
-
     app.post("/invest", async (req, res) => {
-        const { investments } = req.body;
+        const { investments, goals } = req.body;
     
-        if (!Array.isArray(investments) || investments.length === 0) {
-        return res.status(400).json({ error: "Investments are required." });
+        // Validate that investments and goals are provided
+        if (!Array.isArray(investments) || investments.length === 0 || !Array.isArray(goals) || goals.length === 0) {
+            return res.status(400).json({ error: "Investments and goals are required." });
         }
     
         try {
-        // Fetch live data for each stock
-        const stockDataPromises = investments.map(async ({ symbol, amount }) => {
-            const response = await axios.get(
-            `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`
-            );
+            // Fetch live data for each stock
+            const stockDataPromises = investments.map(async ({ symbol, amount }) => {
+                const response = await axios.get(
+                    `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`
+                );
     
-            return {
-            symbol,
-            amount,
-            currentPrice: response.data.c,
-            high: response.data.h,
-            low: response.data.l,
-            open: response.data.o,
-            close: response.data.pc,
-            };
-        });
+                return {
+                    symbol,
+                    amount,
+                    currentPrice: response.data.c,
+                    high: response.data.h,
+                    low: response.data.l,
+                    open: response.data.o,
+                    close: response.data.pc,
+                };
+            });
     
-        const stockData = await Promise.all(stockDataPromises);
+            const stockData = await Promise.all(stockDataPromises);
     
-        // Generate prompt for OpenAI
-        const prompt = `
-    The user has invested in the following stocks:
+            // Generate prompt for OpenAI, including user goals
+            const prompt = `
+            Act as an financial advisor. The user has invested in the following stocks:
     
-    ${stockData.map(stock => `
-    - ${stock.symbol}
-        - Amount Invested: $${stock.amount}
-        - Current Price: $${stock.currentPrice}
-        - High: $${stock.high}
-        - Low: $${stock.low}
-        - Open: $${stock.open}
-        - Previous Close: $${stock.close}
-    `).join("")}
+            ${stockData.map(stock => `
+            - ${stock.symbol}
+                - Amount Invested: $${stock.amount}
+                - Current Price: $${stock.currentPrice}
+                - High: $${stock.high}
+                - Low: $${stock.low}
+                - Open: $${stock.open}
+                - Previous Close: $${stock.close}
+            `).join("")}
     
-    Please analyze these stocks and provide advice:
-        should they hold, sell their investment based on the current price and the history of the stock
-        `;
+            The user's financial goals are:
+            ${goals.join(", ")}
     
-        const gptResponse = await openai.chat.completions.create({
-            model: "gpt-4",
-            messages: [{ role: "user", content: prompt }],
-        });
+            Please analyze these stocks and provide advice:
+            - Should they hold, sell, or buy more based on the current price and the history of the stock?
+            - Consider the user's financial goals when providing the advice.
+            `;
     
-        const answer = gptResponse.choices[0].message.content;
-        res.status(200).json({ invest: answer });
+            const gptResponse = await openai.chat.completions.create({
+                model: "gpt-4",
+                messages: [{ role: "user", content: prompt }],
+            });
+    
+            const answer = gptResponse.choices[0].message.content;
+            res.status(200).json({ invest: answer });
     
         } catch (error) {
-        console.error("Error in /invest:", error.message);
-        res.status(500).json({ error: "Failed to analyze investment." });
+            console.error("Error in /invest:", error.message);
+            res.status(500).json({ error: "Failed to analyze investment." });
         }
     });
     

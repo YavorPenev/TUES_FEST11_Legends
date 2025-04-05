@@ -132,16 +132,22 @@ const fetchAPI = async (setArray) => {
   };
   ///////////////////////////////////////////////////////////////////
 // This function expects an array of investments and a setter function for the result
-const Invest = async (investments, setInvest) => {
+const Invest = async (investments, goals, setInvest) => {
   if (!investments || investments.length === 0) {
     alert("Please enter valid investments.");
     return;
   }
 
+  if (!goals || goals.length === 0) {
+    alert("Please enter valid goals.");
+    return;
+  }
+
   try {
-    // Make a POST request to the backend with the investments data
+    // Make a POST request to the backend with both investments and goals data
     const response = await axios.post("http://localhost:8000/invest", {
-      investments,
+      investments,  // Array of investments like [{ symbol: "AAPL", amount: 500 }]
+      goals         // Array of financial goals like ["Retirement savings", "Short-term gains"]
     });
 
     if (response.status !== 200) {
