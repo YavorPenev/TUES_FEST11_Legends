@@ -11,6 +11,8 @@ import NorCalcs from './NorCalcs';
 import CurrencyCalc from './CurenCalc';
 import Login from './login';
 import SignUP from './signup';
+import Articles from './articles';
+import ArticleDetails from './ArticleDetails';
 
 function Home() {
   const navigate = useNavigate();
@@ -193,6 +195,8 @@ function Home() {
   <Route path="/CurrencyCalculator" element={<CurrencyCalc />} />
   <Route path="/login" element={<Login />} />
   <Route path="/signup" element={<SignUP />} />
+  <Route path="/articles" element={<Articles />} />
+  <Route path="/article" element={<ArticleDetails />} />
 </Routes>
     
 
