@@ -130,21 +130,21 @@ function Home() {
           style={{ display: 'none' }}
         >
           <Link
-            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            className="w-[88%] ml-[6%] mr-[6%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
             to="/invest"
           >
-            Investment<br />
-            advisor
-          </Link>
-          <Link
-            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/advice"
-          >
-            Stocks<br />
+            Stock<br />
             Advisor
           </Link>
           <Link
-            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            className="w-[88%] ml-[6%] mr-[6%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            to="/advice"
+          >
+            Investment<br />
+            Advisor
+          </Link>
+          <Link
+            className="w-[88%] ml-[6%] mr-[6%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
             to="/budgetplaner"
           >
             Budget<br />
