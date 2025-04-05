@@ -232,7 +232,7 @@
 
     /////////////////////////////////////////////////////////////
 
-    app.post("/signup", async (req, res) => {
+   /* app.post("/signup", async (req, res) => {
         const { username, email, password } = req.body;
 
         if (!username || !email || !password) {
@@ -256,7 +256,7 @@
             console.error("Error during signup:", error.message);
             res.status(500).json({ error: "Failed to create user" });
         }
-    });
+    });*/
 
     /////////////////////////////////////////////////////////////
 
