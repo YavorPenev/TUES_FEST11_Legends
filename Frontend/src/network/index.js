@@ -112,7 +112,6 @@ const fetchAPI = async (setArray) => {
   };
 
   ////////////////////////////////////////////////////////////////////
-
   const signup1 = async (username, email, password) => {
     try {
       const response = await axios.post("http://localhost:8000/signup", {
@@ -131,37 +130,37 @@ const fetchAPI = async (setArray) => {
       throw error;
     }
   };
+  ///////////////////////////////////////////////////////////////////
+// This function expects an array of investments and a setter function for the result
+const Invest = async (investments, setInvest) => {
+  if (!investments || investments.length === 0) {
+    alert("Please enter valid investments.");
+    return;
+  }
 
-  ////////////////////////////////////////////////////////////////////
+  try {
+    // Make a POST request to the backend with the investments data
+    const response = await axios.post("http://localhost:8000/invest", {
+      investments,
+    });
 
-  const Invest = async (symbols, amount, setInvest) => {
-    if (!symbols||symbols.trim() === "") {
-      alert("Please enter stock symbols.");
-      return;
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch advice: ${response.statusText}`);
     }
 
-    if (!amount || isNaN(amount) || Number(amount) <= 0) {
-      alert("Please enter a valid investment amount.");
-      return;
+    // Check if the response contains valid data and set it to the state
+    if (response.data && response.data.invest) {
+      setInvest(response.data.invest); // Set the response data to the result state
+    } else {
+      throw new Error("No advice received from the backend.");
     }
+  } catch (error) {
+    console.error("Error:", error);
+    alert(`Something went wrong: ${error.message}`);
+  }
+};
 
-    try {
-      const response = await axios.post("http://localhost:8000/invest", {
-        symbols,
-        amount,
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`Failed to fetch advice: ${response.statusText}`);
-      }
-
-      setInvest(response.data.invest);
-    } catch (error) {
-      console.error("Error:", error);
-      alert(`Something went wrong: ${error.message}`);
-    }
-  };
-
+  
   ////////////////////////////////////////////////////////////////////
 
 export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice, login1, signup1, Invest };// funkciite koito se wry]at
