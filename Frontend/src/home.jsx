@@ -7,7 +7,7 @@ import Law from './law';
 import AdviceAI from './adviceAI';
 import InvestAI from './InvestAI';
 import InvestCalc from './InvCalc';
-import NorCalcs from './NorCalcs';
+import LoanCalc from './loancalc';
 import CurrencyCalc from './CurenCalc';
 import Login from './login';
 import SignUP from './signup';
@@ -189,7 +189,7 @@ function Home() {
   <Route path="/advice" element={<AdviceAI />} />
   <Route path="/invest" element={<InvestAI />} />
   <Route path="/investcalc" element={<InvestCalc />} />
-  <Route path="/Calculators" element={<NorCalcs />} />
+  <Route path="/calcloan" element={<LoanCalc />} />
   <Route path="/CurrencyCalculator" element={<CurrencyCalc />} />
   <Route path="/login" element={<Login />} />
   <Route path="/signup" element={<SignUP />} />
