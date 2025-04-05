@@ -21,7 +21,7 @@ function ArticleDetails() {
         <div className="flex justify-between items-center mb-6 h-16 -mr-10">
           <button
             onClick={() => navigate(-1)}
-            className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition duration-200"
+            className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition duration-200 cursor-pointer"
           >
             ← Back
           </button>
