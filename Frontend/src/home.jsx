@@ -107,7 +107,7 @@ function Home() {
               </Link>
               <Link
                 className="bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200"
-                to="/calcexch"
+                to="/CurrencyCalculator"
                 title="Currency Exchange Calculator"
               >
                 Currency
@@ -117,31 +117,39 @@ function Home() {
         </header>
       )}
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="pt-20 relative"> {/* Add relative positioning to parent div */}
-              <div
-                ref={aimenuref}
-                className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
-                style={{ display: 'none' }}
-              >
-                <Link
-                  className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-                  to="/stockai"
-                >
-                  Stocks<br />
-                  Advisor
-                </Link>
-                <Link
-                  className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-                  to="/budgetai"
-                >
-                  Budget<br />
-                  Planner
-                </Link>
-              </div>
+    <Routes>
+  <Route
+    path="/"
+    element={
+     <div className="pt-20">
+        <div
+          ref={aimenuref}
+          className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
+          style={{ display: 'none' }}
+        >
+          <Link
+            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            to="/invest"
+          >
+            Investment<br />
+            advisor
+          </Link>
+          <Link
+            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            to="/advice"
+          >
+            Stocks<br />
+            Advisor
+          </Link>
+          <Link
+            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            to="/budgetplaner"
+          >
+            Budget<br />
+            Planner
+          </Link>
+        </div>
+
 
               <button
                 className="w-25 h-25 text-3xl pb-23 font-extrabold rounded-full border-blue-950 border-4 bg-blue-800 text-blue-100 fixed bottom-5 right-5 cursor-pointer hover:scale-110 transition-transform duration-200"
