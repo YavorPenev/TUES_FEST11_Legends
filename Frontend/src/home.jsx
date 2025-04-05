@@ -134,6 +134,13 @@ function Home() {
         >
           <Link
             className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
+            to="/invest"
+          >
+            Investment<br />
+            advisor
+          </Link>
+          <Link
+            className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
             to="/advice"
           >
             Stocks<br />
@@ -141,7 +148,7 @@ function Home() {
           </Link>
           <Link
             className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/invest"
+            to="/budgetplaner"
           >
             Budget<br />
             Planner
