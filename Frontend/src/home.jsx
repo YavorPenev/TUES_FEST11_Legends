@@ -126,7 +126,7 @@ function Home() {
             <div className="pt-20">
               <div
                 ref={aimenuref}
-                className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
+                className="z-40 flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
                 style={{ display: 'none' }}
               >
                 <Link
@@ -154,7 +154,7 @@ function Home() {
 
 
               <button
-                className="w-25 h-25 text-3xl pb-23 font-extrabold rounded-full border-blue-950 border-4 bg-blue-800 text-blue-100 fixed bottom-5 right-5 cursor-pointer hover:scale-110 transition-transform duration-200"
+                className="z-50 w-25 h-25 text-3xl pb-23 font-extrabold rounded-full border-blue-950 border-4 bg-blue-800 text-blue-100 fixed bottom-5 right-5 cursor-pointer hover:scale-110 transition-transform duration-200"
                 onClick={AiMenuChange}
               >
                 <sub>^</sub>
