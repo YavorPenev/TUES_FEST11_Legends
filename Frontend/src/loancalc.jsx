@@ -36,7 +36,7 @@ function LoanCalc() {
         Advanced Loan Calculator
       </h1>
 
-      <div className='flex justify-evenly flex-col absolute left-[15%] w-[30%] mr-[10%] h-80 justify-items-center items-center bg-blue-800 rounded-3xl'>
+      <div className='flex justify-evenly flex-col absolute left-[15%] w-[30%] mr-[10%] h-96 justify-items-center items-center bg-blue-800 rounded-3xl'>
         <h2 className='p-4 text-blue-900 font-bold rounded-2xl bg-blue-50 w-[40%] hover:scale-110 transition-transform duration-200'>
           Enter your loan details:
         </h2>
@@ -46,7 +46,7 @@ function LoanCalc() {
           type="number"
           value={loan}
           onChange={(e) => setLoan(e.target.value)}
-          placeholder="Loan Amount..."
+          placeholder="Loan Amount"
         />
 
         <input
@@ -54,7 +54,7 @@ function LoanCalc() {
           type="number"
           value={interest}
           onChange={(e) => setInterest(e.target.value)}
-          placeholder="Yearly Interest Rate..."
+          placeholder="Yearly Interest Rate (%)"
         />
 
         <input
@@ -62,7 +62,7 @@ function LoanCalc() {
           type="number"
           value={months}
           onChange={(e) => setMonths(e.target.value)}
-          placeholder="Months of Payment..."
+          placeholder="Months of Payment"
         />
 
         <button
@@ -73,7 +73,7 @@ function LoanCalc() {
         </button>
       </div>
 
-      <div className='flex justify-evenly flex-col absolute right-[15%] w-[30%] ml-[10%] h-80 justify-items-center items-center bg-blue-800 rounded-3xl'>
+      <div className='pb-10 pt-10 flex justify-evenly flex-col absolute right-[15%] w-[30%] ml-[10%] h-96 justify-items-center items-center bg-blue-800 rounded-3xl'>
         <div className='bg-blue-50 rounded-2xl p-8 text-blue-900 w-[50%] font-bold hover:scale-110 transition-transform duration-200'>
           <h3>Your monthly payment:</h3>
           <h4 className='text-2xl'>{payment}</h4>
