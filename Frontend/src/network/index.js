@@ -1,138 +1,151 @@
-import axios from 'axios'
-
+import axios from 'axios';
 
 const fetchAPI = async (setArray) => {
-    const response = await axios.get("http://localhost:8000/api");
-    setArray(response.data.fruit);
-    console.log(response.data.fruit);
+  const response = await axios.get("http://localhost:8000/api");
+  setArray(response.data.fruit);
+  console.log(response.data.fruit);
+};
+
+//////////////////////////////////////////////////////////////////
+
+const saveNote = async (title, body) => {
+  try {
+    const response = await axios.post("http://localhost:8000/add", {
+      title,
+      body,
+    }, { withCredentials: true }); // <-- Added
+    return response.data;
+  } catch (error) {
+    console.error("Error saving note:", error);
+    throw error;
+  }
+};
+
+/////////////////////////////////////////////////////////////////
+
+const fetchNotes = async () => {
+  try {
+    const response = await axios.get("http://localhost:8000/notes", {
+      withCredentials: true, // <-- Added
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notes:", error);
+    throw error;
+  }
+};
+
+///////////////////////////////////////////////////////////////////
+
+const deleteNote = async (title) => {
+  try {
+    const response = await axios.delete("http://localhost:8000/delete", {
+      data: { title },
+      withCredentials: true, // <-- Added
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    throw error;
+  }
+};
+
+/////////////////////////////////////////////////////////////////////
+
+const editNote = async (oldTitle, newTitle, newBody) => {
+  try {
+    const response = await axios.put("http://localhost:8000/edit", {
+      oldTitle,
+      newTitle,
+      newBody,
+    }, {
+      withCredentials: true, // <-- Added
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error editing note:", error);
+    throw error;
+  }
+};
+
+///////////////////////////////////////////////////////////////////
+
+const Advice = async (income, expenses, goals, setAdvice) => {
+  if (!income || isNaN(income) || !expenses || isNaN(expenses) || goals.length === 0) {
+    alert("Please fill in all fields with valid values!");
+    return;
+  }
+
+  const userProfile = {
+    income: parseInt(income),
+    expenses: parseInt(expenses),
+    goals: goals,
   };
 
-  //////////////////////////////////////////////////////////////
+  try {
+    const response = await axios.post("http://localhost:8000/advice", userProfile, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true, // <-- Added
+    });
 
-  const saveNote = async (title, body) => {
-    try {
-      const response = await axios.post("http://localhost:8000/add", {
-        title,
-        body,
-      });
-      return response.data; // Връща съобщение за успех или грешка
-    } catch (error) {
-      console.error("Error saving note:", error);
-      throw error; // Прехвърля грешката за обработка в Add.jsx
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch advice: ${response.statusText}`);
     }
-  };
 
-  /////////////////////////////////////////////////////////////////
+    setAdvice(response.data.advice);
+  } catch (error) {
+    console.error("Error:", error);
+    alert(`Something went wrong: ${error.message}`);
+  }
+};
 
-  const fetchNotes = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/notes");
-      return response.data; // Връща списъка с бележки
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-      throw error; // Прехвърля грешката за обработка в View.jsx
-    }
-  };
+/////////////////////////////////////////////////////////////////////
 
-  ///////////////////////////////////////////////////////////////////
-  
-  const deleteNote = async (title) => {
-    try {
-      const response = await axios.delete("http://localhost:8000/delete", {
-        data: { title },
-      });
-      return response.data; // Връща съобщение за успех
-    } catch (error) {
-      console.error("Error deleting note:", error);
-      throw error; // Прехвърля грешката за обработка в delete.jsx
-    }
-  };
-  
-  /////////////////////////////////////////////////////////////////////
+const login1 = async (username, password) => {
+  try {
+    const response = await axios.post("http://localhost:8000/login", {
+      username,
+      password,
+    }, {
+      withCredentials: true, // <-- Added
+    });
 
-  const editNote = async (oldTitle, newTitle, newBody) => {
-    try {
-      const response = await axios.put("http://localhost:8000/edit", {
-        oldTitle, // Използваме oldTitle, както е в бекенда
-        newTitle,
-        newBody,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error editing note:", error);
-      throw error;
+    if (response.status !== 200) {
+      throw new Error(`Login failed: ${response.data.error}`);
     }
-  };
-  ////////////////////////////////////////////////////////////////////
-  const Advice = async (income, expenses, goals, setAdvice) => {
-    if (!income || isNaN(income) || !expenses || isNaN(expenses) || goals.length === 0) {
-      alert("Please fill in all fields with valid values!");
-      return;
-    }
-  
-    const userProfile = {
-      income: parseInt(income),
-      expenses: parseInt(expenses),
-      goals: goals,
-    };
-  
-    try {
-      const response = await axios.post("http://localhost:8000/advice", userProfile, {
-        headers: { "Content-Type": "application/json" },
-      });
-  
-      if (response.status !== 200) {
-        throw new Error(`Failed to fetch advice: ${response.statusText}`);
-      }
-  
-      setAdvice(response.data.advice);
-    } catch (error) {
-      console.error("Error:", error);
-      alert(`Something went wrong: ${error.message}`);
-    }
-  };
-  ////////////////////////////////////////////////////////////////////
 
-  const login1 = async (username, password) => {
-    try {
-      const response = await axios.post("http://localhost:8000/login", {
-        username,
-        password,
-      });
-  
-      if (response.status !== 200) {
-        throw new Error(`Login failed: ${response.data.error}`);
-      }
-  
-      return response.data.user;
-    } catch (error) {
-      console.error("Error during login:", error);
-      throw error; 
-    }
-  };
+    return response.data.user;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error;
+  }
+};
 
-  ////////////////////////////////////////////////////////////////////
-  const signup1 = async (username, email, password) => {
-    try {
-      const response = await axios.post("http://localhost:8000/signup", {
-        username,
-        email,
-        password,
-      });
-  
-      if (response.status !== 201) {
-        throw new Error(`Signup failed: ${response.data.error}`);
-      }
-  
-      return response.data.message; // Връща съобщение за успех
-    } catch (error) {
-      console.error("Error during signup:", error);
-      throw error;
+/////////////////////////////////////////////////////////////////////
+
+const signup1 = async (username, email, password) => {
+  try {
+    const response = await axios.post("http://localhost:8000/signup", {
+      username,
+      email,
+      password,
+    }, {
+      withCredentials: true, // <-- Added
+    });
+
+    if (response.status !== 201) {
+      throw new Error(`Signup failed: ${response.data.error}`);
     }
-  };
-  
-  ///////////////////////////////////////////////////////////////////
-// This function expects an array of investments and a setter function for the result
+
+    return response.data.message;
+  } catch (error) {
+    console.error("Error during signup:", error);
+    throw error;
+  }
+};
+
+/////////////////////////////////////////////////////////////////////
+
 const Invest = async (investments, goals, setInvest) => {
   if (!investments || investments.length === 0) {
     alert("Please enter valid investments.");
@@ -145,19 +158,19 @@ const Invest = async (investments, goals, setInvest) => {
   }
 
   try {
-    // Make a POST request to the backend with both investments and goals data
     const response = await axios.post("http://localhost:8000/invest", {
-      investments,  // Array of investments like [{ symbol: "AAPL", amount: 500 }]
-      goals         // Array of financial goals like ["Retirement savings", "Short-term gains"]
+      investments,
+      goals
+    }, {
+      withCredentials: true, // <-- Added
     });
 
     if (response.status !== 200) {
       throw new Error(`Failed to fetch advice: ${response.statusText}`);
     }
 
-    // Check if the response contains valid data and set it to the state
     if (response.data && response.data.invest) {
-      setInvest(response.data.invest); // Set the response data to the result state
+      setInvest(response.data.invest);
     } else {
       throw new Error("No advice received from the backend.");
     }
@@ -167,7 +180,16 @@ const Invest = async (investments, goals, setInvest) => {
   }
 };
 
-  
-  ////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 
-export { fetchAPI, saveNote, fetchNotes, deleteNote, editNote, Advice, login1, signup1, Invest };// funkciite koito se wry]at
+export {
+  fetchAPI,
+  saveNote,
+  fetchNotes,
+  deleteNote,
+  editNote,
+  Advice,
+  login1,
+  signup1,
+  Invest
+};
