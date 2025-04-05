@@ -106,7 +106,7 @@ function Home() {
             </Link>
             <Link
               className="bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform duration-200"
-              to="/calcexch"
+              to="/CurrencyCalculator"
               title="Currency Exchange Calculator"
             >
               Currency
@@ -126,7 +126,7 @@ function Home() {
   <Route
     path="/"
     element={
-      <div className="pt-20">
+     <div className="pt-20">
         <div
           ref={aimenuref}
           className="flex-col-reverse rounded-t-full fixed right-5 bottom-17 pb-15 pt-5 gap-4 text-blue-100 w-25 bg-blue-800 border-4 border-blue-950"
@@ -134,14 +134,14 @@ function Home() {
         >
           <Link
             className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/stockai"
+            to="/advice"
           >
             Stocks<br />
             Advisor
           </Link>
           <Link
             className="w-[80%] ml-[10%] mr-[10%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform duration-200"
-            to="/budgetai"
+            to="/invest"
           >
             Budget<br />
             Planner
