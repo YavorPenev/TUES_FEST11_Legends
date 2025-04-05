@@ -45,10 +45,10 @@ function InvestAI() {
   };
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen flex flex-col items-center">
+    <div className="p-5 bg-gray-100 min-h-screen flex flex-col items-center mt-24">
       <Header/>
-      <h1 className="text-blue-600 text-4xl font-bold mb-10 text-center">
-        -- InvestAI --
+      <h1 className="text-blue-800 text-4xl font-bold mb-10 text-center mt-30">
+         -- Stock Advisor --
       </h1>
 
       <input
@@ -56,7 +56,7 @@ function InvestAI() {
         placeholder="Enter stock symbols (e.g., AAPL, MSFT)"
         value={symbols}
         onChange={(e) => setSymbols(e.target.value)}
-        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
       />
 
       <input
@@ -64,7 +64,7 @@ function InvestAI() {
         placeholder="Enter amount invested per stock (e.g., 5000)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
       />
 
       {/* New input field for goals */}
@@ -73,7 +73,7 @@ function InvestAI() {
         placeholder="Enter your investment goals (e.g., Retirement, Buying a house)"
         value={goals}
         onChange={(e) => setGoals(e.target.value)}
-        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
       />
 
       <button

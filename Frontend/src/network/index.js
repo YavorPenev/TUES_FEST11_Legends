@@ -123,13 +123,14 @@ const fetchAPI = async (setArray) => {
       if (response.status !== 201) {
         throw new Error(`Signup failed: ${response.data.error}`);
       }
-
-      return response.data.message;
+  
+      return response.data.message; // Връща съобщение за успех
     } catch (error) {
       console.error("Error during signup:", error);
       throw error;
     }
   };
+  
   ///////////////////////////////////////////////////////////////////
 // This function expects an array of investments and a setter function for the result
 const Invest = async (investments, goals, setInvest) => {

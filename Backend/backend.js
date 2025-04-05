@@ -5,6 +5,7 @@
     const path = require("path");
     const axios = require("axios");
     const nodemailer = require("nodemailer");
+    const crypto = require("crypto");
     const { OpenAI } = require("openai");
     const session = require("express-session");
     const bodyParser = require("body-parser");
@@ -231,7 +232,7 @@
 
     /////////////////////////////////////////////////////////////
 
-    app.post("/signup", async (req, res) => {
+   /* app.post("/signup", async (req, res) => {
         const { username, email, password } = req.body;
 
         if (!username || !email || !password) {
@@ -255,7 +256,7 @@
             console.error("Error during signup:", error.message);
             res.status(500).json({ error: "Failed to create user" });
         }
-    });
+    });*/
 
     /////////////////////////////////////////////////////////////
 
@@ -364,6 +365,96 @@
 
     ////////////////////////////////////////////////////////////////
 
+    app.use(express.urlencoded({ extended: true }));
+    app.use(session({ secret: 'securekey', resave: false, saveUninitialized: true }));
+    
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.USER_EMAIL,
+            pass: process.env.APP_PASS,
+          },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+    
+    const verificationLinks = {};
+    
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, 'index.html'));
+    });
+
+app.post("/signup", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    db.query(sql, [username, email, hashedPassword], (err, result) => {
+      if (err) {
+        if (err.code === "ER_DUP_ENTRY") {
+          return res.status(400).json({ error: "Username or email already exists" });
+        }
+        console.error("Error inserting user:", err);
+        return res.status(500).json({ error: "Failed to create user" });
+      }
+
+      // Генериране на токен за верификация
+      const token = crypto.randomBytes(20).toString("hex");
+      verificationLinks[token] = email;
+
+      // Съдържание на имейла
+      const htmlContent = `
+        <p>Welcome, ${username}!</p>
+        <p>Click <a href="http://localhost:8000/verify/${token}">here</a> to verify your account and access the site.</p>
+      `;
+
+      // Изпращане на имейл
+      const mailOptions = {
+        from: process.env.USER_EMAIL,
+        to: email,
+        subject: 'Account Verification',
+        html: htmlContent,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error("Error sending email:", err);
+          return res.status(500).json({ error: "Failed to send verification email" });
+        }
+        console.log("Verification email sent:", info.response);
+        res.status(201).json({ message: "User created successfully. Please check your email for verification." });
+      });
+    });
+  } catch (error) {
+    console.error("Error during signup:", error.message);
+    res.status(500).json({ error: "Failed to create user" });
+  }
+});
+
+    
+app.get("/verify/:token", (req, res) => {
+    const token = req.params.token;
+    const email = verificationLinks[token];
+  
+    if (email) {
+      delete verificationLinks[token]; // Изтриване на токена след използване
+      res.redirect("http://localhost:5173"); // Пренасочване към главната страница
+    } else {
+      res.status(403).send("Invalid or expired verification link.");
+    }
+  });
+    
+    /////////////////////////////////////////////////////////////////
+    
     const PORT = process.env.PORT || 8000;
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);// port na backend
