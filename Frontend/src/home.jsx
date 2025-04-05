@@ -52,10 +52,10 @@ function Home() {
               />
             </Link>
 
-            <h1 className="text-white font-bold text-3xl ml-4">SmartBudget</h1>
+            <h1 className="text-white font-bold text-4xl ml-4">SmartBudget</h1>
           </div>
 
-          <div className='flex flex-row justify-end gap-4 items-center'>
+          <div className='flex flex-row justify-end gap-0 items-center'>
             <Link
               to="/articles"
               className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
@@ -64,24 +64,24 @@ function Home() {
             </Link>
             <Link
               to="/login"
-              className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
+              className="bg-blue-100 ml-15 pl-3 pr-3 pt-2 pb-2 rounded-l-2xl  border-r-2 text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
+              className="bg-blue-100 ml-0 pl-3 pr-3 pt-2 pb-2 rounded-r-2xl border-l-2 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
             >
               Sign Up
             </Link>
             <Link
               to="/account"
-              className="bg-blue-100 p-1 rounded-full text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
+              className="bg-blue-100 ml-15 p-1 rounded-full text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
             ><img src='/proficon.png' className='h-13 w-13' />
             </Link>
 
             <button
-              className="relative p-3 rounded-2xl bg-blue-100 hover:scale-110 transition-transform duration-200"
+              className="relative ml-15 p-3 rounded-2xl bg-blue-100 hover:scale-110 transition-transform duration-200"
               onClick={CalcMenuChange}
             >
               <img src="/calclogo.png" alt="Calculator" className="h-9" />
@@ -161,7 +161,7 @@ function Home() {
               </button>
 
               <img
-                className="-mt-20 w-full border-b-8 border-b-blue-900"
+                className="-mt-28 w-full border-b-8 border-b-blue-900"
                 src="/mainpic-above.png"
                 alt="Main Visual"
               />
