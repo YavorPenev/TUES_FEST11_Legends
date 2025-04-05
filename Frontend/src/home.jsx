@@ -219,7 +219,9 @@ function Home() {
           <div className="flex-col flex-nowrap justify-evenly gap-2 items-center justify-items-center">
             <a
               href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-              target="_blank"><img className="aspect-auto h-15" src="/youtube.png" alt="YouTube" /></a>
+              target="_blank"
+              rel="noopener noreferrer"
+              ><img className="aspect-auto h-15" src="/youtube.png" alt="YouTube" /></a>
             <p>+39 06 6988 4857</p>
             <p>yavorpen@gmail.com</p>
           </div>
