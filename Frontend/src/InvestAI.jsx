@@ -4,6 +4,7 @@ import { Invest } from "./network/index";
 function InvestAI() {
   const [symbols, setSymbols] = useState("");
   const [amount, setAmount] = useState("");
+  const [goals, setGoals] = useState("");  // Added state for goals
   const [result, setResult] = useState("");
 
   const handleInvestClick = async () => {
@@ -17,12 +18,28 @@ function InvestAI() {
       return;
     }
 
+    if (!goals || goals.trim().length === 0) {
+      alert("Please enter your investment goals.");
+      return;
+    }
+
     const investments = symbolList.map((symbol) => ({
       symbol,
       amount: parseFloat(amount),
     }));
 
-    await Invest(investments, setResult);
+    const goalList = goals
+      .split(",")
+      .map((g) => g.trim())  // Split goals by commas and trim each goal
+      .filter((g) => g !== "");
+
+    if (goalList.length === 0) {
+      alert("Please enter valid goals.");
+      return;
+    }
+
+    // Call the Invest function with both investments and goals
+    await Invest(investments, goalList, setResult);
   };
 
   return (
@@ -47,6 +64,15 @@ function InvestAI() {
         className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
       />
 
+      {/* New input field for goals */}
+      <input
+        type="text"
+        placeholder="Enter your investment goals (e.g., Retirement, Buying a house)"
+        value={goals}
+        onChange={(e) => setGoals(e.target.value)}
+        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+      />
+
       <button
         onClick={handleInvestClick}
         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -65,5 +91,6 @@ function InvestAI() {
 }
 
 export default InvestAI;
+
 
 
