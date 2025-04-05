@@ -45,52 +45,56 @@ function InvestAI() {
   };
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen flex flex-col items-center mt-24">
-      <Header/>
-      <h1 className="text-blue-800 text-4xl font-bold mb-10 text-center mt-30">
-         -- Stock Advisor --
-      </h1>
+    <>
+      <Header />
+      <div className="p-5 bg-gray-100 min-h-screen flex flex-col items-center mt-24">
 
-      <input
-        type="text"
-        placeholder="Enter stock symbols (e.g., AAPL, MSFT)"
-        value={symbols}
-        onChange={(e) => setSymbols(e.target.value)}
-        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
-      />
+        <h1 className="text-blue-800 text-4xl font-bold mb-10 text-center mt-30">
+          -- Stock Advisor --
+        </h1>
 
-      <input
-        type="number"
-        placeholder="Enter amount invested per stock (e.g., 5000)"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
-      />
+        <input
+          type="text"
+          placeholder="Enter stock symbols (e.g., AAPL, MSFT)"
+          value={symbols}
+          onChange={(e) => setSymbols(e.target.value)}
+          className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
+        />
 
-      {/* New input field for goals */}
-      <input
-        type="text"
-        placeholder="Enter your investment goals (e.g., Retirement, Buying a house)"
-        value={goals}
-        onChange={(e) => setGoals(e.target.value)}
-        className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
-      />
+        <input
+          type="number"
+          placeholder="Enter amount invested per stock (e.g., 5000)"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
+        />
 
-      <button
-        onClick={handleInvestClick}
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-      >
-        Analyze My Investment
-      </button>
+        {/* New input field for goals */}
+        <input
+          type="text"
+          placeholder="Enter your investment goals (e.g., Retirement, Buying a house)"
+          value={goals}
+          onChange={(e) => setGoals(e.target.value)}
+          className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
+        />
 
-      {result && (
-        <div className="mt-10 w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2 text-gray-800">Analysis Result:</h2>
-          <p className="text-gray-700 whitespace-pre-line">{result}</p>
-        </div>
-      )}
-      <Footer/>
-    </div>
+        <button
+          onClick={handleInvestClick}
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Analyze My Investment
+        </button>
+
+        {result && (
+          <div className="mt-10 w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-2 text-gray-800">Analysis Result:</h2>
+            <p className="text-gray-700 whitespace-pre-line">{result}</p>
+          </div>
+        )}
+
+      </div>
+      <Footer />
+    </>
   );
 }
 
