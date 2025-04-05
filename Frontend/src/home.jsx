@@ -76,8 +76,8 @@ function Home() {
             </Link>
             <Link
               to="/account"
-              className="bg-blue-100 p-3 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
-            ><img src='/proficon.png' className='h-9 w-9' />
+              className="bg-blue-100 p-1 rounded-full text-xl text-blue-950 font-bold hover:scale-110 transition-transform duration-200"
+            ><img src='/proficon.png' className='h-13 w-13' />
             </Link>
 
             <button
@@ -161,7 +161,7 @@ function Home() {
               </button>
 
               <img
-                className="-mt-32 w-full border-b-8 border-b-blue-900"
+                className="-mt-20 w-full border-b-8 border-b-blue-900"
                 src="/mainpic-above.png"
                 alt="Main Visual"
               />
@@ -170,7 +170,7 @@ function Home() {
                 <img className="w-[30%]" src="/SmartBudget.png" alt="SmartBudget Logo" />
                 <Link
                   to="/faq"
-                  className="absolute top-[42.1%] right-4 bg-blue-900 pt-2 pb-2 pr-5 pl-5 rounded-2xl text-2xl font-extrabold text-blue-100 hover:scale-110 transition-transform duration-200"
+                  className="absolute top-[45%] right-4 bg-blue-900 pt-2 pb-2 pr-5 pl-5 rounded-2xl text-2xl font-extrabold text-blue-100 hover:scale-110 transition-transform duration-200"
                 >
                   ?
                 </Link>
