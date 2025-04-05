@@ -7,7 +7,22 @@ function InvestAI() {
   const [result, setResult] = useState("");
 
   const handleInvestClick = async () => {
-    await Invest(symbols, amount, setResult);
+    const symbolList = symbols
+      .split(",")
+      .map((s) => s.trim().toUpperCase())
+      .filter((s) => s !== "");
+
+    if (symbolList.length === 0 || !amount || isNaN(amount)) {
+      alert("Please enter valid stock symbols and amount invested.");
+      return;
+    }
+
+    const investments = symbolList.map((symbol) => ({
+      symbol,
+      amount: parseFloat(amount),
+    }));
+
+    await Invest(investments, setResult);
   };
 
   return (
@@ -26,7 +41,7 @@ function InvestAI() {
 
       <input
         type="number"
-        placeholder="Enter amount invested (e.g., 5000)"
+        placeholder="Enter amount invested per stock (e.g., 5000)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
@@ -50,3 +65,5 @@ function InvestAI() {
 }
 
 export default InvestAI;
+
+
