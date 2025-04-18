@@ -44,33 +44,33 @@ function InvestCalc() {
             placeholder="Purchase Price"
             value={buyPrice}
             onChange={(e) => setBuyPrice(e.target.value)}
-            className="border p-2 w-full rounded"
+            className="border p-2 w-full rounded mb-5"
           />
           <input
             type="number"
             placeholder="Current Price"
             value={currentPrice}
             onChange={(e) => setCurrentPrice(e.target.value)}
-            className="border p-2 w-full rounded"
+            className="border p-2 w-full rounded  mb-5"
           />
           <input
             type="number"
             placeholder="Dividend per Stock"
             value={dividend}
             onChange={(e) => setDividend(e.target.value)}
-            className="border p-2 w-full rounded"
+            className="border p-2 w-full rounded  mb-5"
           />
           <input
             type="number"
             placeholder="Number of Stocks"
             value={shares}
             onChange={(e) => setShares(e.target.value)}
-            className="border p-2 w-full rounded"
+            className="border p-2 w-full rounded  mb-6" 
           />
 
           <button
             onClick={calculate}
-            className="bg-green-500 text-white w-full p-2 rounded hover:bg-green-600"
+            className="bg-blue-500 text-white w-full p-2 rounded hover:bg-blue-600"
           >
             Calculate 📈
           </button>

@@ -20,7 +20,6 @@ function Home() {
   };
 
 
-
   //pt-24 - na wsqka stranica za da raboti hedyra
   const hideHeader = location.pathname === '/login' || location.pathname === '/signup';
 
