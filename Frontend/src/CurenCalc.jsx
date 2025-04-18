@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from './header';
-import Footer from './footer';
+import Header from './assets/header';
+import Footer from './assets/footer';
 
 function CurrencyCalc() {
   const [rates, setRates] = useState(null);

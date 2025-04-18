@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Advice } from "./network/index";
-import Header from './header';
-import Footer from './footer';
+import Header from './assets/header';
+import Footer from './assets/footer';
 
 function AdviceAI() {
   const [income, setIncome] = useState("");

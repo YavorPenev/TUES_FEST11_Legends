@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from './header';
-import Footer from './footer';
+import Header from './assets/header';
+import Footer from './assets/footer';
 
 const articles = [
     {

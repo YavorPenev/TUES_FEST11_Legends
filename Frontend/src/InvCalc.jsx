@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
-import Header from './header';
-import Footer from './footer'; 
+import Header from './assets/header';
+import Footer from './assets/footer'; 
 
 function InvestCalc() {
   const [buyPrice, setBuyPrice] = useState("");
