@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Header from './assets/header';
 import Footer from './assets/footer'; 
 import Calculator from './assets/SimpCalc'; 
+import Notes from './assets/notes';
+
 
 function InvestCalc() {
   const [buyPrice, setBuyPrice] = useState("");
@@ -85,6 +87,7 @@ function InvestCalc() {
           </div>
         )}
       </div>
+      <Notes/>
       <Calculator/>
       <Footer /> 
     </>

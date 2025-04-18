@@ -111,6 +111,7 @@ function Law() {
         </a>
       </section>
     </div>
+ 
     <Footer/>
     </>
   );

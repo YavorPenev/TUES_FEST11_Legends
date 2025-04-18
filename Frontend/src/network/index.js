@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-const fetchAPI = async (setArray) => {
+/*const fetchAPI = async (setArray) => {
   const response = await axios.get("http://localhost:8000/api");
   setArray(response.data.fruit);
   console.log(response.data.fruit);
-};
+};*/
 
 //////////////////////////////////////////////////////////////////
 
-const saveNote = async (title, body) => {
+const saveNote = async (title, content) => {
   try {
-    const response = await axios.post("http://localhost:8000/add", {
+    const response = await axios.post("http://localhost:8000/addNote", {
       title,
-      body,
-    }, { withCredentials: true }); // <-- Added
+      content,
+    }, { withCredentials: true }); // Изпращане на сесийни бисквитки
     return response.data;
   } catch (error) {
     console.error("Error saving note:", error);
@@ -25,10 +25,10 @@ const saveNote = async (title, body) => {
 
 const fetchNotes = async () => {
   try {
-    const response = await axios.get("http://localhost:8000/notes", {
-      withCredentials: true, // <-- Added
+    const response = await axios.get("http://localhost:8000/getNotes", {
+      withCredentials: true, // Изпращане на сесийни бисквитки
     });
-    return response.data;
+    return response.data.notes;
   } catch (error) {
     console.error("Error fetching notes:", error);
     throw error;
@@ -37,7 +37,7 @@ const fetchNotes = async () => {
 
 ///////////////////////////////////////////////////////////////////
 
-const deleteNote = async (title) => {
+/*const deleteNote = async (title) => {
   try {
     const response = await axios.delete("http://localhost:8000/delete", {
       data: { title },
@@ -48,11 +48,11 @@ const deleteNote = async (title) => {
     console.error("Error deleting note:", error);
     throw error;
   }
-};
+};*/
 
 /////////////////////////////////////////////////////////////////////
 
-const editNote = async (oldTitle, newTitle, newBody) => {
+/*const editNote = async (oldTitle, newTitle, newBody) => {
   try {
     const response = await axios.put("http://localhost:8000/edit", {
       oldTitle,
@@ -66,7 +66,7 @@ const editNote = async (oldTitle, newTitle, newBody) => {
     console.error("Error editing note:", error);
     throw error;
   }
-};
+};*/
 
 ///////////////////////////////////////////////////////////////////
 
@@ -196,11 +196,12 @@ const Invest = async (investments, goals, setInvest) => {
 /////////////////////////////////////////////////////////////////////
 
 export {
-  fetchAPI,
+  //fetchAPI,
   saveNote,
   fetchNotes,
-  deleteNote,
-  editNote,
+  //deleteNote,
+  //
+  // editNote,
   Advice,
   login1,
   signup1,

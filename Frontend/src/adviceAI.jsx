@@ -3,6 +3,8 @@ import { Advice } from "./network/index";
 import Header from './assets/header';
 import Footer from './assets/footer';
 import Calculator from './assets/SimpCalc'; 
+import Notes from './assets/notes';
+
 
 function AdviceAI() {
   const [income, setIncome] = useState("");
@@ -92,6 +94,7 @@ function AdviceAI() {
         </div>
       </div>
     </div>
+    <Notes/>
     <Calculator/>
     <Footer/>
     </>

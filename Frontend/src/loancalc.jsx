@@ -3,6 +3,8 @@ import Header from './assets/header'
 import Footer from './assets/footer';
 import { Link } from 'react-router';
 import Calculator from './assets/SimpCalc'; 
+import Notes from './assets/notes';
+
 
 function Calc(loan, interest, months) {
   const minterest = interest / 100 / 12;
@@ -37,8 +39,8 @@ function LoanCalc() {
   return (
     <>
       <Header />
-      <div className="mt-36 h-80 mb-80">
-        <h1 className="text-blue-900 text-4xl font-bold mb-10 text-center">
+      <div className="mt-26 h-80 mb-40">
+        <h1 className="text-blue-900 text-4xl font-bold mb-5 text-center">
           Advanced Loan Calculator
         </h1>
 
@@ -90,6 +92,7 @@ function LoanCalc() {
           </div>
         </div>
       </div>
+      <Notes/>
       <Calculator/>
       <Footer /> 
     </>
