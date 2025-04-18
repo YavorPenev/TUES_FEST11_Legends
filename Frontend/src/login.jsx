@@ -8,9 +8,14 @@ function Login() {
   const handleLogin = async () => {
     try {
       const user = await login1(username, password);
-    alert(`Welcome back, ${user.username}!`);
-    window.location.href = "/";
+      alert(`Welcome back, ${user.username}!`);
       console.log("User data:", user);
+  
+      // Съхранете информацията за потребителя в localStorage
+      localStorage.setItem("user", JSON.stringify(user));
+  
+      // Пренасочване към началната страница
+      window.location.href = "/";
     } catch (error) {
       alert(`Login failed: ${error.response?.data?.error || error.message}`);
     }
