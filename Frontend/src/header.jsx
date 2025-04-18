@@ -14,12 +14,24 @@ function Header() {
     }
   }, []);
 
-  const handleLogout = () => {
-    // Изтрийте информацията за потребителя от localStorage
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    window.location.href = "/"; // Пренасочване към началната страница
-  };
+  const handleLogout = async () => {
+    try {
+        const response = await fetch("http://localhost:8000/logout", {
+            method: "POST",
+            credentials: "include", // За изпращане на сесийни бисквитки
+        });
+
+        if (response.ok) {
+            localStorage.removeItem("user"); // Изчистване на потребителя от localStorage
+            setIsLoggedIn(false);
+        } else {
+            alert("Failed to log out. Please try again.");
+        }
+    } catch (error) {
+        console.error("Logout error:", error);
+        alert("An error occurred during logout.");
+    }
+};
 
   const CalcMenuChange = () => {
     SetCalcStatus(!CalcStatus);

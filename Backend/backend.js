@@ -128,6 +128,13 @@ async function getInvestmentAdvice(userProfile) {
         return response.choices[0].message.content;
     } catch (err) {
         console.error("AI error:", err.message);
+
+        if (err.status === 401) {
+            console.error("Access denied. Please log in to access this resource.");
+        } else {
+            console.error("Failed to generate advice.");
+        }
+    
         return "Failed to generate advice.";
     }
 }
@@ -138,7 +145,7 @@ function isAuthenticated(req, res, next) {
     if (req.session && req.session.user) {
         next();
     } else {
-        res.status(401).json({ error: "Unauthorized. Please log in." });
+        res.status(401).json({ error: "Access denied. Please log in to access this resource." });
     }
 }
 
@@ -314,6 +321,21 @@ app.post("/invest", isAuthenticated, async (req, res) => {
         res.status(200).json({ invest: answer });
     } catch (error) {
         res.status(500).json({ error: "Investment analysis failed." });
+    }
+});
+
+app.post("/logout", (req, res) => {
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).json({ error: "Failed to log out" });
+            } else {
+                res.clearCookie("connect.sid"); // Изчистване на сесийната бисквитка
+                return res.status(200).json({ message: "Logout successful" });
+            }
+        });
+    } else {
+        res.status(400).json({ error: "No active session" });
     }
 });
 

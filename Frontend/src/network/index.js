@@ -72,33 +72,39 @@ const editNote = async (oldTitle, newTitle, newBody) => {
 
 const Advice = async (income, expenses, goals, setAdvice) => {
   if (!income || isNaN(income) || !expenses || isNaN(expenses) || goals.length === 0) {
-    alert("Please fill in all fields with valid values!");
-    return;
+      alert("Please fill in all fields with valid values!");
+      return;
   }
 
   const userProfile = {
-    income: parseInt(income),
-    expenses: parseInt(expenses),
-    goals: goals,
+      income: parseInt(income),
+      expenses: parseInt(expenses),
+      goals: goals,
   };
 
   try {
-    const response = await axios.post("http://localhost:8000/advice", userProfile, {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true, // <-- Added
-    });
+      const response = await axios.post("http://localhost:8000/advice", userProfile, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true, // <-- За изпращане на сесийни бисквитки
+      });
 
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch advice: ${response.statusText}`);
-    }
+      if (response.status !== 200) {
+          throw new Error(`Failed to fetch advice: ${response.statusText}`);
+      }
 
-    setAdvice(response.data.advice);
+      setAdvice(response.data.advice);
   } catch (error) {
-    console.error("Error:", error);
-    alert(`Something went wrong: ${error.message}`);
+      console.error("Error:", error);
+
+      // Проверка за статус 401
+      if (error.response && error.response.status === 401) {
+          alert("Access denied. Please log in to access this resource.");
+          window.location.href = "/login"; // Пренасочване към логин страницата
+      } else {
+          alert(`Something went wrong: ${error.message}`);
+      }
   }
 };
-
 /////////////////////////////////////////////////////////////////////
 
 const login1 = async (username, password) => {
@@ -159,25 +165,32 @@ const Invest = async (investments, goals, setInvest) => {
 
   try {
     const response = await axios.post("http://localhost:8000/invest", {
-      investments,
-      goals
+        investments,
+        goals
     }, {
-      withCredentials: true, // <-- Added
+        withCredentials: true, // <-- За изпращане на сесийни бисквитки
     });
 
     if (response.status !== 200) {
-      throw new Error(`Failed to fetch advice: ${response.statusText}`);
+        throw new Error(`Failed to fetch advice: ${response.statusText}`);
     }
 
     if (response.data && response.data.invest) {
-      setInvest(response.data.invest);
+        setInvest(response.data.invest);
     } else {
-      throw new Error("No advice received from the backend.");
+        throw new Error("No advice received from the backend.");
     }
-  } catch (error) {
+} catch (error) {
     console.error("Error:", error);
-    alert(`Something went wrong: ${error.message}`);
-  }
+
+    // Проверка за статус 401
+    if (error.response && error.response.status === 401) {
+        alert("Access denied. Please log in to access this resource.");
+        window.location.href = "/login"; // Пренасочване към логин страницата
+    } else {
+        alert(`Something went wrong: ${error.message}`);
+    }
+}
 };
 
 /////////////////////////////////////////////////////////////////////
