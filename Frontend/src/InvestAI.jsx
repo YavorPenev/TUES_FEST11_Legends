@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Invest } from "./network/index";
-import Header from './header';
-import Footer from './footer';
+import Header from './assets/header';
+import Footer from './assets/footer';
 import { Link } from "react-router";
 
 function InvestAI() {

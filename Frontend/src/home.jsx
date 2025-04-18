@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
 import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
 import './styles/index.css';
-import Header from './header';
-import Footer from './footer';
+import Header from './assets/header';
+import Footer from './assets/footer';
 
 function Home() {
   const navigate = useNavigate();

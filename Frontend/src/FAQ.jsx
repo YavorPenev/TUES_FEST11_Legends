@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './header';
-import Footer from './footer';
+import Header from './assets/header';
+import Footer from './assets/header';
 
 function FAQ() {
   const [activeIndex, setActiveIndex] = useState(null);
