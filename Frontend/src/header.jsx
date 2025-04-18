@@ -112,7 +112,7 @@ function Header() {
           </Link>
           <Link
             className="bg-blue-100 text-blue-950 rounded-lg p-2 hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
-            to="/calcstocks"
+            to="/investcalc"
             title="Stocks Profit Calculator"
           >
             Stocks
