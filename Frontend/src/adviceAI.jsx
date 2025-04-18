@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Advice } from "./network/index";
 import Header from './assets/header';
 import Footer from './assets/footer';
+import Calculator from './assets/SimpCalc'; 
 
 function AdviceAI() {
   const [income, setIncome] = useState("");
@@ -91,6 +92,7 @@ function AdviceAI() {
         </div>
       </div>
     </div>
+    <Calculator/>
     <Footer/>
     </>
   );

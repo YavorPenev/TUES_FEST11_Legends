@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from './assets/header';
 import Footer from './assets/footer';
+import Calculator from './assets/SimpCalc'; 
 
 function CurrencyCalc() {
   const [rates, setRates] = useState(null);
@@ -113,6 +114,7 @@ function CurrencyCalc() {
           <p>Loading...</p>
         )}
       </div>
+      <Calculator/>
       <Footer/>
     </>
   );

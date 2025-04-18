@@ -98,7 +98,7 @@ function Header() {
         )}
 
         <Link
-          to="/account"
+          to="/profile"
           className="bg-blue-100 ml-15 p-1 rounded-full text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
         >
           <img src="/proficon.png" className="h-13 w-13" />

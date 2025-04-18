@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Header from './assets/header';
 import Footer from './assets/footer'; 
+import Calculator from './assets/SimpCalc'; 
 
 function InvestCalc() {
   const [buyPrice, setBuyPrice] = useState("");
@@ -70,7 +71,7 @@ function InvestCalc() {
 
           <button
             onClick={calculate}
-            className="bg-blue-500 text-white w-full p-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white w-full p-2 rounded hover:bg-blue-600 z-index: 9999;"
           >
             Calculate 📈
           </button>
@@ -84,6 +85,7 @@ function InvestCalc() {
           </div>
         )}
       </div>
+      <Calculator/>
       <Footer /> 
     </>
   );

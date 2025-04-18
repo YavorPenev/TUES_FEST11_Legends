@@ -15,6 +15,7 @@ import SignUP from './signup';
 import Articles from './articles';
 import ArticleDetails from './ArticleDetails';
 import Calculator from './assets/SimpCalc';
+import Profile from './profile';
 
 import './styles/index.css';
 
@@ -40,6 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/articles" element={<Articles />} />
         <Route path="/article" element={<ArticleDetails />} />
         <Route path="/SimpCalc" element={<Calculator />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

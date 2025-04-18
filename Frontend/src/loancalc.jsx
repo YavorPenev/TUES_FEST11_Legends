@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './assets/header'
 import Footer from './assets/footer';
 import { Link } from 'react-router';
+import Calculator from './assets/SimpCalc'; 
 
 function Calc(loan, interest, months) {
   const minterest = interest / 100 / 12;
@@ -89,6 +90,7 @@ function LoanCalc() {
           </div>
         </div>
       </div>
+      <Calculator/>
       <Footer /> 
     </>
   );

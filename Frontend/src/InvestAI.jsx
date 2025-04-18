@@ -3,6 +3,7 @@ import { Invest } from "./network/index";
 import Header from './assets/header';
 import Footer from './assets/footer';
 import { Link } from "react-router";
+import Calculator from './assets/SimpCalc'; 
 
 function InvestAI() {
 
@@ -96,7 +97,7 @@ function InvestAI() {
         )}
 
       </div>
-
+      <Calculator/>
       <Footer /> 
     </div>
   );
