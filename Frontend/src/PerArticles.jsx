@@ -12,7 +12,6 @@ function PerArticles() {
         images: [],
     });
 
-    // Зареждане на всички статии
     useEffect(() => {
         const fetchArticles = async () => {
             try {
@@ -26,7 +25,6 @@ function PerArticles() {
         fetchArticles();
     }, []);
 
-    // Добавяне на нова статия
     const handleAddArticle = async () => {
         const formData = new FormData();
         formData.append("title", newArticle.title);
@@ -50,7 +48,6 @@ function PerArticles() {
         }
     };
 
-    // Обработка на качване на снимки
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
         if (files.length > 4) {
@@ -60,7 +57,6 @@ function PerArticles() {
         setNewArticle({ ...newArticle, images: files });
     };
 
-    // Функция за обработка на текста и замяна на >текст< с линкове
     const processBodyText = (text) => {
         return text.replace(/>(.*?)</g, (match, p1) => {
             return `<a href="${p1}" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline">link here</a>`;
@@ -88,7 +84,7 @@ function PerArticles() {
                                 {article.images.map((image, index) => (
                                     <img
                                         key={index}
-                                        src={`http://localhost:8000${image}`} // Зареждане на снимката от сървъра
+                                        src={`http://localhost:8000${image}`} 
                                         alt={`Article ${article.id} Image ${index + 1}`}
                                         className="w-full h-32 object-cover rounded"
                                     />
@@ -100,7 +96,7 @@ function PerArticles() {
 
                 <button
                     onClick={() => setShowForm(true)}
-                    className="fixed  bottom-10 right-10 bg-blue-500 text-white p-4 rounded-2xl shadow-lg text-4xl font-bold flex items-center justify-center"
+                    className="fixed  bottom-10 right-10 bg-blue-900 text-white p-4 rounded-2xl shadow-lg text-4xl font-bold flex items-center justify-center"
                 >
                     +
                 </button>

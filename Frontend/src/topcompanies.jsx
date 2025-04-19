@@ -61,9 +61,9 @@ function TopCompanies() {
     };
 
     return (
-        <div>
+        <div className='flex items-center flex-col mt-10'>
             {/* Header */}
-            <header className="bg-blue-900 text-white text-center py-6 mb-10">
+            <header className="bg-blue-950 text-white text-center py-6 mb-10 max-w-max rounded-xl p-6">
                 <h1 className="text-3xl font-bold">Top Investment Companies</h1>
                 <p className="text-lg mt-2">
                     Discover the most successful investment firms in the world
