@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 function Header() {
   const calcmenuref = useRef(null);
@@ -57,7 +57,7 @@ function Header() {
         <h1 className="text-white font-bold text-4xl ml-4">SmartBudget</h1>
       </div>
 
-      <div className="flex flex-row justify-end gap-4 items-center">
+      <div className="flex flex-row justify-end items-center">
         <Link
           to="/articles"
           className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
@@ -69,13 +69,13 @@ function Header() {
           <>
             <Link
               to="/login"
-              className="bg-blue-100 ml-15 pl-3 pr-2 pt-2 pb-2 rounded-l-2xl  text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 ml-15 pl-3 pr-2 pt-2 pb-2 rounded-l-2xl border-r-2 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="bg-blue-100 ml-0 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl   text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 ml-0 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl border-l-2 border-blue-900  text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Sign Up
             </Link>
