@@ -77,8 +77,8 @@ const Dashboard = () => {
 
 
   return (
-    <div className="bg-gray-100  flex flex-col">
-      <div className="bg-gray-100 h-screen flex flex-col">
+    <div className="bg-gray-100  flex flex-col ">
+      <div className="bg-gray-100 h-screen flex flex-col ">
         <Header />
         <div className="flex h-screen overflow-hidden font-sans mt-24">
           <div className="w-75 bg-gray-800 text-white flex-shrink-0  space-y-6">
@@ -99,23 +99,23 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto bg-gray-100 p-6">
+          <div className="flex-1 overflow-y-auto bg-gray-100 p-6 w-1/2">
             <h2 className="text-xl font-semibold mb-4">Stocks Advisor Diagrams</h2>
             <div className="space-y-6 h-75">
               {diagrams.map((diagram) => (
                 <div key={diagram.id} className="bg-white rounded-xl shadow p-4">
-                  <div className="flex ">
+                  <div className="flex h-5 -mt-3 mb-1">
                     <button
                       onClick={() => deleteDiagram(diagram.id)}
-                      className="text-red-500 hover:underline font-bold text-lg flex-end ml-130"
+                      className="text-red-500 hover:underline font-bold text-lg flex-end ml-150"
                     >
                       ✕
                     </button>
                   </div>
 
 
-                  <div className="bg-black rounded-xl mt-2 p-4 h-[20hv]">
-                    <ResponsiveContainer width="100%" height={100}>
+                  <div className="bg-black rounded-xl mt-2 p-4 ">
+                    <ResponsiveContainer width="100%" height={240}>
                       <LineChart data={diagram.id === 1 ? data1 : data2}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                         <XAxis dataKey="name" stroke="#aaa" />
@@ -131,9 +131,9 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="flex justify-between items-center mt-4">
+                  <div className="flex justify-between items-center mt-4 h-5">
                     <span className="font-semibold text-lg text-center">Diagram {diagram.id}</span>
-                    <button className="bg-blue-600 text-white rounded hover:bg-blue-500 py-2 px-4">
+                    <button className="bg-gray-500 text-white rounded hover:bg-gray-600 py-1 px-2">
                       View
                     </button>
                   </div>
@@ -142,21 +142,23 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <h2 className="text-xl font-semibold mt-8 mb-4 w-1/6">Notes</h2>
-          <div className="space-y-6">
-            {notes.map((note) => (
+          <div className=" bg-gray-800 text-white flex-shrink-0 p-4 h-screen overflow-y-auto w-2/5">
+            <h2 className="text-xl font-semibold mt-2 mb-4 ">Notes</h2>
+            <div className="space-y-6">
+              {notes.map((note) => (
 
-              <div key={note.id} className="bg-blue-100 p-4 rounded-xl shadow w-120"  >
-                <div className="flex justify-between">
-                  <span className="font-medium text-blue-900 text-lg">
-                    {note.title}
-                  </span>
+                <div key={note.id} className="bg-blue-100 p-4 rounded-xl shadow "  >
+                  <div className="flex justify-between">
+                    <span className="font-medium text-blue-900 text-lg">
+                      {note.title}
+                    </span>
+                  </div>
+                  <p className="text-blue-800 text-lg mt-2 border-t border-dashed pt-2">
+                    {note.content}
+                  </p>
                 </div>
-                <p className="text-blue-800 text-lg mt-2 border-t border-dashed pt-2">
-                  {note.content}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
