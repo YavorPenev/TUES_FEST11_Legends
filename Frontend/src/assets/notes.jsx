@@ -1,6 +1,7 @@
 import { saveNote, fetchNotes } from "../network/index";
 import React, { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
+import { Link } from "react-router";
 
 function Notes() {
   const [isVisible, setIsVisible] = useState(false);
@@ -8,6 +9,7 @@ function Notes() {
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]); 
   const nodeRef = useRef(null);
+
 
   useEffect(() => {
     const loadNotes = async () => {
@@ -85,12 +87,22 @@ function Notes() {
               >
                 Close
               </button>
+              <div>
+              <Link
+                to="/profile"
+                className="bg-green-500 text-white px-4 mr-4 py-2 rounded-lg hover:bg-green-600 font-bold"
+              >
+                
+                View notes
+              </Link>
+                
               <button
                 onClick={handleSave}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
               >
                 Save
               </button>
+              </div>
            
             </div>
           </div>
