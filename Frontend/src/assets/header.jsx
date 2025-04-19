@@ -64,7 +64,7 @@ function Header() {
         >
           Articles
         </Link>
-\
+
         {!isLoggedIn && (
           <>
             <Link
