@@ -23,10 +23,10 @@ const saveNote = async (title, content) => {
 
 /////////////////////////////////////////////////////////////////
 
-const fetchNotes = async () => {
+export const fetchNotes = async () => {
   try {
     const response = await axios.get("http://localhost:8000/getNotes", {
-      withCredentials: true, //za biskwitki
+      withCredentials: true, // biskwitki
     });
     return response.data.notes;
   } catch (error) {
@@ -198,7 +198,6 @@ const Invest = async (investments, goals, setInvest) => {
 export {
   //fetchAPI,
   saveNote,
-  fetchNotes,
   //deleteNote,
   //
   // editNote,

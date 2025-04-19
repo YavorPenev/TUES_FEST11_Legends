@@ -348,17 +348,17 @@ app.post("/addNote", isAuthenticated, (req, res) => {
 });
 
 app.get("/getNotes", isAuthenticated, (req, res) => {
-    const userId = req.session.user.id; // Вземете ID на текущия потребител
-
+    const userId = req.session.user.id; 
+  
     const sql = "SELECT id, title, content, created_at FROM notes WHERE user_id = ?";
     db.query(sql, [userId], (err, results) => {
-        if (err) {
-            console.error("Error fetching notes:", err);
-            return res.status(500).json({ error: "Failed to fetch notes" });
-        }
-        res.status(200).json({ notes: results });
+      if (err) {
+        console.error("Error fetching notes:", err);
+        return res.status(500).json({ error: "Failed to fetch notes" });
+      }
+      res.status(200).json({ notes: results });
     });
-});
+  });
 
 app.post("/logout", (req, res) => {
     if (req.session) {

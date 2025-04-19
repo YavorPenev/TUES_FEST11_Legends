@@ -97,16 +97,6 @@ function Notes() {
         </Draggable>
       )}
 
-      
-      <div className="mt-4">
-        {notes.map((note) => (
-          <div key={note.id} className="mb-4 p-4 border border-blue-300 rounded bg-blue-50">
-            <h3 className="font-bold text-lg text-blue-900">{note.title}</h3>
-            <p className="text-blue-800">{note.content}</p>
-            <p className="text-sm text-gray-500">{new Date(note.created_at).toLocaleString()}</p>
-          </div>
-        ))}
-      </div>
     </>
   );
 }

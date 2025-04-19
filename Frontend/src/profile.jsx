@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./assets/header";
 import Footer from "./assets/footer";
+import { fetchNotes } from "./network/index";
 import {
   LineChart,
   Line,
@@ -56,13 +57,24 @@ const Dashboard = () => {
     { id: 12, title: "Note 12", text: "text 12." },
   ]);
 
+  useEffect(() => {
+    const loadNotes = async () => {
+      try {
+        const data = await fetchNotes();
+        console.log("Fetched notes:", data); 
+        setNotes(data);
+      } catch (error) {
+        console.error("Failed to fetch notes:", error);
+      }
+    };
+
+    loadNotes();
+  }, []);
+
   const deleteDiagram = (id) => {
     setDiagrams((prev) => prev.filter((d) => d.id !== id));
   };
 
-  const deleteNote = (id) => {
-    setNotes((prev) => prev.filter((n) => n.id !== id));
-  };
 
   return (
     <div className="bg-gray-100 h-screen flex flex-col">
@@ -96,7 +108,7 @@ const Dashboard = () => {
                   </button>
                 </div>
 
-                {/* Диаграмата */}
+       
                 <div className="bg-black rounded-xl mt-2 p-4 h-[20hv]">
                   <ResponsiveContainer width="100%" height={100}>
                     <LineChart data={diagram.id === 1 ? data1 : data2}>
@@ -125,21 +137,21 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="w-[45%] overflow-y-auto bg-blue-50 p-6 border-l border-gray-300">
-          <h2 className="text-xl font-semibold mb-4 text-blue-900">Notes</h2>
-          <div className="space-y-6">
-            {notes.map((note) => (
-              <div key={note.id} className="bg-blue-100 p-4 rounded-xl shadow">
-                <div className="flex justify-between">
-                  <span className="font-medium text-blue-900 text-lg">{note.title}</span>
-                  <button onClick={() => deleteNote(note.id)} className="text-red-500 hover:underline font-bold text-lg">
-                    ✕
-                  </button>
-                </div>
-                <p className="text-blue-800 text-lg mt-2 border-t border-dashed pt-2">{note.text}</p>
+        <h2 className="text-xl font-semibold mt-8 mb-4">Notes</h2>
+        <div className="space-y-6">
+          {notes.map((note) => (
+
+            <div key={note.id} className="bg-blue-100 p-4 rounded-xl shadow w-120"  >
+              <div className="flex justify-between">
+                <span className="font-medium text-blue-900 text-lg">
+                  {note.title}
+                </span>
               </div>
-            ))}
-          </div>
+              <p className="text-blue-800 text-lg mt-2 border-t border-dashed pt-2">
+                {note.content}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
       <Footer />
