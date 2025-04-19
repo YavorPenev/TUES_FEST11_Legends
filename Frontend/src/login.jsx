@@ -11,10 +11,8 @@ function Login() {
       alert(`Welcome back, ${user.username}!`);
       console.log("User data:", user);
   
-      // Съхранете информацията за потребителя в localStorage
       localStorage.setItem("user", JSON.stringify(user));
   
-      // Пренасочване към началната страница
       window.location.href = "/";
     } catch (error) {
       alert(`Login failed: ${error.response?.data?.error || error.message}`);

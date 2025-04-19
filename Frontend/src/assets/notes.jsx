@@ -1,4 +1,4 @@
-import { saveNote, fetchNotes } from "../network/index"; // Импортиране на функциите
+import { saveNote, fetchNotes } from "../network/index";
 import React, { useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 
@@ -6,7 +6,7 @@ function Notes() {
   const [isVisible, setIsVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [notes, setNotes] = useState([]); // Състояние за бележките
+  const [notes, setNotes] = useState([]); 
   const nodeRef = useRef(null);
 
   useEffect(() => {
@@ -35,17 +35,16 @@ function Notes() {
       setContent("");
       setIsVisible(false);
 
-      // Обновяване на бележките след запазване
       const data = await fetchNotes();
       setNotes(data);
     } catch (error) {
-      alert("Failed to save note. Please try again.");
+      alert("Access denied. Please log in to access this resource.");
     }
   };
 
   return (
     <>
-      {/* Бутон Take Note */}
+   
       {!isVisible && (
         <button
           onClick={() => setIsVisible(true)}
@@ -55,7 +54,7 @@ function Notes() {
         </button>
       )}
 
-      {/* Драгабъл прозорец */}
+
       {isVisible && (
         <Draggable nodeRef={nodeRef}>
           <div
@@ -81,7 +80,7 @@ function Notes() {
             </div>
             <div className="flex justify-between">
             <button
-                onClick={() => setIsVisible(false)} // Скриване на прозореца
+                onClick={() => setIsVisible(false)} 
                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-bold"
               >
                 Close
@@ -98,7 +97,7 @@ function Notes() {
         </Draggable>
       )}
 
-      {/* Списък с бележки */}
+      
       <div className="mt-4">
         {notes.map((note) => (
           <div key={note.id} className="mb-4 p-4 border border-blue-300 rounded bg-blue-50">

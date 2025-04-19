@@ -13,7 +13,7 @@ const saveNote = async (title, content) => {
     const response = await axios.post("http://localhost:8000/addNote", {
       title,
       content,
-    }, { withCredentials: true }); // Изпращане на сесийни бисквитки
+    }, { withCredentials: true });//za biskwitki
     return response.data;
   } catch (error) {
     console.error("Error saving note:", error);
@@ -26,7 +26,7 @@ const saveNote = async (title, content) => {
 const fetchNotes = async () => {
   try {
     const response = await axios.get("http://localhost:8000/getNotes", {
-      withCredentials: true, // Изпращане на сесийни бисквитки
+      withCredentials: true, //za biskwitki
     });
     return response.data.notes;
   } catch (error) {
@@ -96,7 +96,7 @@ const Advice = async (income, expenses, goals, setAdvice) => {
   } catch (error) {
       console.error("Error:", error);
 
-      // Проверка за статус 401
+ 
       if (error.response && error.response.status === 401) {
           alert("Access denied. Please log in to access this resource.");
           window.location.href = "/login"; // Пренасочване към логин страницата
@@ -113,7 +113,7 @@ const login1 = async (username, password) => {
       username,
       password,
     }, {
-      withCredentials: true, // <-- Added
+      withCredentials: true,
     });
 
     if (response.status !== 200) {
@@ -136,7 +136,7 @@ const signup1 = async (username, email, password) => {
       email,
       password,
     }, {
-      withCredentials: true, // <-- Added
+      withCredentials: true, 
     });
 
     if (response.status !== 201) {
@@ -168,7 +168,7 @@ const Invest = async (investments, goals, setInvest) => {
         investments,
         goals
     }, {
-        withCredentials: true, // <-- За изпращане на сесийни бисквитки
+        withCredentials: true, // za biskwitki
     });
 
     if (response.status !== 200) {
@@ -183,10 +183,10 @@ const Invest = async (investments, goals, setInvest) => {
 } catch (error) {
     console.error("Error:", error);
 
-    // Проверка за статус 401
+
     if (error.response && error.response.status === 401) {
         alert("Access denied. Please log in to access this resource.");
-        window.location.href = "/login"; // Пренасочване към логин страницата
+        window.location.href = "/login";
     } else {
         alert(`Something went wrong: ${error.message}`);
     }

@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import Draggable from "react-draggable"; // Импортиране на Draggable
+import Draggable from "react-draggable"; 
 
 function Calculator() {
-  const [isVisible, setIsVisible] = useState(false); // Състояние за видимост на калкулатора
+  const [isVisible, setIsVisible] = useState(false); 
   const [input, setInput] = useState("");
-  const nodeRef = useRef(null); // Създаваме референция за Draggable
+  const nodeRef = useRef(null); //Draggable
 
   const handleClick = (value) => setInput((prev) => prev + value);
   const handleClear = () => setInput("");
@@ -28,21 +28,21 @@ function Calculator() {
 
   return (
     <>
-      {/* Бутон за показване на калкулатора със снимка */}
+ 
       {!isVisible && (
         <button
-          onClick={() => setIsVisible(true)} // Показване на калкулатора
+          onClick={() => setIsVisible(true)} 
           className="fixed bottom-4 left-4 text-white  rounded-lg shadow-lg hover:bg-blue-300"
         >
           <img
-            src="/calc.png" // Път към снимката в папката public
+            src="/calc.png" 
             alt="Calculator"
-            className="h-14 w-14" // Размер на снимката
+            className="h-14 w-14"
           />
         </button>
       )}
 
-      {/* Калкулаторът */}
+
       {isVisible && (
         <Draggable nodeRef={nodeRef}>
           <div
@@ -179,9 +179,9 @@ function Calculator() {
               </button>
             </div>
 
-            {/* Бутон за затваряне на калкулатора */}
+         
             <button
-              onClick={() => setIsVisible(false)} // Скриване на калкулатора
+              onClick={() => setIsVisible(false)} 
               className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
             >
               Close

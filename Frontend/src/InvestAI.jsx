@@ -12,7 +12,7 @@ function InvestAI() {
   
   const [symbols, setSymbols] = useState("");
   const [amount, setAmount] = useState("");
-  const [goals, setGoals] = useState("");  // Added state for goals
+  const [goals, setGoals] = useState("");  
   const [result, setResult] = useState("");
 
   const handleInvestClick = async () => {
@@ -38,7 +38,7 @@ function InvestAI() {
 
     const goalList = goals
       .split(",")
-      .map((g) => g.trim())  // Split goals by commas and trim each goal
+      .map((g) => g.trim()) 
       .filter((g) => g !== "");
 
     if (goalList.length === 0) {
@@ -46,7 +46,7 @@ function InvestAI() {
       return;
     }
 
-    // Call the Invest function with both investments and goals
+ 
     await Invest(investments, goalList, setResult);
   };
 
@@ -75,7 +75,7 @@ function InvestAI() {
           className="w-full max-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-6"
         />
 
-        {/* New input field for goals */}
+
         <input
           type="text"
           placeholder="Enter your investment goals (e.g., Retirement, Buying a house)"
