@@ -174,7 +174,7 @@ function Home() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="h-[20%] bg-blue-900 text-blue-100 flex items-center justify-center text-center p-4 rounded-b-xl">
+                <div className="h-[20%] bg-blue-950 text-blue-100 flex items-center justify-center text-center p-4 rounded-b-xl">
                   {slide.caption}
                 </div>
               </div>
@@ -182,13 +182,13 @@ function Home() {
           </div>
           <button
             onClick={() => changeSlide(-1)}
-            className="absolute rounded top-1/2 left-4 transform -translate-y-1/2 bg-blue-900 text-blue-100 text-3xl px-3 py-2 z-10 hover:scale-115 transition-transform hover:duration-200"
+            className="absolute rounded top-1/2 left-4 transform -translate-y-1/2 bg-blue-950 text-blue-100 text-3xl px-3 py-2 z-10 hover:scale-115 transition-transform hover:duration-200"
           >
             &#10094;
           </button>
           <button
             onClick={() => changeSlide(1)}
-            className="absolute rounded top-1/2 right-4 transform -translate-y-1/2 bg-blue-900 text-blue-100 text-3xl px-3 py-2 z-10 hover:scale-115 transition-transform hover:duration-200"
+            className="absolute rounded top-1/2 right-4 transform -translate-y-1/2 bg-blue-950 text-blue-100 text-3xl px-3 py-2 z-10 hover:scale-115 transition-transform hover:duration-200"
           >
             &#10095;
           </button>
@@ -199,7 +199,7 @@ function Home() {
           {companies.map((company, index) => (
             <div
               key={index}
-              className="bg-blue-900 text-blue-100 p-6 rounded-lg shadow text-center hover:scale-105 transition-transform hover:duration-200"
+              className="bg-blue-950 text-blue-100 p-6 rounded-lg shadow text-center hover:scale-105 transition-transform hover:duration-200"
             >
               <h2 className="text-xl font-semibold">
                 {company.name}
@@ -209,7 +209,7 @@ function Home() {
                 href={company.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-900 inline-block px-4 py-2 bg-blue-100 rounded hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+                className="text-blue-950 inline-block px-4 py-2 bg-blue-100 rounded hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
               >
                 Learn More
               </a>
