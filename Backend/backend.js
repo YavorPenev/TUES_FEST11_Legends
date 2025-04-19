@@ -11,6 +11,8 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const multer = require("multer");
+const fs = require("fs");
+
 
 const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -374,19 +376,20 @@ app.get("/getNotes", isAuthenticated, (req, res) => {
 
   app.post("/addArticle", isAuthenticated, upload.array("images", 4), (req, res) => {
     const { title, body } = req.body;
-    const images = req.files.map((file) => `/uploads/${file.filename}`); // put kum kachenite fajlowe
+    const userId = req.session.user.id; 
+    const images = req.files.map((file) => `/uploads/${file.filename}`);
 
-    if (!title || !body || images.length === 0) {
-        return res.status(400).json({ error: "All fields are required" });
+    if (!title || !body) {
+        return res.status(400).json({ error: "Title and body are required" });
     }
 
-    const userId = req.session.user.id;
-    const sql = "INSERT INTO articles (user_id, title, body, images) VALUES (?, ?, ?, ?)";
-    db.query(sql, [userId, title, body, JSON.stringify(images)], (err, result) => {
+    const sqlInsert = "INSERT INTO articles (user_id, title, body, images) VALUES (?, ?, ?, ?)";
+    db.query(sqlInsert, [userId, title, body, JSON.stringify(images)], (err, result) => {
         if (err) {
-            console.error("Error saving article:", err);
-            return res.status(500).json({ error: "Failed to save article" });
+            console.error("Error inserting article:", err);
+            return res.status(500).json({ error: "Failed to add article" });
         }
+
         res.status(201).json({ message: "Article added successfully" });
     });
 });
@@ -404,8 +407,70 @@ app.get("/getArticles", (req, res) => {
     });
 });
 
+app.delete("/deleteArticle/:id", isAuthenticated, (req, res) => {
+    const articleId = req.params.id;
+    const userId = req.session.user.id;
 
+    const sqlSelect = "SELECT images FROM articles WHERE id = ? AND user_id = ?";
+    db.query(sqlSelect, [articleId, userId], (err, results) => {
+        if (err) {
+            console.error("Error fetching article images:", err);
+            return res.status(500).json({ error: "Failed to fetch article images" });
+        }
 
+        if (results.length === 0) {
+            console.error("Article not found or access denied:", articleId);
+            return res.status(404).json({ error: "You do not have permission to delete this article" });
+        }
+
+        let images = [];
+        try {
+            const imagesField = results[0].images;
+            
+            
+            if (typeof imagesField === 'string' && imagesField.trim() !== "") {
+                images = JSON.parse(imagesField);
+                if (!Array.isArray(images)) images = [];
+            } else if (Array.isArray(imagesField)) {
+                images = imagesField; 
+            }
+        } catch (parseError) {
+            console.error("Error parsing images JSON:", parseError);
+            images = []; 
+        }
+        images.forEach((imagePath) => {
+            const fullPath = path.join(__dirname, imagePath);
+            fs.stat(fullPath, (err, stats) => {
+                if (err) {
+                    console.error("Error checking file existence:", err);
+                    return;
+                }
+                if (stats.isFile()) {
+                    fs.unlink(fullPath, (err) => {
+                        if (err) {
+                            console.error("Error deleting image:", err);
+                        } else {
+                            console.log("Deleted image:", fullPath);
+                        }
+                    });
+                } else {
+                    console.warn("File is not a valid file:", fullPath);
+                }
+            });
+        });
+
+        const sqlDelete = "DELETE FROM articles WHERE id = ? AND user_id = ?";
+        db.query(sqlDelete, [articleId, userId], (err, result) => {
+            if (err) {
+                console.error("Error deleting article:", err);
+                return res.status(500).json({ error: "Failed to delete article" });
+            }
+
+            console.log("Article deleted successfully:", articleId);
+            res.status(200).json({ message: "Article deleted successfully" });
+        });
+    });
+});
 
 app.post("/logout", (req, res) => {
     if (req.session) {
