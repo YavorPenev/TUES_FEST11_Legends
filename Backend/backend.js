@@ -10,6 +10,7 @@ const { OpenAI } = require("openai");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cors = require('cors');
+const multer = require("multer");
 
 const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -56,6 +57,17 @@ db.connect((err) => {
         console.log("Connected to database");
     }
 });
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // Папка за качване на файлове
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "-" + file.originalname); // Уникално име за файла
+    },
+});
+
+const upload = multer({ storage });
 
 // --------------------------- Helpers ---------------------------
 
@@ -360,13 +372,48 @@ app.get("/getNotes", isAuthenticated, (req, res) => {
     });
   });
 
+  app.post("/addArticle", isAuthenticated, upload.array("images", 4), (req, res) => {
+    const { title, body } = req.body;
+    const images = req.files.map((file) => `/uploads/${file.filename}`); // put kum kachenite fajlowe
+
+    if (!title || !body || images.length === 0) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const userId = req.session.user.id;
+    const sql = "INSERT INTO articles (user_id, title, body, images) VALUES (?, ?, ?, ?)";
+    db.query(sql, [userId, title, body, JSON.stringify(images)], (err, result) => {
+        if (err) {
+            console.error("Error saving article:", err);
+            return res.status(500).json({ error: "Failed to save article" });
+        }
+        res.status(201).json({ message: "Article added successfully" });
+    });
+});
+
+app.use("/uploads", express.static("uploads"));// szimame snimkite ot papkata
+
+app.get("/getArticles", (req, res) => {
+    const sql = "SELECT id, title, body, images, created_at FROM articles";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching articles:", err);
+            return res.status(500).json({ error: "Failed to fetch articles" });
+        }
+        res.status(200).json({ articles: results });
+    });
+});
+
+
+
+
 app.post("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy((err) => {
             if (err) {
                 return res.status(500).json({ error: "Failed to log out" });
             } else {
-                res.clearCookie("connect.sid"); // Изчистване на сесийната бисквитка
+                res.clearCookie("connect.sid"); // izchistwane na biskwitkite
                 return res.status(200).json({ message: "Logout successful" });
             }
         });
