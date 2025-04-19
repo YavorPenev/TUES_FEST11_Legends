@@ -37,7 +37,7 @@ function InvestCalc() {
     <>
       <div className="bg-gray-100 flex flex-col min-h-screen relative">
         <Header />
-        <div className="flex-1 mt-35 mb-30 max-w-md mx-auto p-4 rounded-2xl shadow-lg bg-white mt-44.5">
+        <div className="flex-1 mt-44.5 mb-30 max-w-md mx-auto p-4 rounded-2xl shadow-lg bg-whiteSS">
           <h1 className="text-2xl font-bold mb-4 text-center">Stock/ETF Returns 📊</h1>
 
           <div className="space-y-2">

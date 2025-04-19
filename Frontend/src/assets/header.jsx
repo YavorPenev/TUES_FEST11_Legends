@@ -69,13 +69,13 @@ function Header() {
           <>
             <Link
               to="/login"
-              className="bg-blue-100 ml-15 pl-3 pr-2 pt-2 pb-2 rounded-l-2xl border-r-2 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 ml-15 -mr-0.5 pl-3 pr-2 pt-2 pb-2 rounded-l-2xl border-r-4 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="bg-blue-100 ml-0 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl border-l-2 border-blue-900  text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 -ml-0.5 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl border-l-4 border-blue-900  text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Sign Up
             </Link>

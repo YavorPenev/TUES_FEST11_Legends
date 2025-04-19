@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import Header from './assets/header';
 import Footer from './assets/footer';
 
@@ -130,3 +130,4 @@ const articles = [
   }
   
   export default Articles;
+  export { articles };
