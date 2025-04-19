@@ -9,8 +9,7 @@ function ArticleDetails() {
   const article = location.state;
 
   if (!article) {
-    // If no article data is found, redirect back to the articles page
-    navigate("/articles");
+    navigate("/articles");//da se wurnem w normalnata stranica
     return null;
   }
 

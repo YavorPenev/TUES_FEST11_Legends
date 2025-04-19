@@ -9,7 +9,7 @@ function SignUP() {
   const handleSignup = async () => {
     try {
       const message = await signup1(username, email, password);
-      alert(message); // Показва съобщение за успех
+      alert(message); 
       console.log("Signup successful:", { username, email });
     } catch (error) {
       alert(`Signup failed: ${error.response?.data?.error || error.message}`);

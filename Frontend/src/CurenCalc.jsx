@@ -3,6 +3,8 @@ import axios from 'axios';
 import Header from './assets/header';
 import Footer from './assets/footer';
 import Calculator from './assets/SimpCalc'; 
+import Notes from './assets/notes';
+
 
 function CurrencyCalc() {
   const [rates, setRates] = useState(null);
@@ -114,6 +116,7 @@ function CurrencyCalc() {
           <p>Loading...</p>
         )}
       </div>
+      <Notes/>
       <Calculator/>
       <Footer/>
     </>

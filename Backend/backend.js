@@ -25,10 +25,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false,               // true in production with HTTPS
+        secure: false, // true в продукция с HTTPS
         httpOnly: true,
-        sameSite: 'lax',             // use 'none' if using HTTPS and cross-domain
-        maxAge: 1000 * 60 * 60 * 24  // 1 day
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60 * 24 // 1 ден
     }
 }));
 
@@ -134,7 +134,7 @@ async function getInvestmentAdvice(userProfile) {
         } else {
             console.error("Failed to generate advice.");
         }
-    
+
         return "Failed to generate advice.";
     }
 }
@@ -145,6 +145,7 @@ function isAuthenticated(req, res, next) {
     if (req.session && req.session.user) {
         next();
     } else {
+        console.error("User is not authenticated");
         res.status(401).json({ error: "Access denied. Please log in to access this resource." });
     }
 }
@@ -322,6 +323,41 @@ app.post("/invest", isAuthenticated, async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "Investment analysis failed." });
     }
+});
+
+app.post("/addNote", isAuthenticated, (req, res) => {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+        console.error("Missing title or content");
+        return res.status(400).json({ error: "Title and content are required" });
+    }
+
+    const userId = req.session.user.id;
+    console.log("Saving note for user:", userId);
+
+    const sql = "INSERT INTO notes (user_id, title, content) VALUES (?, ?, ?)";
+    db.query(sql, [userId, title, content], (err, result) => {
+        if (err) {
+            console.error("Error saving note:", err);
+            return res.status(500).json({ error: "Failed to save note" });
+        }
+        console.log("Note saved successfully:", result);
+        res.status(201).json({ message: "Note saved successfully" });
+    });
+});
+
+app.get("/getNotes", isAuthenticated, (req, res) => {
+    const userId = req.session.user.id; // Вземете ID на текущия потребител
+
+    const sql = "SELECT id, title, content, created_at FROM notes WHERE user_id = ?";
+    db.query(sql, [userId], (err, results) => {
+        if (err) {
+            console.error("Error fetching notes:", err);
+            return res.status(500).json({ error: "Failed to fetch notes" });
+        }
+        res.status(200).json({ notes: results });
+    });
 });
 
 app.post("/logout", (req, res) => {

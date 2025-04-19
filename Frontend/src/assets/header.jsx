@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 function Header() {
   const calcmenuref = useRef(null);
   const [CalcStatus, SetCalcStatus] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // Проверете дали има логнат потребител в localStorage
+  useEffect(() => {//dasli potrebitelq e lognat
     const user = localStorage.getItem("user");
     if (user) {
       setIsLoggedIn(true);
@@ -18,11 +17,11 @@ function Header() {
     try {
         const response = await fetch("http://localhost:8000/logout", {
             method: "POST",
-            credentials: "include", // За изпращане на сесийни бисквитки
+            credentials: "include",//za biskwitki
         });
 
         if (response.ok) {
-            localStorage.removeItem("user"); // Изчистване на потребителя от localStorage
+            localStorage.removeItem("user");
             setIsLoggedIn(false);
         } else {
             alert("Failed to log out. Please try again.");
@@ -58,36 +57,35 @@ function Header() {
         <h1 className="text-white font-bold text-4xl ml-4">SmartBudget</h1>
       </div>
 
-      <div className="flex flex-row justify-end gap-4 items-center">
+      <div className="flex flex-row justify-end items-center">
         <Link
           to="/articles"
           className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
         >
           Articles
         </Link>
-
-        {/* Показване на бутоните Login и Sign Up само ако потребителят не е логнат */}
+\
         {!isLoggedIn && (
           <>
             <Link
               to="/login"
-              className="bg-blue-100 ml-15 pl-3 pr-3 pt-2 pb-2 rounded-l-2xl border-blue-900 border-r-2 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 ml-15 pl-3 pr-2 pt-2 pb-2 rounded-l-2xl border-r-2 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="bg-blue-100 ml-0 pl-3 pr-3 pt-2 pb-2 rounded-r-2xl border-l-2 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 ml-0 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl border-l-2 border-blue-900  text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Sign Up
             </Link>
           </>
         )}
 
-        {/* Добавяне на празно място, ако потребителят е логнат */}
+
         {isLoggedIn && <div className="w-10"></div>}
 
-        {/* Показване на бутон Logout, ако потребителят е логнат */}
+   
         {isLoggedIn && (
           <button
             onClick={handleLogout}

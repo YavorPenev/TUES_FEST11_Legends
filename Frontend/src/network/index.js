@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-const fetchAPI = async (setArray) => {
+/*const fetchAPI = async (setArray) => {
   const response = await axios.get("http://localhost:8000/api");
   setArray(response.data.fruit);
   console.log(response.data.fruit);
-};
+};*/
 
 //////////////////////////////////////////////////////////////////
 
-const saveNote = async (title, body) => {
+const saveNote = async (title, content) => {
   try {
-    const response = await axios.post("http://localhost:8000/add", {
+    const response = await axios.post("http://localhost:8000/addNote", {
       title,
-      body,
-    }, { withCredentials: true }); // <-- Added
+      content,
+    }, { withCredentials: true });//za biskwitki
     return response.data;
   } catch (error) {
     console.error("Error saving note:", error);
@@ -25,10 +25,10 @@ const saveNote = async (title, body) => {
 
 const fetchNotes = async () => {
   try {
-    const response = await axios.get("http://localhost:8000/notes", {
-      withCredentials: true, // <-- Added
+    const response = await axios.get("http://localhost:8000/getNotes", {
+      withCredentials: true, //za biskwitki
     });
-    return response.data;
+    return response.data.notes;
   } catch (error) {
     console.error("Error fetching notes:", error);
     throw error;
@@ -37,7 +37,7 @@ const fetchNotes = async () => {
 
 ///////////////////////////////////////////////////////////////////
 
-const deleteNote = async (title) => {
+/*const deleteNote = async (title) => {
   try {
     const response = await axios.delete("http://localhost:8000/delete", {
       data: { title },
@@ -48,11 +48,11 @@ const deleteNote = async (title) => {
     console.error("Error deleting note:", error);
     throw error;
   }
-};
+};*/
 
 /////////////////////////////////////////////////////////////////////
 
-const editNote = async (oldTitle, newTitle, newBody) => {
+/*const editNote = async (oldTitle, newTitle, newBody) => {
   try {
     const response = await axios.put("http://localhost:8000/edit", {
       oldTitle,
@@ -66,7 +66,7 @@ const editNote = async (oldTitle, newTitle, newBody) => {
     console.error("Error editing note:", error);
     throw error;
   }
-};
+};*/
 
 ///////////////////////////////////////////////////////////////////
 
@@ -96,7 +96,7 @@ const Advice = async (income, expenses, goals, setAdvice) => {
   } catch (error) {
       console.error("Error:", error);
 
-      // Проверка за статус 401
+ 
       if (error.response && error.response.status === 401) {
           alert("Access denied. Please log in to access this resource.");
           window.location.href = "/login"; // Пренасочване към логин страницата
@@ -113,7 +113,7 @@ const login1 = async (username, password) => {
       username,
       password,
     }, {
-      withCredentials: true, // <-- Added
+      withCredentials: true,
     });
 
     if (response.status !== 200) {
@@ -136,7 +136,7 @@ const signup1 = async (username, email, password) => {
       email,
       password,
     }, {
-      withCredentials: true, // <-- Added
+      withCredentials: true, 
     });
 
     if (response.status !== 201) {
@@ -168,7 +168,7 @@ const Invest = async (investments, goals, setInvest) => {
         investments,
         goals
     }, {
-        withCredentials: true, // <-- За изпращане на сесийни бисквитки
+        withCredentials: true, // za biskwitki
     });
 
     if (response.status !== 200) {
@@ -183,10 +183,10 @@ const Invest = async (investments, goals, setInvest) => {
 } catch (error) {
     console.error("Error:", error);
 
-    // Проверка за статус 401
+
     if (error.response && error.response.status === 401) {
         alert("Access denied. Please log in to access this resource.");
-        window.location.href = "/login"; // Пренасочване към логин страницата
+        window.location.href = "/login";
     } else {
         alert(`Something went wrong: ${error.message}`);
     }
@@ -196,11 +196,12 @@ const Invest = async (investments, goals, setInvest) => {
 /////////////////////////////////////////////////////////////////////
 
 export {
-  fetchAPI,
+  //fetchAPI,
   saveNote,
   fetchNotes,
-  deleteNote,
-  editNote,
+  //deleteNote,
+  //
+  // editNote,
   Advice,
   login1,
   signup1,
