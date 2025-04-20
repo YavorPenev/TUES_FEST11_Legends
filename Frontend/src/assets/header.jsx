@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 function Header() {
   const calcmenuref = useRef(null);
+  const location = useLocation();
   const [CalcStatus, SetCalcStatus] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -15,22 +16,22 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-        const response = await fetch("http://localhost:8000/logout", {
-            method: "POST",
-            credentials: "include",//za biskwitki
-        });
+      const response = await fetch("http://localhost:8000/logout", {
+        method: "POST",
+        credentials: "include",//za biskwitki
+      });
 
-        if (response.ok) {
-            localStorage.removeItem("user");
-            setIsLoggedIn(false);
-        } else {
-            alert("Failed to log out. Please try again.");
-        }
+      if (response.ok) {
+        localStorage.removeItem("user");
+        setIsLoggedIn(false);
+      } else {
+        alert("Failed to log out. Please try again.");
+      }
     } catch (error) {
-        console.error("Logout error:", error);
-        alert("An error occurred during logout.");
+      console.error("Logout error:", error);
+      alert("An error occurred during logout.");
     }
-};
+  };
 
   const CalcMenuChange = () => {
     SetCalcStatus(!CalcStatus);
@@ -58,6 +59,17 @@ function Header() {
       </div>
 
       <div className="flex flex-row justify-end items-center">
+
+        {isLoggedIn &&
+          (location.pathname === "/articles" || location.pathname === "/article") && (
+            <Link
+              to="/PerArticles"
+              className="mr-22 bg-blue-100 text-blue-950 font-bold text-4xl px-4 py-2 rounded-2xl hover:scale-105 transition-transform hover:duration-200 active:scale-90 active:duration-50"
+            >
+              Write an Article
+            </Link>
+          )}
+
         <Link
           to="/articles"
           className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
@@ -85,7 +97,7 @@ function Header() {
 
         {isLoggedIn && <div className="w-10"></div>}
 
-   
+
         {isLoggedIn && (
           <button
             onClick={handleLogout}
