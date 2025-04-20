@@ -16,8 +16,8 @@ import Articles from './articles';
 import ArticleDetails from './ArticleDetails';
 import Profile from './profile';
 import PerArticles from './PerArticles';
-
 import './styles/index.css';
+import Sitelinks from './UsefulSourcesPage';
 
 //tuk se importwa samo home
 // da ne se slusha gorniq komentar, wsi`ko se importwa tuk
@@ -42,6 +42,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/article" element={<ArticleDetails />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/PerArticles" element={<PerArticles/>}/>
+        <Route path="/usefulsources" element={<Sitelinks/>}/>
+        
       </Routes>
     </BrowserRouter>
   </StrictMode>
