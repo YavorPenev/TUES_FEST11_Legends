@@ -8,6 +8,7 @@ import Notes from './assets/notes';
 
 function CurrencyCalc() {
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [sortCondition, setSortCondition] = useState('default');
   const [rates, setRates] = useState(null);
   const [error, setError] = useState(null);
@@ -16,9 +17,63 @@ function CurrencyCalc() {
   const [toCurrency, setToCurrency] = useState('EUR')
   const [result, setResult] = useState(null);
 
+  const currencyRegions = {
+    USD: 'North America',
+    CAD: 'North America',
+    MXN: 'North America',
+
+    EUR: 'Europe',
+    GBP: 'Europe',
+    CHF: 'Europe',
+    NOK: 'Europe',
+    SEK: 'Europe',
+    DKK: 'Europe',
+    PLN: 'Europe',
+    HUF: 'Europe',
+    BGN: 'Europe',
+    CZK: 'Europe',
+
+    JPY: 'Asia',
+    CNY: 'Asia',
+    INR: 'Asia',
+    KRW: 'Asia',
+    SGD: 'Asia',
+    HKD: 'Asia',
+
+    AUD: 'Oceania',
+    NZD: 'Oceania',
+
+    BRL: 'South America',
+    ARS: 'South America',
+    CLP: 'South America',
+
+    ZAR: 'Africa',
+    EGP: 'Africa',
+    NGN: 'Africa',
+
+    TRY: 'Other',
+  };
+
+  const [regionFilter, setRegionFilter] = useState('All');
+
   const getSortedRates = () => {
-    const entries = Object.entries(rates);
-  
+    let entries = Object.entries(rates);
+
+    // Apply region filter
+    if (regionFilter !== 'All') {
+      entries = entries.filter(([currency]) => currencyRegions[currency] === regionFilter);
+    }
+
+    if (regionFilter !== 'All') {
+      entries = entries.filter(([currency]) => currencyRegions[currency] === regionFilter);
+    }
+
+    // Apply search filter
+    if (searchTerm) {
+      entries = entries.filter(([currency]) => currency.includes(searchTerm));
+    }
+
+    // Sorting logic
     switch (sortCondition) {
       case 'highest':
         return entries.sort((a, b) => b[1] - a[1]);
@@ -122,23 +177,55 @@ function CurrencyCalc() {
               </p>
             </div>
 
-            <div className="flex items-center justify-end mb-4">
-              <label className="mr-2 font-semibold">Sort by:</label>
-              <select
-                value={sortCondition}
-                onChange={(e) => setSortCondition(e.target.value)}
-                className="p-2 border rounded"
-              >
-                <option value="default">Default (USD First, A-Z)</option>
-                <option value="alphabetical">Alphabetical (A-Z)</option>
-                <option value="reverse">Reverse Alphabetical (Z–A)</option>
-                <option value="highest">Highest Rate First</option>
-                <option value="lowest">Lowest Rate First</option>
-              </select>
+            <div className='flex flex-row items-center justify-center gap-6 mb-4 mt-8'>
+              <input
+                type="text"
+                placeholder="Search currency (e.g. USD)"
+                className="p-2 border rounded w-full max-w-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value.toUpperCase())}
+              />
+
+              <div className="flex items-center justify-end mb-4 gap-4">
+                {/* Region Filter */}
+                <div className="flex items-center">
+                  <label className="mr-2 font-semibold">Filter by Region:</label>
+                  <select
+                    value={regionFilter}
+                    onChange={(e) => setRegionFilter(e.target.value)}
+                    className="p-2 border rounded"
+                  >
+                    <option value="All">All</option>
+                    <option value="North America">North America</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Oceania">Oceania</option>
+                    <option value="South America">South America</option>
+                    <option value="Africa">Africa</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                {/* Sort Dropdown (existing) */}
+                <div className="flex items-center">
+                  <label className="mr-2 font-semibold">Sort by:</label>
+                  <select
+                    value={sortCondition}
+                    onChange={(e) => setSortCondition(e.target.value)}
+                    className="p-2 border rounded"
+                  >
+                    <option value="default">Default (USD First, A-Z)</option>
+                    <option value="alphabetical">Alphabetical (A-Z)</option>
+                    <option value="reverse">Reverse Alphabetical (Z–A)</option>
+                    <option value="highest">Highest Rate First</option>
+                    <option value="lowest">Lowest Rate First</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            <h2 className="text-3xl font-bold mt-8 mb-4">Exchange Rates</h2>
-            <div className="grid grid-cols-6 gap-4 max-h-300 overflow-y-auto overflow-x-visible p-6 bg-blue-200 rounded-xl">
+            <h2 className="text-3xl font-bold mt-4 mb-4">Exchange Rates</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[600px] overflow-y-auto p-6 bg-blue-200 rounded-xl">
               {getSortedRates().map(([currency, rate]) => (
                 <div key={currency} className="p-3 bg-blue-800 rounded shadow text-white hover:scale-110 hover:duration-200">
                   <p className="font-semibold">{currency}:</p>
