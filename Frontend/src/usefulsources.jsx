@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 function UsefulSources() {
     return (
-        <div className="w-screen justify-center items-center flex text-blue-50 mt-5">
+        <div className="w-full justify-center items-center flex text-blue-50 mt-5">
             <div className="p-6 bg-none max-w-max flex flex-col gap-2 justify-center items-center bg-blue-900 mx-7 mb-10 rounded-2xl">
                 <h1 className="font-bold text-4xl ">Useful Sources</h1>
                 <div className="flex flex-row gap-6 justify-center items-center">
