@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Invest } from "./network/index";
 import Header from './assets/header';
 import Footer from './assets/footer';
-import { Link } from "react-router";
 import Calculator from './assets/SimpCalc';
 import Notes from './assets/notes';
 
@@ -65,8 +64,8 @@ function InvestAI() {
       <Header />
       <div className="flex-grow p-5 bg-gray-100 flex flex-col items-center mt-24">
 
-        <h1 className="text-blue-800 text-4xl font-bold mb-10 text-center mt-30">
-          -- Stock Advisor --
+        <h1 className="text-blue-800 text-4xl font-extrabold mb-10 text-center mt-12">
+          Stock Advisor
         </h1>
 
         <input
@@ -97,7 +96,7 @@ function InvestAI() {
         <button
           onClick={handleInvestClick}
           disabled={loading}
-          className={`bg-blue-600 text-white px-6 py-2 rounded-lg transition flex items-center justify-center gap-2 ${loading ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"
+          className={`bg-blue-800 text-white px-6 py-2 rounded-lg transition flex items-center justify-center gap-2 hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 ${loading ? "bg-blue-700 cursor-wait" : "cursor-pointer"
             }`}
         >
           {loading ? (
