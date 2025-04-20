@@ -178,6 +178,7 @@ function CurrencyCalc() {
             </div>
 
             <div className='flex flex-row items-center justify-center gap-6 mb-4 mt-8'>
+              
               <input
                 type="text"
                 placeholder="Search currency (e.g. USD)"
@@ -228,7 +229,7 @@ function CurrencyCalc() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[600px] overflow-y-auto p-6 bg-blue-200 rounded-xl">
               {getSortedRates().map(([currency, rate]) => (
                 <div key={currency} className="p-3 bg-blue-800 rounded shadow text-white hover:scale-110 hover:duration-200">
-                  <p className="font-semibold">{currency}:</p>
+                  <p className="font-semibold">{currency}</p>
                   <p>{rate.toFixed(2)}</p>
                 </div>
               ))}
