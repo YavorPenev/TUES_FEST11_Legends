@@ -16,7 +16,6 @@ function ProfArticles() {
           className="w-full md:w-1/2 h-48 md:h-64 object-cover rounded-3xl mb-4 md:mb-0 md:mr-6"
         />
 
-
         <div className="flex-1">
           <h2 className="text-xl md:text-2xl font-bold mb-2">
             Discover the World of Investments and Financial Strategies
