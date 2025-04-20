@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 
 function TopCompanies() {
 
@@ -38,21 +38,6 @@ function TopCompanies() {
             desc: "Famous for its low-cost funds and long-term investment strategies.",
             link: "https://www.vanguard.com/",
         },
-        {
-            name: "Fidelity Investments",
-            desc: "A global leader in asset management and financial services.",
-            link: "https://www.fidelity.com/",
-        },
-        {
-            name: "Goldman Sachs",
-            desc: "A global investment bank with significant influence on the world economy.",
-            link: "https://www.goldmansachs.com/",
-        },
-        {
-            name: "Morgan Stanley",
-            desc: "One of the leading investment companies with a long history.",
-            link: "https://www.morganstanley.com/",
-        },
     ];
 
     const changeSlide = (direction) => {
@@ -60,7 +45,9 @@ function TopCompanies() {
     };
 
     return (
-        <div className='flex items-center flex-col mt-10'>
+        <div 
+            style={{ background: 'linear-gradient(to right, #111827, #3b82f6, #111827)'}}  
+            className='flex items-center flex-col bg-white pt-10 custom-gradient'>
             {/* Header */}
             <header className="bg-blue-950 text-white text-center py-6 mb-10 max-w-max rounded-xl p-6">
                 <h1 className="text-3xl font-bold">Top Investment Companies</h1>
@@ -70,9 +57,9 @@ function TopCompanies() {
             </header>
 
             {/* Carousel */}
-            <div className="relative w-[80%] max-w-[800px] mx-auto rounded-xl overflow-hidden h-[500px] mb-10">
+            <div className="relative w-[80%] max-w-[900px] mx-auto rounded-xl overflow-hidden h-[565px] mb-10">
                 <div
-                    className="flex transition-transform duration-500"
+                    className="flex transition-transform duration-1500"
                     style={{ transform: `translateX(-${current * 100}%)` }}
                 >
                     {slides.map((slide, i) => (
@@ -84,7 +71,7 @@ function TopCompanies() {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <div className="h-[20%] bg-blue-950 text-blue-100 flex items-center justify-center text-center p-4 rounded-b-xl">
+                            <div className="h-[20%] bg-blue-950 text-blue-100 flex items-center justify-center text-center p-4 rounded-b-xl text-2xl font-semibold">
                                 {slide.caption}
                             </div>
                         </div>
@@ -92,20 +79,21 @@ function TopCompanies() {
                 </div>
                 <button
                     onClick={() => changeSlide(-1)}
-                    className="absolute scale-150 rounded top-1/2 left-8 transform -translate-y-1/2 bg-blue-100 text-blue-950 text-3xl px-3 py-1 z-10 hover:scale-175 transition-transform hover:duration-200 active:duration-50 active:scale-130"
+                    className="absolute scale-150 rounded top-1/2 left-8 transform -translate-y-1/2 bg-blue-900 text-blue-50 text-3xl px-3 py-1 z-10 hover:scale-175 transition-transform hover:duration-200 active:duration-50 active:scale-130 shadow-2xl" 
                 >
                     &#10094;
                 </button>
                 <button
                     onClick={() => changeSlide(1)}
-                    className="absolute scale-150 rounded top-1/2 right-8 transform -translate-y-1/2 bg-blue-100 text-blue-950 text-3xl px-3 py-1 z-10 hover:scale-175 transition-transform hover:duration-200 active:duration-50 active:scale-130"
+                    className="absolute scale-150 rounded top-1/2 right-8 transform -translate-y-1/2 bg-blue-900 text-blue-50 text-3xl px-3 py-1 z-10 hover:scale-175 transition-transform hover:duration-200 active:duration-50 active:scale-130"
                 >
                     &#10095;
                 </button>
             </div>
 
             {/* Company Grid */}
-            <div className="max-w-[1100px] mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <div className="max-w-[1100px] mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 ">
+
                 {companies.map((company, index) => (
                     <div
                         key={index}
