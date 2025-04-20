@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import LawLink from './lawlink';
 
 function TopCompanies() {
 
@@ -114,6 +115,7 @@ function TopCompanies() {
                     </div>
                 ))}
             </div>
+            <LawLink/>
         </div>
 
     );

@@ -8,7 +8,6 @@ import ArticleCarousel from './assets/articlecarousel';
 import { articles } from './articles';
 import UsefulSources from './assets/usefulsources';
 import ProfArticles from './assets/professionalarticles';
-
 function Home() {
   const navigate = useNavigate();
   const location = useLocation();
