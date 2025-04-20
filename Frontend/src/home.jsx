@@ -6,7 +6,8 @@ import Footer from './assets/footer';
 import TopCompanies from './assets/topcompanies';
 import ArticleCarousel from './assets/articlecarousel';
 import { articles } from './articles';
-import UsefulSources from './assets/usefulsources';
+import UsefulSources from './usefulsources';
+import ProfArticles from './professionalarticles';
 
 function Home() {
   const navigate = useNavigate();
@@ -98,8 +99,15 @@ function Home() {
         <img className="w-full" src="/mainpic-bottom.png" alt="Footer Visual" />
       </div>
       <ArticleCarousel articles={articles} />
-      <TopCompanies/>  
-      <UsefulSources/>   
+
+
+      <div className="bg-[url('/Background_Sections.png')] bg-cover bg-center bg-no-repeat p-10 border-t">
+        <div className="relative z-10">
+          <ProfArticles />
+          <UsefulSources />
+        </div>
+      </div>
+      <TopCompanies />
       <Footer />
     </>
   );
