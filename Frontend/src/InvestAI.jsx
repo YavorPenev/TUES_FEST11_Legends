@@ -97,7 +97,7 @@ function InvestAI() {
         <button
           onClick={handleInvestClick}
           disabled={loading}
-          className={`bg-blue-600 text-white px-6 py-2 rounded-lg transition flex items-center justify-center gap-2 ${loading ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"
+          className={`bg-blue-800 text-white px-6 py-2 rounded-lg transition flex items-center justify-center gap-2 hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 ${loading ? "bg-blue-700 cursor-wait" : "cursor-pointer"
             }`}
         >
           {loading ? (

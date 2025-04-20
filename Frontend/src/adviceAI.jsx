@@ -100,9 +100,9 @@ function AdviceAI() {
               type="button"
               onClick={handleGetAdvice}
               disabled={loading}
-              className={`w-full font-bold py-2 px-4 rounded-md shadow-md transition flex items-center justify-center gap-2 mt-4 ${loading
-                  ? "bg-blue-400 cursor-not-allowed"
-                  : "bg-blue-800 text-white hover:bg-blue-900 cursor-pointer"
+              className={`bg-blue-800 text-white w-full font-bold py-2 px-4 rounded-md shadow-md flex items-center justify-center gap-2 mt-4 transition-transform hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 ${loading
+                  ? "bg-blue-700 cursor-wait"
+                  : "cursor-pointer"
                 }`}
             >
               {loading ? (
