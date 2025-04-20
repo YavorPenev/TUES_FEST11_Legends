@@ -3,10 +3,10 @@ import { Routes, Route, useNavigate, Link, useLocation } from 'react-router';
 import './styles/index.css';
 import Header from './assets/header';
 import Footer from './assets/footer';
-import TopCompanies from './topcompanies';
-import ArticleCarousel from './articlecarousel';
+import TopCompanies from './assets/topcompanies';
+import ArticleCarousel from './assets/articlecarousel';
 import { articles } from './articles';
-import UsefulSources from './usefulsources';
+import UsefulSources from './assets/usefulsources';
 
 function Home() {
   const navigate = useNavigate();
