@@ -138,7 +138,7 @@ function AdviceAI() {
             <h2 className="text-lg font-semibold text-gray-800">Investment Advice:</h2>
             <pre
               id="investmentAdvice"
-              className="mt-2 bg-gray-100 p-4 rounded-md text-gray-700 whitespace-pre-wrap "
+              className="mt-2 bg-gray-100 p-4 rounded-md text-gray-700 whitespace-pre-wrap font-sans"
             >
               {advice || "Your advice will appear here."}
             </pre>
