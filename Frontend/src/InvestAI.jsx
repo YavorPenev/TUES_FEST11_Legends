@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Invest } from "./network/index";
 import Header from './assets/header';
 import Footer from './assets/footer';
 import { Link } from "react-router";
-import Calculator from './assets/SimpCalc'; 
+import Calculator from './assets/SimpCalc';
 import Notes from './assets/notes';
 
 
 function InvestAI() {
 
-  
+  const [loading, setLoading] = useState(false); // Loading state for the button
+  useEffect(() => {
+    document.body.style.cursor = loading ? 'wait' : 'default';
+  }, [loading]);
+
   const [symbols, setSymbols] = useState("");
   const [amount, setAmount] = useState("");
-  const [goals, setGoals] = useState("");  
+  const [goals, setGoals] = useState("");
   const [result, setResult] = useState("");
 
   const handleInvestClick = async () => {
+    setLoading(true); // start loading
+
     const symbolList = symbols
       .split(",")
       .map((s) => s.trim().toUpperCase())
@@ -23,11 +29,13 @@ function InvestAI() {
 
     if (symbolList.length === 0 || !amount || isNaN(amount)) {
       alert("Please enter valid stock symbols and amount invested.");
+      setLoading(false);
       return;
     }
 
     if (!goals || goals.trim().length === 0) {
       alert("Please enter your investment goals.");
+      setLoading(false);
       return;
     }
 
@@ -38,16 +46,18 @@ function InvestAI() {
 
     const goalList = goals
       .split(",")
-      .map((g) => g.trim()) 
+      .map((g) => g.trim())
       .filter((g) => g !== "");
 
     if (goalList.length === 0) {
       alert("Please enter valid goals.");
+      setLoading(false);
       return;
     }
 
- 
     await Invest(investments, goalList, setResult);
+
+    setLoading(false); // stop loading
   };
 
   return (
@@ -86,9 +96,37 @@ function InvestAI() {
 
         <button
           onClick={handleInvestClick}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+          disabled={loading}
+          className={`bg-blue-600 text-white px-6 py-2 rounded-lg transition flex items-center justify-center gap-2 ${loading ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
         >
-          Analyze My Investment
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              Analyzing...
+            </>
+          ) : (
+            "Analyze My Investment"
+          )}
         </button>
 
         {result && (
@@ -99,9 +137,9 @@ function InvestAI() {
         )}
 
       </div>
-      <Notes/>
-      <Calculator/>
-      <Footer /> 
+      <Notes />
+      <Calculator />
+      <Footer />
     </div>
   );
 }
