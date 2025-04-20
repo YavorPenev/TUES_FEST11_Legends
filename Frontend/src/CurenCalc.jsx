@@ -39,7 +39,7 @@ function CurrencyCalc() {
     <>
       <Header/>
       <div className="p-5 pt-24" style={{ margin: '0 10%' }}>
-        <h1 className="text-3xl font-bold mb-6 text-center">Currency Calculator</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center mt-20">Currency Calculator</h1>
         {error && <p className="text-red-500 text-center">{error}</p>}
         {rates ? (
           <>
@@ -81,7 +81,7 @@ function CurrencyCalc() {
               </select>
               <button
                 onClick={handleConvert}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-blue-800 text-white px-4 py-2 rounded hover:scale-110 active:scale-90 transition-transform hover:duration-200 active:duration-50 font-bold"
               >
                 Convert
               </button>
@@ -103,9 +103,9 @@ function CurrencyCalc() {
             </div>
 
             <h2 className="text-3xl font-bold mt-8 mb-4">Exchange Rates</h2>
-            <div className="grid grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+            <div className="grid grid-cols-6 gap-4 max-h-300 overflow-y-auto">
               {Object.entries(rates).map(([currency, rate]) => (
-                <div key={currency} className="p-3 bg-blue-300 rounded shadow">
+                <div key={currency} className="p-3 bg-blue-800 rounded shadow text-white">
                   <p className="font-semibold">{currency}:</p>
                   <p>{rate.toFixed(2)}</p>
                 </div>

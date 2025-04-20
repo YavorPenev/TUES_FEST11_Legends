@@ -50,7 +50,7 @@ function Notes() {
       {!isVisible && (
         <button
           onClick={() => setIsVisible(true)}
-          className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 font-bold"
+          className="fixed bottom-4 right-4 bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 font-bold"
         >
           Take Note
         </button>
@@ -61,7 +61,7 @@ function Notes() {
         <Draggable nodeRef={nodeRef}>
           <div
             ref={nodeRef}
-            className="fixed bottom-20 right-4 bg-blue-100 p-4 rounded-lg shadow-2xl w-96 border border-blue-500 cursor-move"
+            className="fixed bottom-20 right-4 bg-blue-100 p-4 rounded-lg shadow-2xl w-96 border-2 border-blue-500 cursor-grab active:cursor-grabbing"
           >
             <div className="mb-2">
               <input
@@ -83,14 +83,14 @@ function Notes() {
             <div className="flex justify-between">
             <button
                 onClick={() => setIsVisible(false)} 
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-bold"
+                className="bg-red-500 text-white px-4 py-2 rounded-lg transition-transform hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 font-bold"
               >
                 Close
               </button>
               <div>
               <Link
                 to="/profile"
-                className="bg-green-500 text-white px-4 mr-4 py-2 rounded-lg hover:bg-green-600 font-bold"
+                className="inline-block bg-green-600 text-white px-4 mr-4 py-2 transition-transform rounded-lg hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 font-bold"
               >
                 
                 View notes
@@ -98,7 +98,7 @@ function Notes() {
                 
               <button
                 onClick={handleSave}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
+                className="bg-blue-800 text-white px-4 py-2 transition-transform rounded-lg hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 font-bold"
               >
                 Save
               </button>
