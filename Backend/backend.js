@@ -71,6 +71,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+const linkStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/links/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "-" + file.originalname);
+    },
+});
+
+const uploadLinkImage = multer({ storage: linkStorage });
+
 // --------------------------- Helpers ---------------------------
 
 async function fetchAllStockSymbols() {
@@ -469,6 +480,65 @@ app.delete("/deleteArticle/:id", isAuthenticated, (req, res) => {
             console.log("Article deleted successfully:", articleId);
             res.status(200).json({ message: "Article deleted successfully" });
         });
+    });
+});
+
+app.post("/addLink", isAuthenticated, uploadLinkImage.single("image"), (req, res) => {
+    const { title, description, url } = req.body;
+    const userId = req.session.user.id;
+    const imagePath = req.file ? `/uploads/links/${req.file.filename}` : null;
+
+    const sql = "INSERT INTO links (user_id, title, description, url, image_path) VALUES (?, ?, ?, ?, ?)";
+    db.query(sql, [userId, title, description, url, imagePath], (err, result) => {
+        if (err) {
+            console.error("Error adding link:", err);
+            return res.status(500).json({ error: "Failed to add link" });
+        }
+        res.status(201).json({ message: "Link added successfully" });
+    });
+});
+
+
+app.get("/getLinks", isAuthenticated, (req, res) => {
+    const sql = "SELECT * FROM links ORDER BY created_at DESC";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching links:", err);
+            return res.status(500).json({ error: "Failed to fetch links" });
+        }
+        res.status(200).json({ links: results });
+    });
+});
+
+
+app.delete("/deleteLink/:id", isAuthenticated, (req, res) => {
+    const linkId = req.params.id;
+    const { imagePath } = req.body;
+    const userId = req.session.user.id;
+
+
+    const sqlDelete = "DELETE FROM links WHERE id = ? AND user_id = ?";
+    db.query(sqlDelete, [linkId, userId], (err, result) => {
+        if (err) {
+            console.error("Error deleting link:", err);
+            return res.status(500).json({ error: "Failed to delete link" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Link not found or access denied" });
+        }
+
+        
+        if (imagePath) {
+            const fullPath = path.join(__dirname, imagePath);
+            fs.unlink(fullPath, (err) => {
+                if (err) {
+                    console.error("Error deleting image:", err);
+                }
+            });
+        }
+
+        res.status(200).json({ message: "Link deleted successfully" });
     });
 });
 

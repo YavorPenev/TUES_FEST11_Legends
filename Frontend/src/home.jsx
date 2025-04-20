@@ -6,8 +6,8 @@ import Footer from './assets/footer';
 import TopCompanies from './assets/topcompanies';
 import ArticleCarousel from './assets/articlecarousel';
 import { articles } from './articles';
-import UsefulSources from './usefulsources';
-import ProfArticles from './professionalarticles';
+import UsefulSources from './assets/usefulsources';
+import ProfArticles from './assets/professionalarticles';
 
 function Home() {
   const navigate = useNavigate();
