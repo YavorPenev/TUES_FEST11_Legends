@@ -12,7 +12,7 @@ import LoanCalc from './loancalc';
 import CurrencyCalc from './CurenCalc';
 import Login from './login';
 import SignUP from './signup';
-import Articles from './articles';
+import News from './articles';
 import ArticleDetails from './ArticleDetails';
 import Profile from './profile';
 import PerArticles from './PerArticles';
@@ -39,7 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/CurrencyCalculator" element={<CurrencyCalc />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUP />} />
-        <Route path="/articles" element={<Articles />} />
+        <Route path="/articles" element={<News />} />
         <Route path="/article" element={<ArticleDetails />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/PerArticles" element={<PerArticles/>}/>

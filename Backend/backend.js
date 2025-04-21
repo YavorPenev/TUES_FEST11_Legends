@@ -584,6 +584,19 @@ app.delete("/deleteLink/:id", isAuthenticated, (req, res) => {
     });
 });
 
+app.get("/api/news", async (req, res) => {
+    const apiKey = process.env.MARKETAUX_API_KEY; // Add your API key to .env
+    const url = `https://api.marketaux.com/v1/news/all?api_token=${apiKey}&language=en&limit=20`;
+
+    try {
+        const response = await axios.get(url);
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.error("Error fetching news:", error);
+        res.status(500).json({ error: "Failed to fetch news" });
+    }
+});
+
 app.post("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy((err) => {
@@ -598,6 +611,8 @@ app.post("/logout", (req, res) => {
         res.status(400).json({ error: "No active session" });
     }
 });
+
+
 
 // -------------------- Server Start --------------------
 
