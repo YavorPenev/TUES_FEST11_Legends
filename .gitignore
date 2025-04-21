@@ -3,4 +3,5 @@ Frontend/node_modules/
 Backend/node_modules/
 Backend/.env
 venv
-*.pth
+python/stock_model.pth
+
