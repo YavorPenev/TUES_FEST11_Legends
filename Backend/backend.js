@@ -676,6 +676,23 @@ String.prototype.hashCode = function () {
     return hash;
 };
 
+app.post("/save-stock-advice", (req, res) => {
+    const { advice } = req.body;
+  
+    if (!advice) {
+      return res.status(400).json({ error: "Advice is required" });
+    }
+  
+    const sql = "INSERT INTO stockadvisorAi (response) VALUES (?)";
+    db.query(sql, [advice], (err, result) => {
+      if (err) {
+        console.error("Error saving advice:", err);
+        return res.status(500).json({ error: "Failed to save advice" });
+      }
+      res.status(201).json({ message: "Advice saved successfully" });
+    });
+  });
+
 app.post("/save-investment-advice", (req, res) => {
     const { advice } = req.body;
 

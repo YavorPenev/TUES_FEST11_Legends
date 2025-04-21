@@ -19,6 +19,28 @@ function AdviceAI() {
   const [advice, setAdvice] = useState("");
   const adviceRef = useRef(null);
 
+  const handleSaveAdvice = async () => {
+    if (!advice) {
+      alert("No advice to save!");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:8000/save-stock-advice", {
+        advice,
+      });
+
+      if (response.status === 201) {
+        alert("Advice saved successfully!");
+      } else {
+        alert("Failed to save advice.");
+      }
+    } catch (error) {
+      console.error("Error saving advice:", error);
+      alert("An error occurred while saving the advice.");
+    }
+  };
+
   const handleGetAdvice = async () => {
     if (!income || !expenses || !goal || !timeframe) {
       alert("Please fill all fields");
@@ -159,10 +181,20 @@ function AdviceAI() {
         </div>
       </div>
       <div className="mt-0" ref={adviceRef}>
-        <h2 className="text-2xl font-bold text-gray-800">Investment Advice:</h2>
-        <pre className="mt-2 bg-gray-100 p-4 rounded-xl text-gray-700 whitespace-pre-wrap font-sans mx-[35%] mb-10">
-          {advice || "Your advice will appear here."}
-        </pre>
+        <div className="mt-0" ref={adviceRef}>
+          <h2 className="text-2xl font-bold text-gray-800">Investment Advice:</h2>
+          <pre className="mt-2 bg-gray-100 p-4 rounded-xl text-gray-700 whitespace-pre-wrap font-sans mx-[35%] mb-4">
+            {advice || "Your advice will appear here."}
+
+          </pre>
+          <button
+            onClick={handleSaveAdvice}
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+          >
+            Save
+          </button>
+
+        </div>
       </div>
       <Notes />
       <Calculator />
