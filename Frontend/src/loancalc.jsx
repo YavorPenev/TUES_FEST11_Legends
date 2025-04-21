@@ -40,7 +40,7 @@ function LoanCalc() {
     <>
 
       <Header />
-      <div className='absolute left-[2%] top-[30.5%]  w-[28%] h-96 bg-blue-800 bg-opacity-90 text-blue-900 p-6 rounded-2xl shadow-lg '>
+      <div className='absolute left-[2%] top-[42.5%]  w-[28%] min-h-max bg-blue-800 bg-opacity-90 text-blue-900 p-6 rounded-2xl shadow-lg '>
         <div className='  bg-white rounded-2xl p-4'>
           <h2 className='text-xl font-bold mb-1'>How this calculator works:</h2>
           <p className=' leading-relaxed -mb-2'>
