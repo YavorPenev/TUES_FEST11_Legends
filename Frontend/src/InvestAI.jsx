@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Invest } from "./network/index";
 import Header from './assets/header';
 import Footer from './assets/footer';
@@ -17,6 +17,7 @@ function InvestAI() {
   const [amount, setAmount] = useState("");
   const [goals, setGoals] = useState("");
   const [result, setResult] = useState("");
+  const resultRef = useRef(null);
 
   const handleInvestClick = async () => {
     setLoading(true); // start loading
@@ -56,16 +57,36 @@ function InvestAI() {
 
     await Invest(investments, goalList, setResult);
 
-    setLoading(false); // stop loading
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col justify-center items-center">
       <Header />
-      <div className="flex-grow p-5 bg-gray-100 flex flex-col lg:flex-row items-start justify-center gap-10 mt-24">
+      <div className="flex-grow p-5 bg-white flex flex-col lg:flex-row items-start justify-center gap-10 mt-14 pb-20">
+        {/* Description Panel */}
+        <div className="w-full lg:w-2/3 p-6 bg-gray-100 text-blue-900 rounded-2xl shadow-lg mt-35 ">
+          <h2 className="text-xl font-bold mb-4"> How to Use the Stock Advisor</h2>
+          <p className="text-sm leading-relaxed">
+            <strong>Stock Symbols</strong><br />
+            Enter one or more stock tickers like <code>AAPL</code>, <code>MSFT</code>, or <code>TSLA</code> separated by commas.
+            <br /><br />
+            <strong>Amount Invested</strong><br />
+            Specify how much you're investing in <em>each</em> stock.
+            <br /><br />
+            <strong>Investment Goals</strong><br />
+            Describe your financial objectives — for example, <em>retirement</em>, <em>saving for a house</em>, or <em>building wealth</em>.
+            <br /><br />
+            The AI will evaluate if your portfolio aligns with your goals.
+          </p>
+        </div>
         {/* Input Panel */}
-        <div className="w-full lg:w-1/2 flex flex-col items-center">
-          <h1 className="text-blue-800 text-4xl font-extrabold mb-10 text-center mt-37">
+        <div className="w-full lg:w-1/2 flex flex-col items-center bg-gray-100 mt-34 px-14 py-5 rounded-2xl shadow-xl">
+          <h1 className="text-blue-800 text-4xl font-extrabold mb-10 text-center mt-0">
             Stock Advisor
           </h1>
 
@@ -126,32 +147,22 @@ function InvestAI() {
               "Analyze My Investment"
             )}
           </button>
-
-          {result && (
-            <div className="mt-10 w-full max-w-3xl bg-white p-6 rounded-lg shadow-md mb-[5rem]">
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">Analysis Result:</h2>
-              <p className="text-gray-700 whitespace-pre-line">{result}</p>
-            </div>
-          )}
         </div>
 
-        {/* Description Panel */}
-        <div className="w-full lg:w-1/3 p-6 bg-gray-100 text-blue-900 rounded-2xl shadow-lg mt-35 ">
-          <h2 className="text-xl font-bold mb-4"> How to Use the Stock Advisor</h2>
-          <p className="text-sm leading-relaxed">
-            <strong>Stock Symbols</strong><br />
-            Enter one or more stock tickers like <code>AAPL</code>, <code>MSFT</code>, or <code>TSLA</code> separated by commas.
-            <br /><br />
-            <strong>Amount Invested</strong><br />
-            Specify how much you're investing in <em>each</em> stock.
-            <br /><br />
-            <strong>Investment Goals</strong><br />
-            Describe your financial objectives — for example, <em>retirement</em>, <em>saving for a house</em>, or <em>building wealth</em>.
-            <br /><br />
-             The AI will evaluate if your portfolio aligns with your goals.
-          </p>
-        </div>
+
+
       </div>
+      {result && (
+        <div
+          ref={resultRef}
+          className="mt-5 w-full max-w-3xl p-6 rounded-lg shadow-md mb-[5rem] bg-gray-100"
+        >
+          <h2 className="text-xl font-semibold mb-2 text-gray-800">
+            Analysis Result:
+          </h2>
+          <p className="text-gray-700 whitespace-pre-line">{result}</p>
+        </div>
+      )}
       <Notes />
       <Calculator />
       <Footer />
