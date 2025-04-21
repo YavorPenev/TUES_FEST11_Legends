@@ -13,12 +13,12 @@ function FAQ() {
     {
       question: "How to create an account in the site?",
       answer:
-        "To create an account on the website, click on the 'Sign Up' or 'Create Account' button, usually located at the top of the homepage. You will be prompted to provide your username, email address, and a password. Some websites may also require you to confirm your email address by clicking a verification link sent to your inbox.",
+        "To create an account on the website, click on the 'Sign Up' button, located at the top of the homepage. You will be prompted to provide your username, email address, and a password. You must confirm your email address by clicking a verification link sent to your inbox.",
     },
     {
       question: "How do I log in to my account?",
       answer:
-        "To log in, click on the 'Login' button at the top-right corner of the homepage. Enter your registered email address and password, then click 'Submit'. If you’ve forgotten your password, use the 'Forgot Password' option to reset it.",
+        "To log in, click on the 'Login' button at the top-right corner of the homepage. Enter your registered email address and password, then click 'Login'. If you’ve forgotten your password, use the 'Forgot Password' option to reset it.",
     },
     {
       question: "How to use the calculators?",
@@ -41,9 +41,9 @@ function FAQ() {
         "To see your notes you need to be logged in too. After that you need to click on the profile button on the top of page. After that you will be redirected to your profile page where you can see all of your notes.",
     },
     {
-      question: "How to write an usefull source? * ",
+      question: "How to write an useful site link * ",
       answer:
-        "To write an usefull source on the site, you need to click on the + button in the first section on the home page and follow the instructions.",
+        "To write an usefull source on the site, you need to click on the + button in the second section on the home page - investment sites and follow the instructions.",
     },
     {
       question: "How to add links to usefull sites ? * ",
@@ -58,7 +58,7 @@ function FAQ() {
     {
       question: "How to see more about us?",
       answer:
-        "To see more about us you need to click on the About us section in the home page. After that you will be redirected to the page where you can see all of the information about us.",
+        "To see more about us you need to click on the About us button in the footer. After that you will be redirected to the page where you can see all of the information about us.",
 
     },
     {
@@ -69,12 +69,12 @@ function FAQ() {
     {
       question: "How to create an article?",
       answer:
-        "You need to click on the + button on the first section in the home page. After that you can write your article and add links to it. You can also add images to it.",
+        "You need to click on the + button on the first section in the home page - Learnings Before investing. After that you can write your article and add links to it. You can also add images to it.",
     },
     {
       question: "How add link in an article?",
       answer:
-        "You need to write your article and to create the link you need to put it in this format: < your link >.",
+        "To create the link you need to put it in this format: > your link <.",
     },
 
 
