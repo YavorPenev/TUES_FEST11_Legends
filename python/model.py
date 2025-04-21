@@ -1,9 +1,9 @@
-import torch
+import torch #towa
 import torch.nn as nn
 import torch.optim as optim
-import pandas as pd
-import numpy as np
-import yfinance as yf
+import pandas as pd#towa
+import numpy as np#towa
+import yfinance as yf #towa
 import os
 
 tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA']
