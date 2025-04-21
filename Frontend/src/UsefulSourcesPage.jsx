@@ -46,7 +46,7 @@ function Sitelinks() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         const formData = new FormData();
         formData.append("title", newLink.title);
         formData.append("description", newLink.description);
@@ -90,120 +90,146 @@ function Sitelinks() {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-100 p-6 mt-14">
+            <div className=" min-h-screen bg-blue-300 p-6 mt-19">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-8">Useful Resources</h1>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <h1 className="text-3xl font-bold text-gray-800 mb-8">Links to useful sites</h1>
+
+                    <div className="grid grid-cols-1 gap-6">
                         {links.map(link => (
-                            <div key={link.id} className="bg-white rounded-lg shadow-md overflow-hidden relative">
-                                <button 
+                            <div key={link.id} className="bg-red rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row relative border-2">
+                                <button
                                     onClick={() => handleDelete(link.id, link.image_path)}
-                                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 "
                                 >
                                     <FaTrash />
                                 </button>
-                                <div className="p-4">
-                                    <h2 className="text-xl font-semibold text-center mb-2">{link.title}</h2>
-                                    <div className="flex items-start space-x-4">
-                                        {link.image_path && (
-                                            <img 
-                                                src={`http://localhost:8000${link.image_path}`} 
-                                                alt={link.title}
-                                                className="w-24 h-24 object-cover rounded"
-                                            />
-                                        )}
-                                        <p className="text-gray-600 flex-1">{link.description}</p>
+                                {link.image_path && (
+                                    <img
+                                        src={`http://localhost:8000${link.image_path}`}
+                                        alt={link.title}
+                                        className="w-full md:w-1/2 h-[430px] object-cover"
+                                    />
+                                )}
+                                <div className="p-8 flex-1 flex flex-col justify-between">
+                                    <h2 className="text-3xl font-bold mb-6">{link.title}</h2>
+                                    <div className="text-gray-800 text-left  leading-relaxed">
+                                        <p>
+                                            <span className="pl-8">{link.description.split('\n')[0]}</span>
+                                        </p>
+                                        {link.description.split('\n').slice(1).map((line, idx) => (
+                                            <p key={idx}>{line}</p>
+                                        ))}
                                     </div>
-                                    <a 
-                                        href={link.url} 
-                                        target="_blank" 
+
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
                                         rel="noopener noreferrer"
-                                        className="block mt-4 text-blue-500 hover:underline"
+                                        className="mt-6 text-blue-500 hover:underline font-medium"
                                     >
-                                        Visit Resource
+                                        Visit Site here
                                     </a>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    
-                    <button 
+
+                    <button
                         onClick={() => setShowForm(true)}
                         className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 transition"
                     >
                         <FaPlus size={24} />
                     </button>
-                    
+
                     {showForm && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                            <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl">
+                        <div className=" flex  items-center justify-center p-4 z-50">
+                            <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl">
                                 <div className="p-6">
                                     <h2 className="text-2xl font-bold mb-4">Add New Resource</h2>
-                                    <form onSubmit={handleSubmit}>
-                                        <div className="flex flex-col md:flex-row gap-6">
-                                            <div className="flex-1">
-                                                <div className="mb-4">
-                                                    <label className="block text-gray-700 mb-2">Title</label>
-                                                    <input
-                                                        type="text"
-                                                        name="title"
-                                                        value={newLink.title}
-                                                        onChange={handleInputChange}
-                                                        className="w-full px-3 py-2 border rounded"
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="mb-4">
-                                                    <label className="block text-gray-700 mb-2">Description</label>
-                                                    <textarea
-                                                        name="description"
-                                                        value={newLink.description}
-                                                        onChange={handleInputChange}
-                                                        className="w-full px-3 py-2 border rounded h-32"
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="mb-4">
-                                                    <label className="block text-gray-700 mb-2">URL</label>
-                                                    <input
-                                                        type="url"
-                                                        name="url"
-                                                        value={newLink.url}
-                                                        onChange={handleInputChange}
-                                                        className="w-full px-3 py-2 border rounded"
-                                                        required
-                                                    />
-                                                </div>
+                                    <div className="flex flex-col md:flex-row gap-6">
+                                        {/* Left: form */}
+                                        <form onSubmit={handleSubmit} className="flex-1 space-y-4">
+                                            <div>
+                                                <label className="block text-gray-700 mb-2">Title</label>
+                                                <input
+                                                    type="text"
+                                                    name="title"
+                                                    value={newLink.title}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-3 py-2 border rounded"
+                                                    placeholder="Write the title here"
+                                                    required
+                                                />
                                             </div>
-                                            <div className="flex-1">
-                                                <div className="mb-4">
-                                                    <label className="block text-gray-700 mb-2">Image (Optional)</label>
-                                                    <input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={handleImageChange}
-                                                        className="w-full px-3 py-2 border rounded"
-                                                    />
-                                                </div>
+                                            <div>
+                                                <label className="block text-gray-700 mb-2">Description</label>
+                                                <textarea
+                                                    name="description"
+                                                    value={newLink.description}
+                                                    onChange={handleInputChange}
+                                                    maxLength={624}
+                                                    className="w-full px-3 py-2 border rounded h-36"
+                                                    placeholder="Describe the resource..."
+                                                    required
+                                                />
+                                                <p className="text-xs text-gray-500 text-right mt-1">
+                                                    {newLink.description.length}/624 characters
+                                                </p>
                                             </div>
+                                            <div>
+                                                <label className="block text-gray-700 mb-2">URL</label>
+                                                <input
+                                                    type="url"
+                                                    name="url"
+                                                    value={newLink.url}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-3 py-2 border rounded"
+                                                    placeholder="Example: https://example.com"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-gray-700 mb-2">Image (Optional)</label>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={handleImageChange}
+                                                    className="w-full px-3 py-2 border rounded"
+                                                />
+                                            </div>
+                                            <div className="flex justify-end space-x-4 mt-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowForm(false)}
+                                                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                                >
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                        {/* Right: instructions */}
+                                        <div className="w-full md:w-64 bg-gray-50 border rounded p-4 text-sm text-gray-700">
+                                            <h3 className="font-semibold mb-2">How to add a link:</h3>
+                                            <ul className="list-disc list-inside space-y-1">
+                                                <li><strong>Title:</strong> Enter a short and clear title for the resource — for example, "React Docs" or "Free Design Assets".</li>
+                                                <li><strong>Description:</strong> Add a brief explanation of what this resource is about, why it’s useful or when it can be used.</li>
+                                                <li><strong>URL:</strong> Paste the full web address. Make sure it starts with <code>https://</code>, so the link works properly.</li>
+                                                <li><strong>Image (optional):</strong> You can upload an image (like a logo or preview) to make your resource card more attractive.</li>
+                                                <li>When ready, click <strong>Save</strong>. The resource will appear immediately in the list below.</li>
+                                                <li>If you change your mind, hit <strong>Cancel</strong> to close this window without saving.</li>
+                                            </ul>
+                                            <p className="mt-3 text-xs text-gray-500">
+                                                Tip: Keep titles and descriptions short and to the point for better readability.
+                                            </p>
                                         </div>
-                                        <div className="flex justify-end space-x-4 mt-6">
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowForm(false)}
-                                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                type="submit"
-                                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                            >
-                                                Save
-                                            </button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

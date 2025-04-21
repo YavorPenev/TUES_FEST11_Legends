@@ -84,7 +84,7 @@ const uploadLinkImage = multer({ storage: linkStorage });
 
 // --------------------------- Helpers ---------------------------
 
-async function fetchAllStockSymbols() {
+/*async function fetchAllStockSymbols() {
     const exchanges = ["US", "LSE", "HKEX", "BSE", "SSE", "TSE", "KOSDAQ"];
     let allsymbols = [];
 
@@ -116,9 +116,9 @@ async function getStockData(symbol) {
         console.error("Error fetching stock data:", err.message);
         return null;
     }
-}
+}*/
 
-async function getInvestmentAdvice(userProfile) {
+/*async function getInvestmentAdvice(userProfile) {
     const stockSymbols = await fetchAllStockSymbols();
     const stockDataPromises = stockSymbols.slice(0, 5).map(symbol => getStockData(symbol.symbol));
 
@@ -162,7 +162,49 @@ async function getInvestmentAdvice(userProfile) {
 
         return "Failed to generate advice.";
     }
-}
+}*/
+
+app.post("/model-advice", isAuthenticated, async (req, res) => {
+    try {
+        const { income, expenses, goal, timeframe } = req.body;
+        
+        const response = await axios.post('http://localhost:5001/predict', {
+            income: parseFloat(income),
+            expenses: parseFloat(expenses),
+            goal: parseFloat(goal),
+            timeframe: parseInt(timeframe)
+        });
+
+        if (!response.data.success) {
+            return res.status(500).json({
+                error: response.data.error || 'prediction_failed'
+            });
+        }
+
+        const formattedAdvice = response.data.recommendations.map(rec => 
+            `Stock: ${rec.name} (${rec.symbol})\n` +
+            `Recommended Investment: $${rec.recommended_amount.toFixed(2)}\n` +
+            `Predicted Annual Return: ${(rec.predicted_return * 100).toFixed(2)}%\n` +
+            `Current Annual Return: ${(rec.actual_return * 100).toFixed(2)}%\n` +
+            `Timeframe: ${rec.timeframe} months\n` +
+            `------------------------`
+        ).join('\n');
+
+        res.status(200).json({
+            success: true,
+            advice: formattedAdvice,
+            rawData: response.data
+        });
+
+    } catch (error) {
+        console.error("Model error:", error);
+        const status = error.response?.status || 500;
+        res.status(status).json({
+            error: error.response?.data?.error || 'server_error',
+            message: error.response?.data?.message || 'Failed to process request'
+        });
+    }
+});
 
 // ---------------------- Middleware ----------------------
 
