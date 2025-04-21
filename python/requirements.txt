@@ -1,0 +1,6 @@
+torch
+flask
+flask-cors
+yfinance
+pandas
+numpy
