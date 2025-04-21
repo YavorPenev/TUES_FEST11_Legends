@@ -1,4 +1,155 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Header from "./assets/header";
+import Footer from "./assets/footer";
+import axios from "axios";
+
+function News() {
+    const [news, setNews] = useState([]);
+    const [selectedArticle, setSelectedArticle] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fetchNews = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            const response = await axios.get("http://localhost:8000/api/news");
+            
+            if (response.data.success) {
+                setNews(response.data.data);
+            } else {
+                setError(response.data.message);
+                setNews(response.data.data); // Fallback 
+            }
+        } catch (err) {
+            console.error("Fetch error:", err);
+            setError("Failed to load news. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchNews();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col">
+                <Header />
+                <div className="flex-grow flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <Header />
+            <div className="min-h-screen bg-blue-100 p-6 mt-20">  
+                <div className="max-w-7xl mx-auto">
+                    <h1 className="text-4xl font-bold text-center text-blue-800 mb-10">
+                        Latest Financial News
+                    </h1>
+
+                    {error && (
+                        <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-6 rounded">
+                            <p className="text-yellow-700">{error}</p>
+                        </div>
+                    )}
+
+                    {selectedArticle ? (
+                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+                            <button
+                                onClick={() => setSelectedArticle(null)}
+                                className="text-blue-600 hover:underline mb-4 flex items-center"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                                </svg>
+                                Back to News
+                            </button>
+                            <h2 className="text-2xl font-bold mb-4">{selectedArticle.title}</h2>
+                            <div className="flex items-center text-sm text-gray-500 mb-4">
+                                <span>{selectedArticle.source}</span>
+                                <span className="mx-2">•</span>
+                                <span>{new Date(selectedArticle.published_at).toLocaleDateString()}</span>
+                            </div>
+                            {selectedArticle.image_url && (
+                                <img
+                                    src={selectedArticle.image_url}
+                                    alt={selectedArticle.title}
+                                    className="w-full h-64 object-cover rounded-lg mb-4"
+                                    onError={(e) => {
+                                        e.target.src = 'https://via.placeholder.com/800x400?text=News+Image';
+                                    }}
+                                />
+                            )}
+                            <p className="text-gray-700 mb-4">{selectedArticle.description}</p>
+                            {selectedArticle.content && (
+                                <p className="text-gray-600 mb-6">{selectedArticle.content.replace(/\[\+\d+ chars\]/, '')}</p>
+                            )}
+                            <a
+                                href={selectedArticle.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-blue-600 hover:underline"
+                            >
+                                Read Full Article
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {news.map((article) => (
+                                <div
+                                    key={article.uuid}
+                                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                                    onClick={() => setSelectedArticle(article)}
+                                >
+                                    <div className="h-48 overflow-hidden">
+                                        <img
+                                            src={article.image_url}
+                                            alt={article.title}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                e.target.src = 'https://via.placeholder.com/400x200?text=News+Image';
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="p-4">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                                                {article.source}
+                                            </span>
+                                            <span className="text-xs text-gray-500">
+                                                {new Date(article.published_at).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-lg font-bold mb-2 line-clamp-2">{article.title}</h3>
+                                        <p className="text-gray-600 text-sm line-clamp-3 mb-3">{article.description}</p>
+                                        <button className="text-blue-600 text-sm font-medium hover:underline">
+                                            Read more
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+            <Footer />
+        </>
+    );
+}
+
+export default News;
+/*import React from "react";
 import { Link } from "react-router";
 import Header from './assets/header';
 import Footer from './assets/footer';
@@ -130,4 +281,4 @@ const articles = [
   }
   
   export default Articles;
-  export { articles };
+  export { articles };*/

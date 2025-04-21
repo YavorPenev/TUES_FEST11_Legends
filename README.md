@@ -9,7 +9,7 @@ npm install
 
 In python folder:
 pip install torch flask flask-cors
-pip install yfinance pandas numpy
+pip install yfinance pandas numpy scikit-learn
 --------------------------------
 START:
 In 1 terminal in frontend folder:

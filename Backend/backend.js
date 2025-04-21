@@ -584,6 +584,59 @@ app.delete("/deleteLink/:id", isAuthenticated, (req, res) => {
     });
 });
 
+app.get("/api/news", async (req, res) => {
+    try {
+        const response = await axios.get(
+            `https://newsapi.org/v2/everything?q=finance&apiKey=${process.env.NEWSAPI_KEY}&pageSize=20&language=en`
+        );
+        // frontend format
+        const formattedNews = response.data.articles.map(article => ({
+            uuid: article.url.hashCode(), // ID
+            title: article.title,
+            description: article.description,
+            url: article.url,
+            image_url: article.urlToImage || '/default-news-image.jpg',
+            source: article.source.name,
+            published_at: article.publishedAt
+        }));
+
+        res.status(200).json({
+            success: true,
+            data: formattedNews
+        });
+        
+    } catch (error) {
+        console.error("News API error:", error);
+
+        const fallbackNews = [
+            {
+                uuid: 1,
+                title: "Financial Markets Update",
+                description: "Latest updates from global financial markets",
+                url: "https://example.com/finance-news",
+                image_url: "https://via.placeholder.com/300x200?text=Finance+News",
+                source: "Financial Times",
+                published_at: new Date().toISOString()
+            },
+        ];
+        
+        res.status(200).json({
+            success: false,
+            message: "Using fallback news data",
+            data: fallbackNews
+        });
+    }
+});
+
+String.prototype.hashCode = function() {
+    let hash = 0;
+    for (let i = 0; i < this.length; i++) {
+        hash = ((hash << 5) - hash) + this.charCodeAt(i);
+        hash |= 0; 
+    }
+    return hash;
+};
+
 app.post("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy((err) => {
@@ -598,6 +651,8 @@ app.post("/logout", (req, res) => {
         res.status(400).json({ error: "No active session" });
     }
 });
+
+
 
 // -------------------- Server Start --------------------
 

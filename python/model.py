@@ -1,71 +1,105 @@
-import torch #towa
+import torch
 import torch.nn as nn
-import torch.optim as optim
-import pandas as pd#towa
-import numpy as np#towa
-import yfinance as yf #towa
-import os
+import yfinance as yf
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 
-tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA']
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+tickers = [
+    "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META", "BRK.B", "UNH", "V",
+    "JNJ", "WMT", "PG", "MA", "DIS", "PYPL", "PFE", "NFLX", "INTC", "PEP", "HD", "CSCO", 
+    "VZ", "MRK", "XOM", "KO", "BA", "NKE", "AMGN", "CAT", "MS", "GE", "IBM", "UPS", 
+    "MMM", "GS", "CVX", "RTX", "ABT", "T", "LOW", "WBA", "CVS", "INTU", "LMT", 
+    "TXN", "SPG", "BKNG", "MCD", "TGT", "BLK", "GS", "COST", "AXP", "COP", "QCOM", "AMT", 
+    "AIG", "FIS", "BMY", "SCHW", "CSX", "DUK", "KMB", "LMT", "LUV", "MMC", "CHTR", "STZ", 
+    "DE", "CI", "MCK", "CL", "GD", "DHR", "CME", "NSC", "ZTS", "ISRG", "GILD", "SYY", "WFC", 
+    "TMO", "NOC", "ECL", "BAX", "MO", "LLY", "AIG", "AXP", "MS", "GM", "ADBE", "ALPH", 
+    "F", "TIF", "GS", "ORCL", "DISCK", "DISCA", "AMAT", "GS", "GM", "LMT", "LOPE", "ALXN", 
+    "HPQ", "REGN", "MSCI", "ANTM", "STZ", "DVA", "NEE", "FMC", "PAYX", "HCA", "EW", "BIIB", 
+    "EXC", "BMY", "VRTX", "ICE", "ADP", "CHTR", "SPGI", "DHR", "AMGN", "DAL", "HUM", "MDT", 
+    "CME", "ALXN", "HUM", "EMR", "FAST", "LMT", "AFL", "AZO", "AME", "TROW", "ED", "INCY", 
+    "HSY", "CERN", "INTU", "DE", "EVRG", "FRT", "PFG", "MCO", "EXPE", "ALNY", "RE", "CDW", 
+    "WM", "EXPE", "FISV", "CTSH", "FRT", "GMAB", "VRTX", "CSX", "INFO", "WBA", "AIG", "HUM", 
+    "PG", "DPZ", "XLNX", "TRV", "BAC", "NSC", "ED"
+]
 
-class StockPredictor(nn.Module):
-    def __init__(self):
-        super(StockPredictor, self).__init__()
-        self.fc1 = nn.Linear(4, 64)  
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(64, 1)  
+class LSTMStockPredictor(nn.Module):
+    def __init__(self, input_size=2, hidden_size=64, num_layers=2):
+        super(LSTMStockPredictor, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
-        x = self.relu(self.fc1(x))
-        return self.fc2(x)
+        h0 = torch.zeros(2, x.size(0), 64).to(device)
+        c0 = torch.zeros(2, x.size(0), 64).to(device)
+        out, _ = self.lstm(x, (h0, c0))
+        return self.fc(out[:, -1, :])
 
 def fetch_data(ticker):
     try:
-        df = yf.download(ticker, period="7d", interval="1d")
-        return df['Close'].values if 'Close' in df else None
+        df = yf.download(ticker, period="90d", interval="1d", progress=False)
+        if 'Close' in df and len(df['Close']) >= 30:
+            return df[['Close', 'Volume']].values 
     except Exception as e:
-        print(f"Failed to fetch data for {ticker}: {e}")
-        return None
+        print(f"Error fetching {ticker}: {e}")
+    return None
 
 def create_dataset():
-    data = []
+    X, y = [], []
+    scaler = MinMaxScaler(feature_range=(0, 1)) 
     for ticker in tickers:
-        prices = fetch_data(ticker)
-        if prices is not None and len(prices) > 1:
-            expected_return = (prices[-1] - prices[0]) / prices[0] 
-            for _ in range(60):  
-                income = np.random.randint(3000, 10000)
-                expenses = np.random.randint(1000, income)
-                goal = np.random.randint(5000, 50000)
-                timeframe = np.random.randint(3, 36)
-                data.append([income, expenses, goal, timeframe, expected_return])
-    return pd.DataFrame(data, columns=['income', 'expenses', 'goal', 'timeframe', 'return'])
+        data = fetch_data(ticker)
+        if data is None or len(data) < 30:
+            continue
+        
+        close_prices = data[:, 0]
+        volume = data[:, 1]
+
+        normalized_data = scaler.fit_transform(data)
+        
+    
+        for i in range(30, len(close_prices)):
+            features = normalized_data[i-30:i]
+            input_seq = torch.tensor(features, dtype=torch.float32)
+            X.append(input_seq)
+            
+    
+            expected_return = (close_prices[i] - close_prices[i-1]) / close_prices[i-1]
+            y.append(torch.tensor([expected_return], dtype=torch.float32))
+
+    return X, y
 
 def train_model():
-    df = create_dataset()
+    X, y = create_dataset()
+    X = torch.stack(X).to(device)
+    y = torch.stack(y).to(device)
 
-    X = df[['income', 'expenses', 'goal', 'timeframe']].values.astype(np.float32)
-    y = df['return'].values.astype(np.float32).reshape(-1, 1)
+   
+    train_size = int(0.8 * len(X))
+    X_train, X_val = X[:train_size], X[train_size:]
+    y_train, y_val = y[:train_size], y[train_size:]
 
-    model = StockPredictor()
+    model = LSTMStockPredictor(input_size=2).to(device) 
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    X_tensor = torch.tensor(X)
-    y_tensor = torch.tensor(y)
-
-    for epoch in range(300):
+    for epoch in range(30):
         model.train()
-        outputs = model(X_tensor)
-        loss = criterion(outputs, y_tensor)
-
+        output = model(X_train)
+        loss = criterion(output, y_train)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-        if (epoch + 1) % 50 == 0:
-            print(f"Epoch [{epoch+1}/300], Loss: {loss.item():.4f}")
+    
+        model.eval()
+        with torch.no_grad():
+            val_output = model(X_val)
+            val_loss = criterion(val_output, y_val)
+        
+        print(f"Epoch [{epoch+1}/30], Train Loss: {loss.item():.6f}, Val Loss: {val_loss.item():.6f}")
 
     torch.save(model.state_dict(), 'stock_model.pth')
     print("✅ Model trained and saved as 'stock_model.pth'")

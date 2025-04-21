@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+/*import React, { useState } from "react";
 import { Link } from "react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -59,4 +59,4 @@ const ArticleCarousel = ({ articles }) => {
   );
 };
 
-export default ArticleCarousel;
+export default ArticleCarousel;*/
