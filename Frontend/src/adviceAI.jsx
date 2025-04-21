@@ -7,7 +7,7 @@ import Notes from './assets/notes';
 
 function AdviceAI() {
 
-  const [loading, setLoading] = useState(false); // Loading state for the button
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     document.body.style.cursor = loading ? "wait" : "default";
   }, [loading]);
@@ -20,16 +20,16 @@ function AdviceAI() {
   const adviceRef = useRef(null);
 
   const handleSaveAdvice = async () => {
-    if (!advice) {
+    if (!advice || advice.trim().length === 0) {
       alert("No advice to save!");
       return;
     }
-
+  
     try {
       const response = await axios.post("http://localhost:8000/save-stock-advice", {
         advice,
       });
-
+  
       if (response.status === 201) {
         alert("Advice saved successfully!");
       } else {
@@ -62,10 +62,9 @@ function AdviceAI() {
       if (response.data.success) {
         setAdvice(response.data.advice);
 
-        // Scroll to advice after setting it
         setTimeout(() => {
           adviceRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100); // small delay to ensure DOM is updated
+        }, 100);
       } else {
         setAdvice(`Error: ${response.data.error || 'Unknown error'}`);
       }
@@ -183,9 +182,8 @@ function AdviceAI() {
       <div className="mt-0" ref={adviceRef}>
         <div className="mt-0" ref={adviceRef}>
           <h2 className="text-2xl font-bold text-gray-800">Investment Advice:</h2>
-          <pre className="mt-2 bg-gray-100 p-4 rounded-xl text-gray-700 whitespace-pre-wrap font-sans mx-[35%] mb-4">
+          <pre className="mt-2 bg-gray-100 p-4 rounded-xl text-gray-700 whitespace-pre-wrap font-sans mx-[35%] mb-10">
             {advice || "Your advice will appear here."}
-
           </pre>
           <button
             onClick={handleSaveAdvice}
@@ -193,7 +191,6 @@ function AdviceAI() {
           >
             Save
           </button>
-
         </div>
       </div>
       <Notes />

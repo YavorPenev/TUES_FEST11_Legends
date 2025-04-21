@@ -678,20 +678,20 @@ String.prototype.hashCode = function () {
 
 app.post("/save-stock-advice", (req, res) => {
     const { advice } = req.body;
-  
-    if (!advice) {
-      return res.status(400).json({ error: "Advice is required" });
+
+    if (!advice || advice.trim().length === 0) {
+        return res.status(400).json({ error: "Advice is required" });
     }
-  
+
     const sql = "INSERT INTO stockadvisorAi (response) VALUES (?)";
     db.query(sql, [advice], (err, result) => {
-      if (err) {
-        console.error("Error saving advice:", err);
-        return res.status(500).json({ error: "Failed to save advice" });
-      }
-      res.status(201).json({ message: "Advice saved successfully" });
+        if (err) {
+            console.error("Error saving advice:", err);
+            return res.status(500).json({ error: "Failed to save advice" });
+        }
+        res.status(201).json({ message: "Advice saved successfully" });
     });
-  });
+});
 
 app.post("/save-investment-advice", (req, res) => {
     const { advice } = req.body;
@@ -709,6 +709,58 @@ app.post("/save-investment-advice", (req, res) => {
         res.status(201).json({ message: "Advice saved successfully" });
     });
 });
+
+app.get("/get-stock-advice", isAuthenticated, (req, res) => {
+    const sql = "SELECT id, response AS fullResponse, LEFT(response, 100) AS summary FROM stockadvisorAi";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching stock advice:", err);
+            return res.status(500).json({ error: "Failed to fetch stock advice" });
+        }
+        res.status(200).json({ responses: results });
+    });
+});
+
+app.get("/get-investment-advice", isAuthenticated, (req, res) => {
+    const sql = "SELECT id, response AS fullResponse, LEFT(response, 100) AS summary FROM investadvisorAi";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching investment advice:", err);
+            return res.status(500).json({ error: "Failed to fetch investment advice" });
+        }
+        res.status(200).json({ responses: results });
+    });
+});
+
+app.post("/save-budget-plan", (req, res) => {
+    const { plan } = req.body;
+    console.log("Received plan:", plan);
+  
+    if (!plan || plan.trim().length === 0) {
+      return res.status(400).json({ error: "Budget plan is required" });
+    }
+  
+    const sql = "INSERT INTO budgetplannerAi (response) VALUES (?)";
+    db.query(sql, [plan], (err, result) => {
+      if (err) {
+        console.error("Error saving budget plan:", err);
+        return res.status(500).json({ error: "Failed to save budget plan" });
+      }
+      res.status(201).json({ message: "Budget plan saved successfully" });
+    });
+  });
+
+  app.get("/get-budget-planner", isAuthenticated, (req, res) => {
+    const sql = "SELECT id, response AS fullResponse, LEFT(response, 100) AS summary FROM budgetplannerAi";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching budget plans:", err);
+            return res.status(500).json({ error: "Failed to fetch budget plans" });
+        }
+        res.status(200).json({ responses: results });
+    });
+});
+
 
 app.post("/logout", (req, res) => {
     if (req.session) {

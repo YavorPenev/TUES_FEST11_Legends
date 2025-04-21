@@ -5,6 +5,8 @@ import Footer from './assets/footer';
 import Notes from './assets/notes';
 import Calculator from './assets/SimpCalc';
 
+
+
 const BudgetPlanner = () => {
   const [income, setIncome] = useState('');
   const [expenses, setExpenses] = useState('');
@@ -13,6 +15,29 @@ const BudgetPlanner = () => {
   const [budgetPlan, setBudgetPlan] = useState('');
   const [isClicked, setIsClicked] = useState(false);
   const planRef = useRef(null);
+
+  const handleSavePlan = async () => {
+    console.log("Save button clicked");
+    if (!budgetPlan || budgetPlan.trim().length === 0) {
+      alert("No budget plan to save!");
+      return;
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:8000/save-budget-plan", {
+        plan: budgetPlan,
+      });
+  
+      if (response.status === 201) {
+        alert("Budget plan saved successfully!");
+      } else {
+        alert("Failed to save the budget plan.");
+      }
+    } catch (error) {
+      console.error("Error saving budget plan:", error);
+      alert("An error occurred while saving the budget plan.");
+    }
+  };
 
   useEffect(() => {
     document.body.style.cursor = isClicked ? "wait" : "default";
@@ -164,6 +189,14 @@ const BudgetPlanner = () => {
         <pre className="mt-2 bg-gray-100 p-4 rounded-xl text-gray-700 whitespace-pre-wrap font-sans mx-[17%] mb-10">
           {budgetPlan || "Your plan will appear here."}
         </pre>
+        {budgetPlan && (
+          <button
+            onClick={handleSavePlan}
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+          >
+            Save
+          </button>
+        )}
       </div>
 
       <Notes />
