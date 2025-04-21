@@ -164,6 +164,45 @@ async function getStockData(symbol) {
     }
 }*/
 
+app.post("/budgetplanner", async (req, res) => {
+    const { income, expenses, familySize, goals } = req.body;
+  
+    if (!income || !expenses || !familySize || !goals || goals.trim() === "") {
+      return res.status(400).json({ error: "Income, expenses, family size, and goals are required." });
+    }
+  
+    const prompt = `
+    I need you to act as a personal financial advisor. Based on the following information:
+    - Monthly Income: $${income}
+    - Monthly Expenses: $${expenses}
+    - Family Members: ${familySize}
+    - Financial Goals: ${goals || "No specific goals provided"}
+  
+    Create a day-by-day budget plan for a typical 30-day month that is reusable for any month of the year. Each day's entry should give advice on how much to spend, how much to save, and what to focus on (e.g., groceries, entertainment, saving, investing, etc.).
+  
+    Be practical, clear, and structured. Format like this:
+    Day 1: Spend: $X | Save: $Y | Focus: [advice]
+    Day 2: ...
+    ...
+    Day 30: ...
+    `;
+  
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 2000,
+      });
+  
+      const budgetPlan = response.choices[0].message.content;
+      res.status(200).json({ plan: budgetPlan });
+    } catch (err) {
+      console.error("Error generating budget plan:", err);
+      res.status(500).json({ error: "Failed to generate budget plan" });
+    }
+  });
+
 app.post("/model-advice", isAuthenticated, async (req, res) => {
     try {
         const { income, expenses, goal, timeframe } = req.body;

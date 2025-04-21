@@ -7,10 +7,21 @@ function Header() {
   const [CalcStatus, SetCalcStatus] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {//dasli potrebitelq e lognat
+  useEffect(() => {
+    // Проверка дали потребителят е логнат
     const user = localStorage.getItem("user");
     if (user) {
-      setIsLoggedIn(true);
+      try {
+        const parsedUser = JSON.parse(user);
+        if (parsedUser && parsedUser.username) {
+          setIsLoggedIn(true);
+        } else {
+          localStorage.removeItem("user"); // Изчистване на невалидни данни
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        localStorage.removeItem("user"); // Изчистване на невалидни данни
+      }
     }
   }, []);
 
@@ -18,7 +29,7 @@ function Header() {
     try {
       const response = await fetch("http://localhost:8000/logout", {
         method: "POST",
-        credentials: "include",//za biskwitki
+        credentials: "include", // За бисквитки
       });
 
       if (response.ok) {
@@ -59,7 +70,6 @@ function Header() {
       </div>
 
       <div className="flex flex-row justify-end items-center">
-
         <Link
           to="/articles"
           className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
@@ -77,16 +87,14 @@ function Header() {
             </Link>
             <Link
               to="/signup"
-              className="bg-blue-100 -ml-0.5 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl border-l-4 border-blue-900  text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+              className="bg-blue-100 -ml-0.5 pl-3 pr-2 pt-2 pb-2 rounded-r-2xl border-l-4 border-blue-900 text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             >
               Sign Up
             </Link>
           </>
         )}
 
-
         {isLoggedIn && <div className="w-10"></div>}
-
 
         {isLoggedIn && (
           <button
@@ -97,12 +105,14 @@ function Header() {
           </button>
         )}
 
-        <Link
-          to="/profile"
-          className="bg-blue-100 ml-15 p-1 rounded-full text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
-        >
-          <img src="/proficon.png" className="h-13 w-13" />
-        </Link>
+        {isLoggedIn && (
+          <Link
+            to="/profile"
+            className="bg-blue-100 ml-15 p-1 rounded-full text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+          >
+            <img src="/proficon.png" className="h-13 w-13" />
+          </Link>
+        )}
 
         <button
           className="relative ml-15 p-3 rounded-2xl bg-blue-100 hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
