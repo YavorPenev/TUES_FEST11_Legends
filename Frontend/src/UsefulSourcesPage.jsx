@@ -90,13 +90,13 @@ function Sitelinks() {
     return (
         <>
             <Header />
-            <div className=" min-h-screen bg-blue-300 p-6 mt-19">
+            <div className=" min-h-screen bg-white p-6 mt-19">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-8">Links to useful sites</h1>
+                    <h1 className="text-5xl font-bold text-gray-800 mb-8 mt-3">Links to useful sites</h1>
 
                     <div className="grid grid-cols-1 gap-6">
                         {links.map(link => (
-                            <div key={link.id} className="bg-red rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row relative border-2">
+                            <div key={link.id} className="bg-blue-300 rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row relative border-2">
                                 <button
                                     onClick={() => handleDelete(link.id, link.image_path)}
                                     className="absolute top-2 right-2 text-red-500 hover:text-red-700 "

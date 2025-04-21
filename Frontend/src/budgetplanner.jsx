@@ -184,7 +184,7 @@ const BudgetPlanner = () => {
       </div>
 
       {/* Result Display */}
-      <div className="mt-0" ref={planRef}>
+      <div className="-mt-0 mb-15" ref={planRef} >
         <h2 className="text-2xl font-bold text-gray-800 text-center">Your Budget Plan:</h2>
         <pre className="mt-2 bg-gray-100 p-4 rounded-xl text-gray-700 whitespace-pre-wrap font-sans mx-[17%] mb-10">
           {budgetPlan || "Your plan will appear here."}
@@ -192,7 +192,7 @@ const BudgetPlanner = () => {
         {budgetPlan && (
           <button
             onClick={handleSavePlan}
-            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+            className="mt-4 mb-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
           >
             Save
           </button>

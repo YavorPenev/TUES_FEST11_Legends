@@ -184,9 +184,9 @@ function InvestAI() {
           <p className="text-gray-700 whitespace-pre-line">{result}</p>
           <button
             onClick={handleSaveResult}
-            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
           >
-            Save
+            Save answear
           </button>
         </div>
       )}

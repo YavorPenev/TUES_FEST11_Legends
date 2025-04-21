@@ -88,13 +88,13 @@ function PerArticles() {
         <>
             <Header />
             <div className="p-6 pt-14 bg-gray-100 min-h-screen">
-                <h1 className="text-3xl font-bold mb-6">Articles</h1>
+            <h1 className="text-5xl font-bold text-gray-800 mb-4 mt-15">Useful Articles</h1>
 
-                <div className="space-y-6">
+                <div className="space-y-6 ">
                     {articles.map((article) => (
                         <div
                             key={article.id}
-                            className="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-4 relative"
+                            className="bg-blue-200 p-6 rounded-lg shadow-lg flex flex-col space-y-4 relative"
                         >
                             <button
                                 onClick={() => handleDeleteArticle(article.id)}
