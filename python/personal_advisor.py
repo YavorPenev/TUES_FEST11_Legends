@@ -1,121 +1,96 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+import os
 import torch
 import torch.nn as nn
 import yfinance as yf
-from datetime import datetime, timedelta
+from flask import Flask, request, jsonify
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 
-app = Flask(__name__)
-CORS(app)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-class StockPredictor(nn.Module):
-    def __init__(self):
-        super(StockPredictor, self).__init__()
-        self.fc1 = nn.Linear(4, 64)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(64, 1)
+tickers = [
+    "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META", "BRK.B", "UNH", "V",
+    "JNJ", "WMT", "PG", "MA", "DIS", "PYPL", "PFE", "NFLX", "INTC", "PEP", "HD", "CSCO",
+    "VZ", "MRK", "XOM", "KO", "BA", "NKE", "AMGN", "CAT", "MS", "GE", "IBM", "UPS",
+    "MMM", "GS", "CVX", "RTX", "ABT", "T", "LOW", "WBA", "CVS", "INTU", "LMT",
+    "TXN", "SPG", "BKNG", "MCD", "TGT", "BLK", "GS", "COST", "AXP", "COP", "QCOM", "AMT",
+    "AIG", "FIS", "BMY", "SCHW", "CSX", "DUK", "KMB", "LMT", "LUV", "MMC", "CHTR", "STZ",
+    "DE", "CI", "MCK", "CL", "GD", "DHR", "CME", "NSC", "ZTS", "ISRG", "GILD", "SYY", "WFC",
+    "TMO", "NOC", "ECL", "BAX", "MO", "LLY", "AIG", "AXP", "MS", "GM", "ADBE", "ALPH",
+    "F", "TIF", "GS", "ORCL", "DISCK", "DISCA", "AMAT", "GS", "GM", "LMT", "LOPE", "ALXN",
+    "HPQ", "REGN", "MSCI", "ANTM", "STZ", "DVA", "NEE", "FMC", "PAYX", "HCA", "EW", "BIIB",
+    "EXC", "BMY", "VRTX", "ICE", "ADP", "CHTR", "SPGI", "DHR", "AMGN", "DAL", "HUM", "MDT",
+    "CME", "ALXN", "HUM", "EMR", "FAST", "LMT", "AFL", "AZO", "AME", "TROW", "ED", "INCY",
+    "HSY", "CERN", "INTU", "DE", "EVRG", "FRT", "PFG", "MCO", "EXPE", "ALNY", "RE", "CDW",
+    "WM", "EXPE", "FISV", "CTSH", "FRT", "GMAB", "VRTX", "CSX", "INFO", "WBA", "AIG", "HUM",
+    "PG", "DPZ", "XLNX", "TRV", "BAC", "NSC", "ED"
+]
+
+class LSTMStockPredictor(nn.Module):
+    def __init__(self, input_size=2, hidden_size=64, num_layers=2):
+        super(LSTMStockPredictor, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
-        x = self.relu(self.fc1(x))
-        return self.fc2(x)
+        h0 = torch.zeros(2, x.size(0), 64).to(device)
+        c0 = torch.zeros(2, x.size(0), 64).to(device)
+        out, _ = self.lstm(x, (h0, c0))
+        return self.fc(out[:, -1, :])
 
-model = StockPredictor()
+
+app = Flask(__name__)
+
+
+model = LSTMStockPredictor(input_size=2).to(device)
 model.load_state_dict(torch.load('stock_model.pth'))
 model.eval()
 
-tickers = {
-    'AAPL': 'Apple',
-    'MSFT': 'Microsoft',
-    'GOOGL': 'Alphabet',
-    'AMZN': 'Amazon',
-    'NVDA': 'NVIDIA',
-    'TSLA': 'Tesla',
-    'META': 'Meta',
-    'JPM': 'JPMorgan',
-    'V': 'Visa',
-    'WMT': 'Walmart'
-}
 
-def fetch_current_return(ticker):
+def fetch_data(ticker):
     try:
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=14)
-        
-        data = yf.download(
-            ticker,
-            start=start_date,
-            end=end_date,
-            progress=False
-        )
-        
-        if len(data) < 2:
-            return None
-            
-        closes = data['Close'].values
-        current_close = float(closes[-1])
-        prev_close = float(closes[-2])
-        
-        return (current_close - prev_close) / prev_close * 252
-        
-    except Exception:
+        df = yf.download(ticker, period="30d", interval="1d", progress=False)
+        if 'Close' in df and len(df['Close']) >= 30:
+            return df[['Close', 'Volume']].values 
+    except Exception as e:
+        print(f"Error fetching {ticker}: {e}")
+    return None
+
+def predict_stock_return(ticker):
+    data = fetch_data(ticker)
+    if data is None:
         return None
 
-@app.route('/predict', methods=['POST'])
+    close_prices = data[:, 0]
+    volume = data[:, 1]
+
+    # Normalize the data
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    normalized_data = scaler.fit_transform(data)
+
+
+    input_seq = torch.tensor(normalized_data[-30:], dtype=torch.float32).unsqueeze(0).to(device)
+
+    with torch.no_grad():
+        predicted_return = model(input_seq)
+    
+    return predicted_return.item()
+
+@app.route('/predict', methods=['GET'])
 def predict():
-    try:
-        data = request.json
-        
-        try:
-            income = float(data['income'])
-            expenses = float(data['expenses'])
-            goal = float(data['goal'])
-            timeframe = int(data['timeframe'])
-        except (ValueError, KeyError):
-            return jsonify({'error': 'Invalid input values'}), 400
-
-        investable = income - expenses
-        if investable <= 0:
-            return jsonify({'error': 'No investable income'}), 400
-
-        input_tensor = torch.tensor([[income, expenses, goal, timeframe]], dtype=torch.float32)
-        recommendations = []
-
-        for ticker, name in tickers.items():
-            predicted_return = model(input_tensor).item()
-            actual_return = fetch_current_return(ticker)
-            
-            if actual_return is None:
-                continue
-                
-            recommended_amount = min(investable * 0.25, goal / len(tickers))
-            
-            recommendations.append({
-                'symbol': ticker,
-                'name': name,
-                'predicted_return': float(predicted_return),
-                'actual_return': float(actual_return),
-                'recommended_amount': float(recommended_amount),
-                'timeframe': timeframe
-            })
-
-        if not recommendations:
-            return jsonify({'error': 'No stock data available'}), 503
-
-        recommendations.sort(key=lambda x: x['predicted_return'], reverse=True)
-
-        return jsonify({
-            'success': True,
-            'recommendations': recommendations,
-            'summary': {
-                'total_investable': float(investable),
-                'goal': float(goal),
-                'timeframe': timeframe,
-                'stocks_analyzed': len(recommendations)
-            }
-        })
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    ticker = request.args.get('ticker')
+    if ticker not in tickers:
+        return jsonify({"error": "Ticker not found"}), 400
+    
+    predicted_return = predict_stock_return(ticker)
+    if predicted_return is None:
+        return jsonify({"error": "Error fetching data for the ticker"}), 500
+    
+    return jsonify({
+        "ticker": ticker,
+        "predicted_return": predicted_return
+    })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(debug=True)
+
