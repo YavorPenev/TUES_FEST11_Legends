@@ -60,21 +60,11 @@ function Header() {
 
       <div className="flex flex-row justify-end items-center">
 
-        {isLoggedIn &&
-          (location.pathname === "/articles" || location.pathname === "/article") && (
-            <Link
-              to="/PerArticles"
-              className="mr-22 bg-blue-100 text-blue-950 font-bold text-4xl px-4 py-2 rounded-2xl hover:scale-105 transition-transform hover:duration-200 active:scale-90 active:duration-50"
-            >
-              Write an Article
-            </Link>
-          )}
-
         <Link
           to="/articles"
           className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
         >
-          Articles
+          News
         </Link>
 
         {!isLoggedIn && (

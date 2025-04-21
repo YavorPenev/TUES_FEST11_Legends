@@ -8,16 +8,13 @@ function News() {
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("finance");
 
-    const fetchNews = async (query = "finance") => {
+    const fetchNews = async () => {
         try {
             setLoading(true);
             setError(null);
             
-            const response = await axios.get(
-                `http://localhost:8000/api/news?query=${query}`
-            );
+            const response = await axios.get("http://localhost:8000/api/news");
             
             if (response.data.success) {
                 setNews(response.data.data);
@@ -34,13 +31,8 @@ function News() {
     };
 
     useEffect(() => {
-        fetchNews(searchTerm);
-    }, [searchTerm]);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        fetchNews(searchTerm);
-    };
+        fetchNews();
+    }, []);
 
     if (loading) {
         return (
@@ -57,32 +49,11 @@ function News() {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-100 p-6">
+            <div className="min-h-screen bg-blue-100 p-6 mt-20">  
                 <div className="max-w-7xl mx-auto">
-                    <h1 className="text-4xl font-bold text-center text-blue-800 mb-6">
+                    <h1 className="text-4xl font-bold text-center text-blue-800 mb-10">
                         Latest Financial News
                     </h1>
-                    
-                    {/* Търсачка */}
-                    <div className="mb-8 flex justify-center">
-                        <form onSubmit={handleSearch} className="w-full max-w-md">
-                            <div className="flex shadow-sm">
-                                <input
-                                    type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="Search for news..."
-                                    className="flex-grow px-4 py-2 rounded-l-md border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                <button
-                                    type="submit"
-                                    className="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition"
-                                >
-                                    Search
-                                </button>
-                            </div>
-                        </form>
-                    </div>
 
                     {error && (
                         <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-6 rounded">
