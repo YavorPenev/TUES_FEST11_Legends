@@ -19,7 +19,7 @@ import PerArticles from './PerArticles';
 import './styles/index.css';
 import Sitelinks from './UsefulSourcesPage';
 import LearnMore from './LearnMore';
-import BudgetPlanner from './budgetplaner'
+import BudgetPlanner from './budgetplanner'
 
 //tuk se importwa samo home
 // da ne se slusha gorniq komentar, wsi`ko se importwa tuk
