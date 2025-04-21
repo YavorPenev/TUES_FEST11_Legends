@@ -194,7 +194,43 @@ const Invest = async (investments, goals, setInvest) => {
 };
 
 /////////////////////////////////////////////////////////////////////
+const BudgetPlanner = async (income, expenses, familySize, goals, setPlan) => {
+  if (!income || isNaN(income) || !expenses || isNaN(expenses) || !familySize || isNaN(familySize) || !goals || goals.trim() === "") {
+    alert("Please fill in all fields with valid values, including your financial goals.");
+    return;
+  }
 
+  const requestData = {
+    income: parseInt(income),
+    expenses: parseInt(expenses),
+    familySize: parseInt(familySize),
+    goals: goals.trim()
+  };
+
+  try {
+    const response = await axios.post("http://localhost:8000/budgetplanner", requestData, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch budget plan: ${response.statusText}`);
+    }
+
+    setPlan(response.data.budgetPlan);
+  } catch (error) {
+    console.error("BudgetPlanner error:", error.response ? error.response.data : error.message);
+
+    if (error.response && error.response.status === 401) {
+      alert("Access denied. Please log in to access this resource.");
+      window.location.href = "/login";
+    } else {
+      alert(`Something went wrong: ${error.message}`);
+    }
+  }
+};
+
+/////////////////////////////////////////////////////////////////////////
 export {
   //fetchAPI,
   saveNote,
@@ -204,5 +240,6 @@ export {
   Advice,
   login1,
   signup1,
-  Invest
+  Invest,
+  BudgetPlanner
 };
