@@ -4,8 +4,8 @@ import './styles/index.css';
 import Header from './assets/header';
 import Footer from './assets/footer';
 import TopCompanies from './assets/topcompanies';
-import ArticleCarousel from './assets/articlecarousel';
-import { articles } from './articles';
+//import ArticleCarousel from './assets/articlecarousel';
+//import News from './articles';
 import UsefulSources from './assets/usefulsources';
 import ProfArticles from './assets/professionalarticles';
 function Home() {
@@ -97,7 +97,7 @@ function Home() {
 
         <img className="w-full" src="/mainpic-bottom.png" alt="Footer Visual" />
       </div>
-      <ArticleCarousel articles={articles} />
+     {/* <ArticleCarousel articles={articles} /> */}
 
 
       <div className="bg-[url('/Background_Sections.png')] bg-cover bg-center bg-no-repeat p-10 border-t">

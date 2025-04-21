@@ -47,7 +47,7 @@ function Calculator() {
         <Draggable nodeRef={nodeRef}>
           <div
             ref={nodeRef}
-            className="fixed bottom-20 right-4 bg-blue-800 p-4 rounded-2xl shadow-2xl w-72 border border-gray-200 cursor-grab active:cursor-grabbing"
+            className="fixed bottom-20 right-4 bg-blue-600 p-4 rounded-2xl shadow-2xl w-72 border border-gray-200 cursor-grab active:cursor-grabbing"
           >
             <div className="mb-4">
               <input
@@ -79,7 +79,7 @@ function Calculator() {
               </button>
               <button
                 onClick={() => handleClick("/")}
-                className="bg-blue-500 p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
+                className="bg-blue-900 text-white p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
               >
                 /
               </button>
@@ -104,7 +104,7 @@ function Calculator() {
               </button>
               <button
                 onClick={() => handleClick("*")}
-                className="bg-blue-500 p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
+                className="bg-blue-900 text-white p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
               >
                 *
               </button>
@@ -129,7 +129,7 @@ function Calculator() {
               </button>
               <button
                 onClick={() => handleClick("-")}
-                className="bg-blue-500 p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
+                className="bg-blue-900 text-white p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
               >
                 -
               </button>
@@ -154,7 +154,7 @@ function Calculator() {
               </button>
               <button
                 onClick={() => handleClick("+")}
-                className="bg-blue-500 p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
+                className="bg-blue-900 text-white p-3 rounded-lg font-bold text-lg cursor-pointer hover:scale-110 active:scale-100 transition-transform hover:duration-150 active:duration-50"
               >
                 +
               </button>

@@ -6,9 +6,10 @@ import Calculator from './assets/SimpCalc';
 import Notes from './assets/notes';
 
 function AdviceAI() {
-  const [loading, setLoading] = useState(false);
+
+  const [loading, setLoading] = useState(false); // Loading state for the button
   useEffect(() => {
-    document.body.style.cursor = loading ? 'wait' : 'default';
+    document.body.style.cursor = loading ? "wait" : "default";
   }, [loading]);
 
   const [income, setIncome] = useState("");
@@ -51,7 +52,23 @@ function AdviceAI() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-to-r flex items-center justify-center p-6 mt-10">
+      <div className="min-h-screen bg-gradient-to-r flex items-start justify-center p-6 mt-10">
+        {/* Explanation Box */}
+        <div className="bg-gray-100 shadow-md text-lg rounded-lg p-6 max-w-sm w-full mr-26 mt-84">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">What This Does</h2>
+          <p className="text-gray-700 text-lg">
+            This tool helps you receive investment advice based on:
+          </p>
+          <ul className="list-disc list-inside text-gray-700 text-lg mt-2 space-y-1">
+            <li>Your annual income</li>
+            <li>Your monthly expenses</li>
+            <li>Your investment goals</li>
+          </ul>
+          <p className="text-gray-700 text-lg mt-3">
+            After submitting the form, the system calculates your disposable income and provides tailored investment advice based on your goals.
+          </p>
+        </div>
+      <div className="min-h-screen bg-gradient-to-r  flex items-center justify-center p-6 mt-10">
         <div className="bg-gray-100 shadow-lg rounded-lg p-8 max-w-lg w-full gap-1 flex flex-col mt-3">
           <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
             Investment Advice
@@ -59,7 +76,10 @@ function AdviceAI() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="income"
+                className="block text-sm font-medium text-gray-700 "
+              >
                 Enter Your Income ($):
               </label>
               <input
@@ -131,7 +151,6 @@ function AdviceAI() {
               )}
             </button>
           </div>
-          
           <div className="mt-6">
             <h2 className="text-lg font-semibold text-gray-800">Investment Advice:</h2>
             <pre className="mt-2 bg-gray-100 p-4 rounded-md text-gray-700 whitespace-pre-wrap font-sans">
@@ -139,6 +158,7 @@ function AdviceAI() {
             </pre>
           </div>
         </div>
+      </div>
       </div>
       <Notes />
       <Calculator />
