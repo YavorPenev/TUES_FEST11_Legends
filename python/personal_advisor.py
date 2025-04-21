@@ -13,14 +13,17 @@ tickers = [
     "JNJ", "WMT", "PG", "MA", "DIS", "PYPL", "PFE", "NFLX", "INTC", "PEP", "HD", "CSCO",
     "VZ", "MRK", "XOM", "KO", "BA", "NKE", "AMGN", "CAT", "MS", "GE", "IBM", "UPS",
     "MMM", "GS", "CVX", "RTX", "ABT", "T", "LOW", "WBA", "CVS", "INTU", "LMT",
-    "TXN", "SPG", "BKNG", "MCD", "TGT", "BLK", "COST", "AXP", "COP", "QCOM", "AMT",
-    "AIG", "FIS", "BMY", "SCHW", "CSX", "DUK", "KMB", "LUV", "MMC", "CHTR", "STZ",
+    "TXN", "SPG", "BKNG", "MCD", "TGT", "BLK", "GS", "COST", "AXP", "COP", "QCOM", "AMT",
+    "AIG", "FIS", "BMY", "SCHW", "CSX", "DUK", "KMB", "LMT", "LUV", "MMC", "CHTR", "STZ",
     "DE", "CI", "MCK", "CL", "GD", "DHR", "CME", "NSC", "ZTS", "ISRG", "GILD", "SYY", "WFC",
-    "TMO", "NOC", "ECL", "BAX", "MO", "LLY", "GM", "ADBE", "ORCL", "AMAT", "REGN", "MSCI",
-    "NEE", "FMC", "PAYX", "HCA", "EW", "BIIB", "EXC", "VRTX", "ICE", "ADP", "SPGI",
-    "DAL", "HUM", "MDT", "EMR", "FAST", "AFL", "AZO", "AME", "TROW", "ED", "INCY",
-    "HSY", "CERN", "EVRG", "FRT", "PFG", "MCO", "EXPE", "ALNY", "RE", "CDW", "WM",
-    "FISV", "CTSH", "GMAB", "INFO", "DPZ", "XLNX", "TRV", "BAC"
+    "TMO", "NOC", "ECL", "BAX", "MO", "LLY", "AIG", "AXP", "MS", "GM", "ADBE", "ALPH",
+    "F", "TIF", "GS", "ORCL", "DISCK", "DISCA", "AMAT", "GS", "GM", "LMT", "LOPE", "ALXN",
+    "HPQ", "REGN", "MSCI", "ANTM", "STZ", "DVA", "NEE", "FMC", "PAYX", "HCA", "EW", "BIIB",
+    "EXC", "BMY", "VRTX", "ICE", "ADP", "CHTR", "SPGI", "DHR", "AMGN", "DAL", "HUM", "MDT",
+    "CME", "ALXN", "HUM", "EMR", "FAST", "LMT", "AFL", "AZO", "AME", "TROW", "ED", "INCY",
+    "HSY", "CERN", "INTU", "DE", "EVRG", "FRT", "PFG", "MCO", "EXPE", "ALNY", "RE", "CDW",
+    "WM", "EXPE", "FISV", "CTSH", "FRT", "GMAB", "VRTX", "CSX", "INFO", "WBA", "AIG", "HUM",
+    "PG", "DPZ", "XLNX", "TRV", "BAC", "NSC", "ED"
 ]
 
 class LSTMStockPredictor(nn.Module):
@@ -45,30 +48,21 @@ def fetch_data(ticker):
     try:
         df = yf.download(ticker, period="30d", interval="1d", progress=False)
         if 'Close' in df and len(df['Close']) >= 30:
-            return df[['Close', 'Volume']].values
-    except Exception as e:
-        print(f"Error fetching data for {ticker}: {e}")
+            return df[['Close', 'Volume']].values 
+    except:
+        pass
     return None
 
 def predict_stock_return(ticker):
     data = fetch_data(ticker)
     if data is None:
-        print(f"No data for {ticker}, skipping prediction.")
         return None
     scaler = MinMaxScaler(feature_range=(0, 1))
     normalized_data = scaler.fit_transform(data)
     input_seq = torch.tensor(normalized_data[-30:], dtype=torch.float32).unsqueeze(0).to(device)
     with torch.no_grad():
-        predicted_price = model(input_seq).item()
-    last_price = data[-1][0]
-    
-    # Handle invalid data or zero predictions more gracefully
-    if last_price <= 0 or predicted_price <= 0 or np.isnan(predicted_price):
-        print(f"Invalid prediction for {ticker}. Last price: {last_price}, Predicted price: {predicted_price}. Skipping.")
-        return None
-    
-    predicted_return = ((predicted_price - last_price) / last_price) * 100
-    return predicted_return
+        predicted_return = model(input_seq)
+    return predicted_return.item()
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -77,49 +71,28 @@ def predict():
     expenses = data.get('expenses')
     goal = data.get('goal')
     timeframe = data.get('timeframe')
-
     if not all([income, expenses, goal, timeframe]):
         return jsonify({"success": False, "error": "Missing input values"}), 400
-
-    try:
-        income = float(income)
-        expenses = float(expenses)
-        goal = float(goal)
-        timeframe = int(timeframe)
-    except:
-        return jsonify({"success": False, "error": "Invalid input types"}), 400
-
-    investable_income = (income * timeframe) - (expenses * timeframe)
-    if investable_income <= 0:
-        return jsonify({"success": False, "error": "No investable income available"}), 400
-
+    investable_income = income - (expenses * 12)
     predictions = []
     for ticker in tickers[:150]:
         predicted_return = predict_stock_return(ticker)
-        
-        # Handle edge cases where prediction might be NaN, negative, or zero
-        if predicted_return is None or np.isnan(predicted_return) or predicted_return <= 0:
+        if predicted_return is None:
             continue
-        
         predictions.append((ticker, predicted_return))
-
-    if not predictions:
-        return jsonify({"success": False, "error": "No valid predictions available"}), 500
-
     top_5 = sorted(predictions, key=lambda x: x[1], reverse=True)[:5]
-
     recommendations = []
     for ticker, predicted_return in top_5:
-        recommended_amount = round(investable_income / 5, 2)
+        recommended_amount = investable_income / 5
+        actual_return = np.random.uniform(0.05, 0.15)
         recommendations.append({
             "name": ticker,
             "symbol": ticker,
-            "predicted_annual_return": f"{round(predicted_return, 2)}%",
-            "current_annual_return": f"{round(predicted_return, 2)}%",
-            "recommended_investment": recommended_amount,
+            "predicted_return": predicted_return,
+            "actual_return": actual_return,
+            "recommended_amount": recommended_amount,
             "timeframe": timeframe
         })
-
     return jsonify({
         "success": True,
         "recommendations": recommendations
@@ -127,3 +100,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
+
