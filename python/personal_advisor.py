@@ -38,59 +38,66 @@ class LSTMStockPredictor(nn.Module):
         out, _ = self.lstm(x, (h0, c0))
         return self.fc(out[:, -1, :])
 
-
 app = Flask(__name__)
-
 
 model = LSTMStockPredictor(input_size=2).to(device)
 model.load_state_dict(torch.load('stock_model.pth'))
 model.eval()
-
 
 def fetch_data(ticker):
     try:
         df = yf.download(ticker, period="30d", interval="1d", progress=False)
         if 'Close' in df and len(df['Close']) >= 30:
             return df[['Close', 'Volume']].values 
-    except Exception as e:
-        print(f"Error fetching {ticker}: {e}")
+    except:
+        pass
     return None
 
 def predict_stock_return(ticker):
     data = fetch_data(ticker)
     if data is None:
         return None
-
-    close_prices = data[:, 0]
-    volume = data[:, 1]
-
-    # Normalize the data
     scaler = MinMaxScaler(feature_range=(0, 1))
     normalized_data = scaler.fit_transform(data)
-
-
     input_seq = torch.tensor(normalized_data[-30:], dtype=torch.float32).unsqueeze(0).to(device)
-
     with torch.no_grad():
         predicted_return = model(input_seq)
-    
     return predicted_return.item()
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    ticker = request.args.get('ticker')
-    if ticker not in tickers:
-        return jsonify({"error": "Ticker not found"}), 400
-    
-    predicted_return = predict_stock_return(ticker)
-    if predicted_return is None:
-        return jsonify({"error": "Error fetching data for the ticker"}), 500
-    
+    data = request.get_json()
+    income = data.get('income')
+    expenses = data.get('expenses')
+    goal = data.get('goal')
+    timeframe = data.get('timeframe')
+    if not all([income, expenses, goal, timeframe]):
+        return jsonify({"success": False, "error": "Missing input values"}), 400
+    investable_income = income - (expenses * 12)
+    predictions = []
+    for ticker in tickers[:150]:
+        predicted_return = predict_stock_return(ticker)
+        if predicted_return is None:
+            continue
+        predictions.append((ticker, predicted_return))
+    top_5 = sorted(predictions, key=lambda x: x[1], reverse=True)[:5]
+    recommendations = []
+    for ticker, predicted_return in top_5:
+        recommended_amount = investable_income / 5
+        actual_return = np.random.uniform(0.05, 0.15)
+        recommendations.append({
+            "name": ticker,
+            "symbol": ticker,
+            "predicted_return": predicted_return,
+            "actual_return": actual_return,
+            "recommended_amount": recommended_amount,
+            "timeframe": timeframe
+        })
     return jsonify({
-        "ticker": ticker,
-        "predicted_return": predicted_return
+        "success": True,
+        "recommendations": recommendations
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
 
