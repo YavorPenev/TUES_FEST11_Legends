@@ -77,7 +77,7 @@ function Notes() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Enter your note here..."
-                className="w-full p-2 border border-blue-300 rounded bg-blue-50 text-blue-900 h-32"
+                className="w-full p-2 border border-blue-500 rounded bg-blue-50 text-blue-900 h-32"
               />
             </div>
             <div className="flex justify-between">

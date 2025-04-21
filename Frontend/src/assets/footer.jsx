@@ -26,8 +26,8 @@ function Footer() {
         <Link to="/CurrencyCalculator" className="text-blue-100 hover:underline">Currency Calculator</Link>
       </div>
       <div className="flex flex-col gap-1 items-start">
-        <Link to="/articles" className="text-blue-100 hover:underline">Articles</Link>
         <Link to="/about" className="text-blue-100 hover:underline">About Us</Link>
+        <Link to="/articles" className="text-blue-100 hover:underline">Latest News</Link>
         <Link to="/usefulsources" className="text-blue-100 hover:underline">Useful Sources</Link>
       </div>
     </footer>
