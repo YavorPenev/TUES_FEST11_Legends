@@ -27,6 +27,9 @@ const data2 = [
 ];
 
 const Dashboard = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const username = user?.username || "Гост";
+
   const [diagrams, setDiagrams] = useState([
     { id: 1, text: "Diagrama 1" },
     { id: 2, text: "Diagrama 2" },
@@ -43,18 +46,18 @@ const Dashboard = () => {
   ]);
 
   const [notes, setNotes] = useState([
-    { id: 1, title: "Note 1", text: "Text 1." },
-    { id: 2, title: "Note 2", text: "text 2." },
-    { id: 3, title: "Note 3", text: "text 3." },
-    { id: 4, title: "Note 4", text: "text 4." },
-    { id: 5, title: "Note 5", text: "text 5." },
-    { id: 6, title: "Note 6", text: "text 6." },
-    { id: 7, title: "Note 7", text: "text 7." },
-    { id: 8, title: "Note 8", text: "text 8." },
-    { id: 9, title: "Note 9", text: "text 9." },
-    { id: 10, title: "Note 10", text: "text 10." },
-    { id: 11, title: "Note 11", text: "text 11." },
-    { id: 12, title: "Note 12", text: "text 12." },
+    { id: 1, title: "Note 1", content: "Text 1." },
+    { id: 2, title: "Note 2", content: "Text 2." },
+    { id: 3, title: "Note 3", content: "Text 3." },
+    { id: 4, title: "Note 4", content: "Text 4." },
+    { id: 5, title: "Note 5", content: "Text 5." },
+    { id: 6, title: "Note 6", content: "Text 6." },
+    { id: 7, title: "Note 7", content: "Text 7." },
+    { id: 8, title: "Note 8", content: "Text 8." },
+    { id: 9, title: "Note 9", content: "Text 9." },
+    { id: 10, title: "Note 10", content: "Text 10." },
+    { id: 11, title: "Note 11", content: "Text 11." },
+    { id: 12, title: "Note 12", content: "Text 12." },
   ]);
 
   useEffect(() => {
@@ -75,23 +78,23 @@ const Dashboard = () => {
     setDiagrams((prev) => prev.filter((d) => d.id !== id));
   };
 
-
   return (
-    <div className="bg-gray-100  flex flex-col ">
-      <div className="bg-gray-100 h-screen flex flex-col ">
+    <div className="bg-gray-100 flex flex-col">
+      <div className="bg-gray-100 h-screen flex flex-col">
         <Header />
         <div className="flex h-screen overflow-hidden font-sans mt-24">
-          <div className="w-75 bg-gray-800 text-white flex-shrink-0  space-y-6">
-            <div className="flex items-center justify-center mb-4 bg-gray-800  p-4 h-1/2 flex-col w-full">
+          {/* Sidebar */}
+          <div className="w-75 bg-gray-800 text-white flex-shrink-0 space-y-6">
+            <div className="flex items-center justify-center mb-4 bg-gray-800 p-4 h-1/2 flex-col w-full">
               <div className="flex justify-center">
-                <div className="w-40 h-40 bg-white text-black flex items-center justify-center text-sm rounded-full mt-10">
+                <div className="w-40 h-40 bg-white text-black flex items-center justify-center text-sm rounded-full mt-10 overflow-hidden">
                   <img src="../public/proficon.jpg" alt="Profile" className="rounded-full w-full h-full object-cover" />
                 </div>
               </div>
-              <p className="text-center text-3xl font-bold mt-6">Dimcho Dimov</p>
+              <p className="text-center text-3xl font-bold mt-6">{username}</p>
             </div>
-            <div className="flex  mb-4 bg-gray-800 rounded-xl p-4 h-1/2 w-full">
-              <div className="space-y-7 gap-2  mt-40">
+            <div className="flex mb-4 bg-gray-800 rounded-xl p-4 h-1/2 w-full">
+              <div className="space-y-7 gap-2 mt-40">
                 <button className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded">AI Advisor</button>
                 <button className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded">Stock Advisor</button>
                 <button className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded">Budget Advisor</button>
@@ -99,39 +102,34 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Main Content - Diagrams */}
           <div className="flex-1 overflow-y-auto bg-gray-100 p-6 w-1/2">
             <h2 className="text-xl font-semibold mb-4">Stocks Advisor Diagrams</h2>
-            <div className="space-y-6 h-75">
+            <div className="space-y-6">
               {diagrams.map((diagram) => (
                 <div key={diagram.id} className="bg-white rounded-xl shadow p-4">
-                  <div className="flex h-5 -mt-3 mb-1">
+                  <div className="flex h-5 -mt-3 mb-1 justify-end">
                     <button
                       onClick={() => deleteDiagram(diagram.id)}
-                      className="text-red-500 hover:underline font-bold text-lg flex-end ml-150"
+                      className="text-red-500 hover:underline font-bold text-lg"
                     >
                       ✕
                     </button>
                   </div>
 
-
-                  <div className="bg-black rounded-xl mt-2 p-4 ">
+                  <div className="bg-black rounded-xl mt-2 p-4">
                     <ResponsiveContainer width="100%" height={240}>
                       <LineChart data={diagram.id === 1 ? data1 : data2}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                         <XAxis dataKey="name" stroke="#aaa" />
                         <YAxis stroke="#aaa" />
                         <Tooltip />
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#00FF00"
-                          strokeWidth={2}
-                        />
+                        <Line type="monotone" dataKey="value" stroke="#00FF00" strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="flex justify-between items-center mt-4 h-5">
+                  <div className="flex justify-between items-center mt-4">
                     <span className="font-semibold text-lg text-center">Diagram {diagram.id}</span>
                     <button className="bg-gray-500 text-white rounded hover:bg-gray-600 py-1 px-2">
                       View
@@ -142,16 +140,14 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className=" bg-gray-800 text-white flex-shrink-0 p-4 h-screen overflow-y-auto w-2/5">
-            <h2 className="text-xl font-semibold mt-2 mb-4 ">Notes</h2>
+          {/* Notes */}
+          <div className="bg-gray-800 text-white flex-shrink-0 p-4 h-screen overflow-y-auto w-2/5">
+            <h2 className="text-xl font-semibold mt-2 mb-4">Notes</h2>
             <div className="space-y-6">
               {notes.map((note) => (
-
-                <div key={note.id} className="bg-blue-100 p-4 rounded-xl shadow "  >
+                <div key={note.id} className="bg-blue-100 p-4 rounded-xl shadow">
                   <div className="flex justify-between">
-                    <span className="font-medium text-blue-900 text-lg">
-                      {note.title}
-                    </span>
+                    <span className="font-medium text-blue-900 text-lg">{note.title}</span>
                   </div>
                   <p className="text-blue-800 text-lg mt-2 border-t border-dashed pt-2">
                     {note.content}
@@ -161,7 +157,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
       </div>
       <Footer />
     </div>
