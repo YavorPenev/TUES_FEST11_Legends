@@ -8,8 +8,8 @@ In Backend folder:
 npm install
 
 In python folder:
-pip install torch flask flask-cors
-pip install yfinance pandas numpy scikit-learn
+pip install torch flask flask-cors yfinance pandas numpy scikit-learn
+or simply run requirements.txt
 --------------------------------
 START:
 In 1 terminal in frontend folder:
