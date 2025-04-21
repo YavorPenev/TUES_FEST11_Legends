@@ -54,7 +54,7 @@ function AdviceAI() {
       <Header />
       <div className="min-h-screen bg-gradient-to-r flex items-start justify-center p-6 mt-10">
         {/* Explanation Box */}
-        <div className="bg-gray-100 shadow-md text-lg rounded-lg p-6 max-w-sm w-full mr-6 mt-65">
+        <div className="bg-gray-100 shadow-md text-lg rounded-lg p-6 max-w-sm w-full mr-26 mt-84">
           <h2 className="text-xl font-bold text-gray-800 mb-4">What This Does</h2>
           <p className="text-gray-700 text-lg">
             This tool helps you receive investment advice based on:
