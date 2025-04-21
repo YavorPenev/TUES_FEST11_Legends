@@ -7,10 +7,9 @@ import Notes from './assets/notes';
 
 
 function AdviceAI() {
-
   const [loading, setLoading] = useState(false); // Loading state for the button
   useEffect(() => {
-    document.body.style.cursor = loading ? 'wait' : 'default';
+    document.body.style.cursor = loading ? "wait" : "default";
   }, [loading]);
 
   const [income, setIncome] = useState("");
@@ -41,8 +40,25 @@ function AdviceAI() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-to-r  flex items-center justify-center p-6 mt-10">
-        <div className="bg-gray-100 shadow-lg rounded-lg p-8 max-w-lg w-full gap-1 flex flex-col mt-3">
+      <div className="min-h-screen bg-gradient-to-r flex items-start justify-center p-6 mt-10">
+        {/* Explanation Box */}
+        <div className="bg-gray-100 shadow-md text-lg rounded-lg p-6 max-w-sm w-full mr-6 mt-65">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">What This Does</h2>
+          <p className="text-gray-700 text-lg">
+            This tool helps you receive investment advice based on:
+          </p>
+          <ul className="list-disc list-inside text-gray-700 text-lg mt-2 space-y-1">
+            <li>Your annual income</li>
+            <li>Your monthly expenses</li>
+            <li>Your investment goals</li>
+          </ul>
+          <p className="text-gray-700 text-lg mt-3">
+            After submitting the form, the system calculates your disposable income and provides tailored investment advice based on your goals.
+          </p>
+        </div>
+
+        {/* Main Form */}
+        <div className="bg-gray-100 shadow-lg rounded-lg p-8 max-w-lg w-full gap-1 flex flex-col mt-50 ml-20">
           <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
             Investment Advice
           </h1>
@@ -51,7 +67,7 @@ function AdviceAI() {
             <div>
               <label
                 htmlFor="income"
-                className="block text-sm font-medium text-gray-700 "
+                className="block text-sm font-medium text-gray-700"
               >
                 Enter Your Income ($):
               </label>
@@ -100,10 +116,9 @@ function AdviceAI() {
               type="button"
               onClick={handleGetAdvice}
               disabled={loading}
-              className={`bg-blue-800 text-white w-full font-bold py-2 px-4 rounded-md shadow-md flex items-center justify-center gap-2 mt-4 transition-transform hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 ${loading
-                  ? "bg-blue-700 cursor-wait"
-                  : "cursor-pointer"
-                }`}
+              className={`bg-blue-800 text-white w-full font-bold py-2 px-4 rounded-md shadow-md flex items-center justify-center gap-2 mt-4 transition-transform hover:scale-110 hover:duration-200 active:scale-90 active:duration-50 ${
+                loading ? "bg-blue-700 cursor-wait" : "cursor-pointer"
+              }`}
             >
               {loading ? (
                 <>
@@ -134,6 +149,7 @@ function AdviceAI() {
               )}
             </button>
           </div>
+
           <div className="mt-6">
             <h2 className="text-lg font-semibold text-gray-800">Investment Advice:</h2>
             <pre
