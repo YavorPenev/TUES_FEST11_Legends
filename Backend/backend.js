@@ -166,11 +166,11 @@ async function getStockData(symbol) {
 
 app.post("/budgetplanner", async (req, res) => {
     const { income, expenses, familySize, goals } = req.body;
-  
+
     if (!income || !expenses || !familySize || !goals || goals.trim() === "") {
-      return res.status(400).json({ error: "Income, expenses, family size, and goals are required." });
+        return res.status(400).json({ error: "Income, expenses, family size, and goals are required." });
     }
-  
+
     const prompt = `
     I need you to act as a personal financial advisor. Based on the following information:
     - Monthly Income: $${income}
@@ -186,27 +186,27 @@ app.post("/budgetplanner", async (req, res) => {
     ...
     Day 30: ...
     `;
-  
+
     try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
-        max_tokens: 2000,
-      });
-  
-      const budgetPlan = response.choices[0].message.content;
-      res.status(200).json({ plan: budgetPlan });
+        const response = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.7,
+            max_tokens: 2000,
+        });
+
+        const budgetPlan = response.choices[0].message.content;
+        res.status(200).json({ plan: budgetPlan });
     } catch (err) {
-      console.error("Error generating budget plan:", err);
-      res.status(500).json({ error: "Failed to generate budget plan" });
+        console.error("Error generating budget plan:", err);
+        res.status(500).json({ error: "Failed to generate budget plan" });
     }
-  });
+});
 
 app.post("/model-advice", isAuthenticated, async (req, res) => {
     try {
         const { income, expenses, goal, timeframe } = req.body;
-        
+
         const response = await axios.post('http://localhost:5001/predict', {
             income: parseFloat(income),
             expenses: parseFloat(expenses),
@@ -220,7 +220,7 @@ app.post("/model-advice", isAuthenticated, async (req, res) => {
             });
         }
 
-        const formattedAdvice = response.data.recommendations.map(rec => 
+        const formattedAdvice = response.data.recommendations.map(rec =>
             `Stock: ${rec.name} (${rec.symbol})\n` +
             `Recommended Investment: $${rec.recommended_amount.toFixed(2)}\n` +
             `Predicted Annual Return: ${(rec.predicted_return * 100).toFixed(2)}%\n` +
@@ -454,21 +454,21 @@ app.post("/addNote", isAuthenticated, (req, res) => {
 });
 
 app.get("/getNotes", isAuthenticated, (req, res) => {
-    const userId = req.session.user.id; 
-  
+    const userId = req.session.user.id;
+
     const sql = "SELECT id, title, content, created_at FROM notes WHERE user_id = ?";
     db.query(sql, [userId], (err, results) => {
-      if (err) {
-        console.error("Error fetching notes:", err);
-        return res.status(500).json({ error: "Failed to fetch notes" });
-      }
-      res.status(200).json({ notes: results });
+        if (err) {
+            console.error("Error fetching notes:", err);
+            return res.status(500).json({ error: "Failed to fetch notes" });
+        }
+        res.status(200).json({ notes: results });
     });
-  });
+});
 
-  app.post("/addArticle", isAuthenticated, upload.array("images", 4), (req, res) => {
+app.post("/addArticle", isAuthenticated, upload.array("images", 4), (req, res) => {
     const { title, body } = req.body;
-    const userId = req.session.user.id; 
+    const userId = req.session.user.id;
     const images = req.files.map((file) => `/uploads/${file.filename}`);
 
     if (!title || !body) {
@@ -518,17 +518,17 @@ app.delete("/deleteArticle/:id", isAuthenticated, (req, res) => {
         let images = [];
         try {
             const imagesField = results[0].images;
-            
-            
+
+
             if (typeof imagesField === 'string' && imagesField.trim() !== "") {
                 images = JSON.parse(imagesField);
                 if (!Array.isArray(images)) images = [];
             } else if (Array.isArray(imagesField)) {
-                images = imagesField; 
+                images = imagesField;
             }
         } catch (parseError) {
             console.error("Error parsing images JSON:", parseError);
-            images = []; 
+            images = [];
         }
         images.forEach((imagePath) => {
             const fullPath = path.join(__dirname, imagePath);
@@ -609,7 +609,7 @@ app.delete("/deleteLink/:id", isAuthenticated, (req, res) => {
             return res.status(404).json({ error: "Link not found or access denied" });
         }
 
-        
+
         if (imagePath) {
             const fullPath = path.join(__dirname, imagePath);
             fs.unlink(fullPath, (err) => {
@@ -643,7 +643,7 @@ app.get("/api/news", async (req, res) => {
             success: true,
             data: formattedNews
         });
-        
+
     } catch (error) {
         console.error("News API error:", error);
 
@@ -658,7 +658,7 @@ app.get("/api/news", async (req, res) => {
                 published_at: new Date().toISOString()
             },
         ];
-        
+
         res.status(200).json({
             success: false,
             message: "Using fallback news data",
@@ -667,14 +667,31 @@ app.get("/api/news", async (req, res) => {
     }
 });
 
-String.prototype.hashCode = function() {
+String.prototype.hashCode = function () {
     let hash = 0;
     for (let i = 0; i < this.length; i++) {
         hash = ((hash << 5) - hash) + this.charCodeAt(i);
-        hash |= 0; 
+        hash |= 0;
     }
     return hash;
 };
+
+app.post("/save-investment-advice", (req, res) => {
+    const { advice } = req.body;
+
+    if (!advice) {
+        return res.status(400).json({ error: "Advice is required" });
+    }
+
+    const sql = "INSERT INTO investadvisorAi (response) VALUES (?)";
+    db.query(sql, [advice], (err, result) => {
+        if (err) {
+            console.error("Error saving advice:", err);
+            return res.status(500).json({ error: "Failed to save advice" });
+        }
+        res.status(201).json({ message: "Advice saved successfully" });
+    });
+});
 
 app.post("/logout", (req, res) => {
     if (req.session) {

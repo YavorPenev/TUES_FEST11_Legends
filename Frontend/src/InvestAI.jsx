@@ -19,6 +19,27 @@ function InvestAI() {
   const [result, setResult] = useState("");
   const resultRef = useRef(null);
 
+  const handleSaveResult = async () => {
+  try {
+    const response = await fetch("http://localhost:8000/save-investment-advice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ advice: result }),
+    });
+
+    if (response.ok) {
+      alert("Result saved successfully!");
+    } else {
+      alert("Failed to save the result.");
+    }
+  } catch (error) {
+    console.error("Error saving result:", error);
+    alert("An error occurred while saving the result.");
+  }
+};
+
   const handleInvestClick = async () => {
     setLoading(true); // start loading
 
@@ -161,6 +182,12 @@ function InvestAI() {
             Analysis Result:
           </h2>
           <p className="text-gray-700 whitespace-pre-line">{result}</p>
+          <button
+            onClick={handleSaveResult}
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+          >
+            Save
+          </button>
         </div>
       )}
       <Notes />
