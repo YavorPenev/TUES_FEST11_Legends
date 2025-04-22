@@ -16,7 +16,7 @@ function Footer() {
         <p>©legends Development Team</p>
       </div>
       <div className="flex-col flex-nowrap justify-evenly gap-2 items-center justify-items-center">
-        <p>legends@gmail.com</p>
+        <p>legends11@gmail.com</p>
         <p>+39 06 6988 4857</p>
         <p>+39 04 5355 9832</p>
       </div>
