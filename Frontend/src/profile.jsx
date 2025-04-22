@@ -64,7 +64,7 @@ const Dashboard = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
       <div className="flex flex-1 overflow-hidden mt-24">
-        {/* Sidebar */}
+   
         <div className="w-74 bg-gray-800 text-white flex-shrink-0 flex flex-col items-center py-6 space-y-6 overflow-y-auto">
           <div className="w-40 h-40 bg-white text-black flex items-center justify-center text-sm rounded-full overflow-hidden">
             <img src="../public/proficon.jpg" alt="Profile" className="rounded-full w-full h-full object-cover" />
@@ -72,8 +72,7 @@ const Dashboard = () => {
           <p className="text-center text-3xl font-bold">{username}</p>
         </div>
 
-        {/* Responses */}
-        <div className="flex flex-col w-2/3 overflow-y-auto p-6 space-y-6">
+        <div className="flex flex-col w-2/3 h-[calc(100vh-6rem)] overflow-hidden p-6 space-y-6">
           <h1 className="text-4xl font-bold text-blue-800">Saved responses, {username}</h1>
           <div className="flex space-x-4">
             <button onClick={() => handleModelSelection("stocks")} className={`px-6 py-2 rounded-lg font-bold ${selectedModel === "stocks" ? "bg-blue-800 text-white" : "bg-gray-300 text-gray-800"}`}>Investment Advisor</button>
@@ -81,7 +80,7 @@ const Dashboard = () => {
             <button onClick={() => handleModelSelection("budget")} className={`px-6 py-2 rounded-lg font-bold ${selectedModel === "budget" ? "bg-blue-800 text-white" : "bg-gray-300 text-gray-800"}`}>Budget Planner</button>
           </div>
 
-          <div ref={responseRef} className="bg-white rounded-lg shadow-md p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-blue-100 h-full">
+          <div ref={responseRef} className="bg-white rounded-lg shadow-md p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-blue-100 flex-1">
             {responses.length === 0 ? (
               <p className="text-gray-600 text-center text-lg">No responses available for this model.</p>
             ) : (
@@ -103,8 +102,7 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-
-        {/* Notes */}
+   
         <div className="bg-gray-800 text-white flex-shrink-0 p-4 w-2/6 h-[calc(100vh-6rem)] flex flex-col">
           <h2 className="text-3xl font-semibold mt-2 mb-4">Notes</h2>
           <div className="space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-300 flex-1 pr-1">
@@ -122,7 +120,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="flex bg-blue-800 bg-gradient-to-b from-transparent to-gray-800 text-blue-100 p-5 justify-evenly flex-wrap items-center border-t-8 border-t-blue-900 w-full">
         <div className="flex-col flex-nowrap justify-evenly gap-2 items-center">
           <a href="https://www.youtube.com/watch?v=MpxpUVjfFaE" target="_blank" rel="noopener noreferrer">
