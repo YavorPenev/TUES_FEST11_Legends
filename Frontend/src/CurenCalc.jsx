@@ -18,40 +18,61 @@ function CurrencyCalc() {
   const [result, setResult] = useState(null);
 
   const currencyRegions = {
-    USD: 'North America',
-    CAD: 'North America',
-    MXN: 'North America',
 
-    EUR: 'Europe',
-    GBP: 'Europe',
-    CHF: 'Europe',
-    NOK: 'Europe',
-    SEK: 'Europe',
-    DKK: 'Europe',
-    PLN: 'Europe',
-    HUF: 'Europe',
-    BGN: 'Europe',
-    CZK: 'Europe',
+    USD: 'North America', CAD: 'North America', MXN: 'North America',
+    BBD: 'North America', BZD: 'North America', BSD: 'North America',
+    CUP: 'North America', DOP: 'North America', HTG: 'North America',
+    HNL: 'North America', JMD: 'North America', KYD: 'North America',
+    NIO: 'North America', PAB: 'North America', TTD: 'North America',
+    XCD: 'North America', GYD: 'North America',
+  
+    ARS: 'South America', BOB: 'South America', BRL: 'South America',
+    CLP: 'South America', COP: 'South America', PEN: 'South America',
+    PYG: 'South America', UYU: 'South America', SRD: 'South America',
+  
+    EUR: 'Europe', GBP: 'Europe', CHF: 'Europe', DKK: 'Europe',
+    NOK: 'Europe', SEK: 'Europe', CZK: 'Europe', HUF: 'Europe',
+    PLN: 'Europe', BGN: 'Europe', RON: 'Europe', RSD: 'Europe',
+    BAM: 'Europe', MKD: 'Europe', ISK: 'Europe', GEL: 'Europe',
+    UAH: 'Europe', RUB: 'Europe', MDL: 'Europe', ALL: 'Europe',
+    AMD: 'Europe', AZN: 'Europe', BYN: 'Europe',
+  
+    CNY: 'Asia', JPY: 'Asia', INR: 'Asia', IDR: 'Asia', KRW: 'Asia',
+    MYR: 'Asia', SGD: 'Asia', THB: 'Asia', VND: 'Asia', PKR: 'Asia',
+    BDT: 'Asia', NPR: 'Asia', LKR: 'Asia', MVR: 'Asia', KHR: 'Asia',
+    MMK: 'Asia', LAK: 'Asia', KZT: 'Asia', UZS: 'Asia', TJS: 'Asia',
+    TMT: 'Asia', IRR: 'Asia', IQD: 'Asia', JOD: 'Asia', SAR: 'Asia',
+    AED: 'Asia', KWD: 'Asia', BHD: 'Asia', OMR: 'Asia', QAR: 'Asia',
+    ILS: 'Asia', SYP: 'Asia', YER: 'Asia', AFN: 'Asia', LBP: 'Asia',
+  
+    AUD: 'Oceania', NZD: 'Oceania', FJD: 'Oceania', WST: 'Oceania',
+    PGK: 'Oceania', SBD: 'Oceania', VUV: 'Oceania', TVD: 'Oceania',
+    KID: 'Oceania',
 
-    JPY: 'Asia',
-    CNY: 'Asia',
-    INR: 'Asia',
-    KRW: 'Asia',
-    SGD: 'Asia',
-    HKD: 'Asia',
-
-    AUD: 'Oceania',
-    NZD: 'Oceania',
-
-    BRL: 'South America',
-    ARS: 'South America',
-    CLP: 'South America',
-
-    ZAR: 'Africa',
-    EGP: 'Africa',
-    NGN: 'Africa',
-
+    ZAR: 'Africa', EGP: 'Africa', NGN: 'Africa', MAD: 'Africa',
+    TND: 'Africa', DZD: 'Africa', SDG: 'Africa', LYD: 'Africa',
+    GHS: 'Africa', GMD: 'Africa', GNF: 'Africa', SLL: 'Africa',
+    SLE: 'Africa', MUR: 'Africa', MZN: 'Africa', SZL: 'Africa',
+    LSL: 'Africa', NAD: 'Africa', BWP: 'Africa', ZMW: 'Africa',
+    MWK: 'Africa', RWF: 'Africa', KES: 'Africa', UGX: 'Africa',
+    TZS: 'Africa', DJF: 'Africa', ETB: 'Africa', ERN: 'Africa',
+    SOS: 'Africa', SCR: 'Africa', CVE: 'Africa', KMF: 'Africa',
+  
+    ANG: 'Other', AWG: 'Other', BMD: 'Other', FKP: 'Other',
+    GIP: 'Other', IMP: 'Other', JEP: 'Other', SHP: 'Other',
+    XAF: 'Other', XOF: 'Other', XPF: 'Other', XDR: 'Other',
+    XCG: 'Other', STN: 'Other', SSP: 'Other',
+  
     TRY: 'Other',
+    HKD: 'Asia',
+    TWD: 'Asia',
+    PHP: 'Asia',
+    BTN: 'Asia',
+    MGA: 'Africa',
+    MRU: 'Africa',
+    BIF: 'Africa',
+    SYP: 'Asia', 
+    ZWL: 'Africa', 
   };
 
   const [regionFilter, setRegionFilter] = useState('All');
@@ -96,7 +117,7 @@ function CurrencyCalc() {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD'); // API за валутни курсове
+        const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
         setRates(response.data.rates);
       } catch (err) {
         setError('Error fetching exchange rates. Please try again later.');
