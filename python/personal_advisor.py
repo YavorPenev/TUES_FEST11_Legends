@@ -92,20 +92,20 @@ def predict():
         predicted_price, last_price = predict_stock_return(ticker)
         if predicted_price is None or last_price is None:
             continue
-        actual_return = ((predicted_price - last_price) / last_price) * 100  # Converted to percentage
-        predictions.append((ticker, actual_return, predicted_price))
-        print(f"Ticker: {ticker}, Predicted Price: {predicted_price:.2f}, Last Price: {last_price:.2f}, Predicted Return: {actual_return:.2f}%")
+        predicted_return = ((predicted_price - last_price) / last_price) * 100  # Converted to percentage
+        predictions.append((ticker, predicted_return, predicted_price))
+        print(f"Ticker: {ticker}, Predicted Price: {predicted_price:.2f}, Last Price: {last_price:.2f}, Predicted Return: {predicted_return:.2f}%")
 
     top_5 = sorted(predictions, key=lambda x: x[1], reverse=True)[:5]
 
     recommendations = []
-    for ticker, actual_return, predicted_price in top_5:
+    for ticker, predicted_return, predicted_price in top_5:
         recommended_amount = investable_income / 5
         recommendations.append({
             "name": ticker,
             "symbol": ticker,
             "predicted_price": (predicted_price, 2),
-            "actual_return": (actual_return * 100, 2),  
+            "predicted_return": (predicted_return * 100, 2),  
             "recommended_amount": round(recommended_amount, 2),
             "timeframe": timeframe
         })

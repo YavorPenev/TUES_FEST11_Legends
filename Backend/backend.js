@@ -224,7 +224,7 @@ app.post("/model-advice", isAuthenticated, async (req, res) => {
             `Stock: ${rec.name} (${rec.symbol})\n` +
             `Recommended Investment: $${parseFloat(rec.recommended_amount).toFixed(2)}\n` +
             `Predicted Price: $${parseFloat(rec.predicted_price).toFixed(2)}\n` +
-            `Predicted Return: ${parseFloat(rec.actual_return).toFixed(2)}%\n` +
+            `Predicted Return: ${parseFloat(rec.predicted_return).toFixed(2)}%\n` +
             `Timeframe: ${rec.timeframe} months\n` +
             `------------------------`
         ).join('\n');
