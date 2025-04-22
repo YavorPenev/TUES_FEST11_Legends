@@ -55,14 +55,24 @@ def fetch_data(ticker):
 
 def predict_stock_return(ticker):
     data = fetch_data(ticker)
-    if data is None:
-        return None
+    if data is None or len(data) < 30:
+        return None, None
     scaler = MinMaxScaler(feature_range=(0, 1))
     normalized_data = scaler.fit_transform(data)
     input_seq = torch.tensor(normalized_data[-30:], dtype=torch.float32).unsqueeze(0).to(device)
+
     with torch.no_grad():
-        predicted_return = model(input_seq)
-    return predicted_return.item()
+        predicted_scaled = model(input_seq).item()
+
+    min_close = scaler.data_min_[0]
+    max_close = scaler.data_max_[0]
+    predicted_price = predicted_scaled * (max_close - min_close) + min_close
+    last_price = data[-1][0]
+
+    if np.isnan(predicted_price) or np.isnan(last_price):
+        return None, None
+
+    return predicted_price, last_price
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -71,28 +81,35 @@ def predict():
     expenses = data.get('expenses')
     goal = data.get('goal')
     timeframe = data.get('timeframe')
+
     if not all([income, expenses, goal, timeframe]):
         return jsonify({"success": False, "error": "Missing input values"}), 400
-    investable_income = income - (expenses * 12)
+
+    investable_income = income - expenses
     predictions = []
+
     for ticker in tickers[:150]:
-        predicted_return = predict_stock_return(ticker)
-        if predicted_return is None:
+        predicted_price, last_price = predict_stock_return(ticker)
+        if predicted_price is None or last_price is None:
             continue
-        predictions.append((ticker, predicted_return))
+        actual_return = ((predicted_price - last_price) / last_price) * 100  # Converted to percentage
+        predictions.append((ticker, actual_return, predicted_price))
+        print(f"Ticker: {ticker}, Predicted Price: {predicted_price:.2f}, Last Price: {last_price:.2f}, Predicted Return: {actual_return:.2f}%")
+
     top_5 = sorted(predictions, key=lambda x: x[1], reverse=True)[:5]
+
     recommendations = []
-    for ticker, predicted_return in top_5:
+    for ticker, actual_return, predicted_price in top_5:
         recommended_amount = investable_income / 5
-        actual_return = np.random.uniform(0.05, 0.15)
         recommendations.append({
             "name": ticker,
             "symbol": ticker,
-            "predicted_return": predicted_return,
-            "actual_return": actual_return,
-            "recommended_amount": recommended_amount,
+            "predicted_price": (predicted_price, 2),
+            "actual_return": (actual_return * 100, 2),  
+            "recommended_amount": round(recommended_amount, 2),
             "timeframe": timeframe
         })
+
     return jsonify({
         "success": True,
         "recommendations": recommendations

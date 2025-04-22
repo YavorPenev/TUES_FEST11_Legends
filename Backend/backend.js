@@ -222,13 +222,13 @@ app.post("/model-advice", isAuthenticated, async (req, res) => {
 
         const formattedAdvice = response.data.recommendations.map(rec =>
             `Stock: ${rec.name} (${rec.symbol})\n` +
-            `Recommended Investment: $${rec.recommended_amount.toFixed(2)}\n` +
-            `Predicted Annual Return: ${(rec.predicted_return * 100).toFixed(2)}%\n` +
-            `Current Annual Return: ${(rec.actual_return * 100).toFixed(2)}%\n` +
+            `Recommended Investment: $${parseFloat(rec.recommended_amount).toFixed(2)}\n` +
+            `Predicted Price: $${parseFloat(rec.predicted_price).toFixed(2)}\n` +
+            `Predicted Return: ${parseFloat(rec.actual_return).toFixed(2)}%\n` +
             `Timeframe: ${rec.timeframe} months\n` +
             `------------------------`
         ).join('\n');
-
+        
         res.status(200).json({
             success: true,
             advice: formattedAdvice,
