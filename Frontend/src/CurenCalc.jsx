@@ -71,7 +71,6 @@ function CurrencyCalc() {
     MGA: 'Africa',
     MRU: 'Africa',
     BIF: 'Africa',
-    SYP: 'Asia', 
     ZWL: 'Africa', 
   };
 
