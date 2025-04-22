@@ -92,7 +92,7 @@ def predict():
         predicted_price, last_price = predict_stock_return(ticker)
         if predicted_price is None or last_price is None:
             continue
-        predicted_return = ((predicted_price - last_price) / last_price) * 100  # Converted to percentage
+        predicted_return = ((predicted_price - last_price) / last_price) * 100
         predictions.append((ticker, predicted_return, predicted_price))
         print(f"Ticker: {ticker}, Predicted Price: {predicted_price:.2f}, Last Price: {last_price:.2f}, Predicted Return: {predicted_return:.2f}%")
 
@@ -105,7 +105,7 @@ def predict():
             "name": ticker,
             "symbol": ticker,
             "predicted_price": (predicted_price, 2),
-            "predicted_return": (predicted_return * 100, 2),  
+            "predicted_return": (predicted_return, 2),  
             "recommended_amount": round(recommended_amount, 2),
             "timeframe": timeframe
         })
