@@ -69,6 +69,9 @@ def predict_stock_return(ticker):
     predicted_price = predicted_scaled * (max_close - min_close) + min_close
     last_price = data[-1][0]
 
+    if np.isnan(predicted_price) or np.isnan(last_price):
+        return None, None
+
     return predicted_price, last_price
 
 @app.route('/predict', methods=['POST'])
@@ -89,8 +92,9 @@ def predict():
         predicted_price, last_price = predict_stock_return(ticker)
         if predicted_price is None or last_price is None:
             continue
-        actual_return = (predicted_price - last_price) / last_price
+        actual_return = ((predicted_price - last_price) / last_price) * 100  # Converted to percentage
         predictions.append((ticker, actual_return, predicted_price))
+        print(f"Ticker: {ticker}, Predicted Price: {predicted_price:.2f}, Last Price: {last_price:.2f}, Predicted Return: {actual_return:.2f}%")
 
     top_5 = sorted(predictions, key=lambda x: x[1], reverse=True)[:5]
 
@@ -100,8 +104,8 @@ def predict():
         recommendations.append({
             "name": ticker,
             "symbol": ticker,
-            "predicted_price": round(predicted_price, 2),
-            "actual_return": round(actual_return, 4),
+            "predicted_price": (predicted_price, 2),
+            "actual_return": (actual_return * 100, 2),  
             "recommended_amount": round(recommended_amount, 2),
             "timeframe": timeframe
         })
@@ -113,3 +117,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
+
