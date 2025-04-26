@@ -99,6 +99,7 @@ function Home() {
             Stocks<br />
             Advisor
           </Link>
+          
           <Link
             className="w-[88%] ml-[6%] mr-[6%] bg-blue-100 text-blue-950 rounded-xl pt-2 pb-2 hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
             to="/advice"

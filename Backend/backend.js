@@ -82,6 +82,18 @@ const linkStorage = multer.diskStorage({
 
 const uploadLinkImage = multer({ storage: linkStorage });
 
+// ---------------------- Middleware ----------------------
+
+function isAuthenticated(req, res, next) {
+    if (req.session && req.session.user) {
+        next();
+    } else {
+        console.error("User is not authenticated");
+        res.status(401).json({ error: "Access denied. Please log in to access this resource." });
+    }
+}
+
+
 // --------------------------- Helpers ---------------------------
 
 /*async function fetchAllStockSymbols() {
@@ -164,7 +176,7 @@ async function getStockData(symbol) {
     }
 }*/
 
-app.post("/budgetplanner", async (req, res) => {
+app.post("/budgetplanner", isAuthenticated, async (req, res) => {
     const { income, expenses, familySize, goals, savingsGoalAmount, savingsGoalPeriodMonths } = req.body;
 
     if (!income || !expenses || !familySize || !goals || goals.trim() === "") {
@@ -174,7 +186,6 @@ app.post("/budgetplanner", async (req, res) => {
     const availableBudget = income - expenses;
     const monthlySavingsNeeded = savingsGoalAmount / savingsGoalPeriodMonths;
 
-
     if (monthlySavingsNeeded > availableBudget) {
         return res.status(400).json({
             error: `With the current budget, your financial goal is not achievable. You need $${monthlySavingsNeeded.toFixed(2)} per month, but you only have $${availableBudget.toFixed(2)} available. 
@@ -183,8 +194,7 @@ app.post("/budgetplanner", async (req, res) => {
         });
     }
 
-    
-    const foodPerPersonPerDay = 10; 
+    const foodPerPersonPerDay = 10;
     const foodBudgetMonthly = foodPerPersonPerDay * familySize * 30;
 
     if (foodBudgetMonthly > availableBudget) {
@@ -196,77 +206,95 @@ app.post("/budgetplanner", async (req, res) => {
     }
 
     const remainingBudgetAfterFood = availableBudget - foodBudgetMonthly;
+
     if (monthlySavingsNeeded > remainingBudgetAfterFood) {
         return res.status(400).json({
             error: `After covering food expenses, you cannot meet your savings goal. 
-        
+            
             Creating a full budget plan is currently not possible. Please review your financial priorities, reduce optional expenses, or consider financial assistance.`,
         });
     }
 
+    const distributeRemainingBudget = (remainingBudget) => {
+        const essentialsPercentage = 0.4;
+        const entertainmentPercentage = 0.2;
+        const savingsPercentage = 0.3;
+        const investmentsPercentage = 0.1;
+
+        return {
+            essentials: remainingBudget * essentialsPercentage,
+            entertainment: remainingBudget * entertainmentPercentage,
+            savings: remainingBudget * savingsPercentage,
+            investments: remainingBudget * investmentsPercentage,
+        };
+    };
+
+    const { essentials, entertainment, savings, investments } = distributeRemainingBudget(remainingBudgetAfterFood);
+
     const prompt = `
-Act as a professional financial advisor.
+    Act as a professional financial advisor.
 
-Based on the following user's data:
-- Monthly Income: $${income}
-- Monthly Fixed Expenses: $${expenses}
-- Available Budget after Fixed Expenses: $${availableBudget}
-- Family Members: ${familySize}
-- Food Budget (fixed): $${foodBudgetMonthly}
-- Remaining Budget After Food: $${remainingBudgetAfterFood}
-- Savings Goal: $${savingsGoalAmount} over ${savingsGoalPeriodMonths} months
+    Based on the following user's data:
+    - Monthly Income: $${income}
+    - Monthly Fixed Expenses: $${expenses}
+    - Available Budget after Fixed Expenses: $${availableBudget}
+    - Family Members: ${familySize}
+    - Food Budget (fixed): $${foodBudgetMonthly}
+    - Remaining Budget After Food: $${remainingBudgetAfterFood}
+    - Savings Goal: $${savingsGoalAmount} over ${savingsGoalPeriodMonths} months
 
-Create a clear and detailed financial plan divided into **THREE SECTIONS**:
+    Create a clear and detailed financial plan divided into **THREE SECTIONS**:
 
----
-SECTION 1: Budget Overview
-- Briefly explain:
-  - Monthly income
-  - Monthly fixed expenses
-  - Monthly food budget
-  - Remaining available budget for other purposes (investments, entertainment, savings, etc.)
-  - Monthly savings required to achieve the goal
+    ---
+    SECTION 1: Budget Overview
+    - Briefly explain:
+      - Monthly income
+      - Monthly fixed expenses
+      - Monthly food budget
+      - Remaining available budget for other purposes (investments, entertainment, savings, etc.)
+      - Monthly savings required to achieve the goal
 
----
-SECTION 2: Daily Budget Plan (for 30 days)
-- For each day (Day 1 to Day 30), list:
-  - Food: $X.XX
-  - Investments: $X.XX
-  - Entertainment: $X.XX
-  - Other Essentials: $X.XX
-  - Savings: $X.XX
-- Each day must be listed separately (no grouping).
-- The daily values must add up perfectly so that the monthly total matches the available budget after fixed expenses.
-- All numbers must be realistic and rounded to two decimals.
+    ---
+    SECTION 2: Daily Budget Plan (for 30 days)
+    - For each day (Day 1 to Day 30), list:
+      - Food: $X.XX
+      - Investments: $X.XX
+      - Entertainment: $X.XX
+      - Other Essentials: $X.XX
+      - Savings: $X.XX
+    - Each day must be listed separately (without grouping - this means that you will have to print a total of thirty messages).
+    - The daily values must add up perfectly so that the monthly total matches the available budget after fixed expenses.
+    - All numbers must be realistic and rounded to two decimals.
 
-Strict example format:
+    Strict example format:
 
-Day 1:
-  - Food: $X.XX
-  - Investments: $X.XX
-  - Entertainment: $X.XX
-  - Other Essentials: $X.XX
-  - Savings: $X.XX
+    Day 1:
+      - Food: $X.XX
+      - Investments: $X.XX
+      - Entertainment: $X.XX
+      - Other Essentials: $X.XX
+      - Savings: $X.XX
 
-Day 2:
-  ...
+    Day 2:
+    ...
 
-(Continue for all 30 days.)
+    (Continue for all 30 days - this means that you will have to print a total of thirty messages)
 
----
-SECTION 3: Conclusion and Advice
-- If the goal is achievable:
-  - Write a short, motivational paragraph encouraging the user to stay disciplined and consistent with their financial plan.
-- If the goal is NOT achievable (meaning remaining budget is insufficient for the savings goal):
-  - Clearly state that it is impossible to meet the goal under the current conditions.
-  - Suggest practical advice like reducing expenses, increasing income, or adjusting the savings timeline.
+    ---
+    SECTION 3: Conclusion and Advice
+    - If the goal is achievable:
+      - Write a short, motivational paragraph encouraging the user to stay disciplined and consistent with their financial plan.
+    - If the goal is NOT achievable (meaning remaining budget is insufficient for the savings goal):
+      - Clearly state that it is impossible to meet the goal under the current conditions.
+      - Suggest practical advice like reducing expenses, increasing income, or adjusting the savings timeline.
 
----
-Important:
-- Be extremely clear, practical, and well-structured.
-- Never skip a day.
-- Strictly follow the three-section structure.
-`;
+    ---
+    Important:
+    - Be extremely clear, practical, and well-structured.
+    - Never skip a day.
+    - Strictly follow the three-section structure.
+    `;
+
     try {
         const response = await openai.chat.completions.create({
             model: "gpt-4",
@@ -276,7 +304,21 @@ Important:
         });
 
         const budgetPlan = response.choices[0].message.content;
-        res.status(200).json({ plan: budgetPlan });
+
+        const stats = {
+            totalIncome: income,
+            totalExpenses: expenses,
+            totalFoodBudget: foodBudgetMonthly,
+            remainingAfterFood: remainingBudgetAfterFood,
+            requiredSavings: monthlySavingsNeeded,
+            availableForOtherCategories: remainingBudgetAfterFood - monthlySavingsNeeded,
+            essentialsBudget: essentials,
+            entertainmentBudget: entertainment,
+            savingsBudget: savings,
+            investmentsBudget: investments,
+        };
+
+        res.status(200).json({ plan: budgetPlan, stats });
     } catch (err) {
         console.error("Error generating budget plan:", err);
         res.status(500).json({ error: "Failed to generate budget plan" });
@@ -326,16 +368,6 @@ app.post("/model-advice", isAuthenticated, async (req, res) => {
     }
 });
 
-// ---------------------- Middleware ----------------------
-
-function isAuthenticated(req, res, next) {
-    if (req.session && req.session.user) {
-        next();
-    } else {
-        console.error("User is not authenticated");
-        res.status(401).json({ error: "Access denied. Please log in to access this resource." });
-    }
-}
 
 // ---------------------- Routes ----------------------
 
@@ -463,105 +495,113 @@ app.post("/advice", isAuthenticated, async (req, res) => {
 
 app.post("/invest", isAuthenticated, async (req, res) => {
     const { investments, goals } = req.body;
-  
+
     if (!Array.isArray(investments) || !Array.isArray(goals)) {
-      return res.status(400).json({ error: "Investments and goals required." });
+        return res.status(400).json({ error: "Investments and goals required." });
     }
-  
+
     try {
-      const stockData = await Promise.all(
-        investments.map(async ({ symbol, amount }) => {
-          const quoteResponse = await axios.get(`https://finnhub.io/api/v1/quote`, {
-            params: { symbol, token: FINNHUB_API_KEY },
-          });
-          const profileResponse = await axios.get(`https://finnhub.io/api/v1/stock/profile2`, {
-            params: { symbol, token: FINNHUB_API_KEY },
-          });
-          const metricResponse = await axios.get(`https://finnhub.io/api/v1/stock/metric`, {
-            params: { symbol, metric: "all", token: FINNHUB_API_KEY },
-          });
-          const metric = metricResponse.data.metric || {};
-          const fiftyTwoWeekHigh = metric["52WeekHigh"] ?? null;
-          const fiftyTwoWeekLow = metric["52WeekLow"] ?? null;
-  
-          return {
-            symbol,
-            amount,
-            currentPrice: quoteResponse.data.c,
-            fiftyTwoWeekHigh,
-            fiftyTwoWeekLow,
-            companyName: profileResponse.data.name,
-            companyDescription: profileResponse.data.finnhubIndustry,
-            businessSummary: profileResponse.data.weburl
-              ? `More at ${profileResponse.data.weburl}`
-              : "",
-          };
-        })
-      );
-  
-      const prompt = `
-  You are a professional investment advisor.
-  
-  The user has invested in the following stocks:
-  
-  ${stockData
+        const stockData = await Promise.all(
+            investments.map(async ({ symbol, amount }) => {
+                const quoteResponse = await axios.get(`https://finnhub.io/api/v1/quote`, {
+                    params: { symbol, token: FINNHUB_API_KEY },
+                });
+                const profileResponse = await axios.get(`https://finnhub.io/api/v1/stock/profile2`, {
+                    params: { symbol, token: FINNHUB_API_KEY },
+                });
+                const metricResponse = await axios.get(`https://finnhub.io/api/v1/stock/metric`, {
+                    params: { symbol, metric: "all", token: FINNHUB_API_KEY },
+                });
+
+                const metric = metricResponse.data.metric || {};
+                const currentPrice = quoteResponse.data.c;
+                const rawFiftyTwoWeekHigh = metric["52WeekHigh"] ?? null;
+                const rawFiftyTwoWeekLow = metric["52WeekLow"] ?? null;
+
+                const fiftyTwoWeekHigh = (rawFiftyTwoWeekHigh !== null && rawFiftyTwoWeekHigh >= currentPrice)
+                    ? rawFiftyTwoWeekHigh
+                    : null;
+
+                const fiftyTwoWeekLow = rawFiftyTwoWeekLow ?? null;
+
+                return {
+                    symbol,
+                    amount,
+                    currentPrice,
+                    fiftyTwoWeekHigh,
+                    fiftyTwoWeekLow,
+                    companyName: profileResponse.data.name,
+                    companyDescription: profileResponse.data.finnhubIndustry,
+                    businessSummary: profileResponse.data.weburl
+                        ? `More at ${profileResponse.data.weburl}`
+                        : "",
+                };
+            })
+        );
+
+        const prompt = `
+You are a professional investment advisor.
+
+The user has invested in the following stocks:
+
+${stockData
     .map(
-      (stock) => `
-  ### ${stock.companyName} (${stock.symbol})
-  
-  - **Sector:** ${stock.companyDescription}
-  - **Business Focus:** Briefly describe what the company sells or produces in one clear sentence.
-  - **Current Stock Price:** $${stock.currentPrice}
-  - **52-Week High:** ${stock.fiftyTwoWeekHigh !== null ? `$${stock.fiftyTwoWeekHigh}` : "Data unavailable"}
-  - **52-Week Low:** ${stock.fiftyTwoWeekLow  !== null ? `$${stock.fiftyTwoWeekLow}`  : "Data unavailable"}
-  `
+        (stock) => `
+### ${stock.companyName} (${stock.symbol})
+
+- **Sector:** ${stock.companyDescription}
+- **Business Focus:** Briefly describe what the company sells or produces in one clear sentence.
+- **Current Stock Price:** $${stock.currentPrice}
+- **52-Week High:** ${stock.fiftyTwoWeekHigh !== null ? `$${stock.fiftyTwoWeekHigh}` : "Data unavailable"}
+- **52-Week Low:** ${stock.fiftyTwoWeekLow !== null ? `$${stock.fiftyTwoWeekLow}` : "Data unavailable"}
+`
     )
     .join("\n")}
-  
-  ---
-  
-  ### User's Investment Goals:
-  ${goals.map((goal, i) => `${i + 1}. ${goal}`).join("\n")}
-  
-  ---
-  
-  ### Your Task:
-  
-  - **Part 1: Company Overview**
-    - For each company:
-      - Very briefly describe the sector and what the company produces or sells (maximum 2 short sentences).
-  
-  - **Part 2: Stock Information**
+
+---
+
+### User's Investment Goals:
+${goals.map((goal, i) => `${i + 1}. ${goal}`).join("\n")}
+
+---
+
+### Your Task:
+
+- **Part 1: Company Overview**
+  - For each company:
+    - Very briefly describe the sector and what the company produces or sells (maximum 2 short sentences).
+
+- **Part 2: Stock Information**
+  - For each stock:
+    - Show:
+      - **Current Stock Price** ($)
+      - **52-Week High** ($)
+      - **52-Week Low** ($)
+
+- **Part 3: Investment Advice**
+  - If the user's goals seem unrealistic or too high:
+    - Show only this single sentence and end the response: 
+      > **"This goal may be unrealistic or require a very long time to achieve."**
+    - Do not provide any BUY, SELL, or HOLD advice.
+  - Otherwise:
     - For each stock:
-      - Show:
-        - **Current Stock Price** ($)
-        - **52-Week High** ($)
-        - **52-Week Low** ($)
-  
-  - **Part 3: Investment Advice**
-    - If the user's goals seem unrealistic or too high:
-      - Show only this single sentence and end the response: 
-        > **"This goal may be unrealistic or require a very long time to achieve."**
-      - Do not provide any BUY, SELL, or HOLD advice.
-    - Otherwise:
-      - For each stock:
-        - Recommend: **BUY**, **SELL**, or **HOLD** based on the current stock data and user's goals.
-        
-  - Keep the language professional, well-structured with clear sections and bullet points.
-  - Always show actual numerical values where applicable.
-  `;
-  
-      const gptResponse = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-      });
-  
-      res.status(200).json({ invest: gptResponse.choices[0].message.content });
+      - Recommend: **BUY**, **SELL**, or **HOLD** based on the current stock data and user's goals.
+      
+- Keep the language professional, well-structured with clear sections and bullet points.
+- Always show actual numerical values where applicable.
+`;
+
+        const gptResponse = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        res.status(200).json({ invest: gptResponse.choices[0].message.content });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Investment analysis failed." });
+        console.error(error);
+        res.status(500).json({ error: "Investment analysis failed." });
     }
-  });
+});
 
 app.post("/addNote", isAuthenticated, (req, res) => {
     const { title, content } = req.body;

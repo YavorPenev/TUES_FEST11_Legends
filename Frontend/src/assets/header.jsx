@@ -8,7 +8,7 @@ function Header({ onLogoClick }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Проверка дали потребителят е логнат
+
     const user = localStorage.getItem("user");
     if (user) {
       try {
@@ -16,11 +16,11 @@ function Header({ onLogoClick }) {
         if (parsedUser && parsedUser.username) {
           setIsLoggedIn(true);
         } else {
-          localStorage.removeItem("user"); // Remove invalid data
+          localStorage.removeItem("user"); 
         }
       } catch (error) {
         console.error("Error parsing user data:", error);
-        localStorage.removeItem("user"); // Remove invalid data
+        localStorage.removeItem("user"); 
       }
     }
   }, []);
@@ -56,7 +56,7 @@ function Header({ onLogoClick }) {
       e.preventDefault();
       onLogoClick();
     }
-    // otherwise, let Link work normally
+ 
   };
 
   return (
@@ -82,7 +82,7 @@ function Header({ onLogoClick }) {
       <div className="flex flex-row justify-end items-center">
         <Link
           to="/stocks"
-          className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+          className="bg-green-200 pl-3 pr-3 pt-2 pb-2 mr-11 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
         >
           Stocks
         </Link>

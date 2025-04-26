@@ -90,7 +90,7 @@ const BudgetPlanner = () => {
     <>
       <Header />
       <div className="min-h-screen bg-gradient-to-r flex items-start justify-center p-6 mt-10">
-        {/* Info Box */}
+
         <div className="bg-gray-100 shadow-md text-lg rounded-lg p-6 max-w-sm w-full mr-26 mt-34">
           <h2 className="text-xl font-bold text-gray-800 mb-4">How This Helps</h2>
           <p className="text-gray-700 text-lg">
@@ -105,8 +105,7 @@ const BudgetPlanner = () => {
             It generates a detailed plan to guide you in managing your finances and meeting your goals.
           </p>
         </div>
-
-        {/* Form Box */}
+  
         <div className="min-h-screen flex items-center justify-center p-6 mt-0">
           <form onSubmit={handleSubmit} className="bg-gray-100 shadow-lg rounded-lg p-8 max-w-lg w-full flex flex-col mt-3 space-y-4">
             <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Budget Planner</h1>

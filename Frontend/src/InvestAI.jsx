@@ -89,7 +89,7 @@ function InvestAI() {
     <div className="min-h-screen flex flex-col justify-center items-center">
       <Header />
       <div className="flex-grow p-5 bg-white flex flex-col lg:flex-row items-start justify-center gap-10 mt-14 pb-20">
-        {/* Description Panel */}
+     
         <div className="w-full lg:w-2/3 p-6 bg-gray-100 text-blue-900 rounded-2xl shadow-lg mt-35 ">
           <h2 className="text-xl font-bold mb-4"> How to Use the Stock Advisor</h2>
           <p className="text-sm leading-relaxed">
@@ -102,10 +102,10 @@ function InvestAI() {
             <strong>Investment Goals</strong><br />
             Describe your financial objectives — for example, <em>retirement</em>, <em>saving for a house</em>, or <em>building wealth</em>.
             <br /><br />
-            The AI will evaluate if your portfolio aligns with your goals.
+            <b>The investment advice of this model is not very reliable. If you want more accurate advice, use our Invest Advisor.</b>
           </p>
         </div>
-        {/* Input Panel */}
+    
         <div className="w-full lg:w-1/2 flex flex-col items-center bg-gray-100 mt-34 px-14 py-5 rounded-2xl shadow-xl">
           <h1 className="text-blue-800 text-4xl font-extrabold mb-10 text-center mt-0">
             Stock Advisor
