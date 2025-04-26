@@ -1,13 +1,15 @@
-import { useState, useRef, React } from 'react';
+import { useState, useRef, React, useEffect } from 'react';
 import { Routes, Route, useNavigate, Link, useLocation } from 'react-router';
 import './styles/index.css';
 import Header from './assets/header';
 import Footer from './assets/footer';
 import TopCompanies from './assets/topcompanies';
-//import ArticleCarousel from './assets/articlecarousel';
-//import News from './articles';
+import ArticleCarousel from './assets/articlecarousel';
+import News from './articles';
 import UsefulSources from './assets/usefulsources';
 import ProfArticles from './assets/professionalarticles';
+import axios from "axios";
+
 function Home() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,6 +17,44 @@ function Home() {
 
   const [AiStatus, SetAiStatus] = useState(false);
 
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchNews = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/news");
+      if (response.data.success) {
+        // Map news data to expected ArticleCarousel shape
+        const formattedArticles = response.data.data.map((article) => ({
+          id: article.uuid,
+          title: article.title,
+          image: article.image_url,
+          description: article.description,
+          content: article.content,
+          published_at: article.published_at,
+          source: article.source,
+          url: article.url
+        }));
+        setArticles(formattedArticles);
+      }
+    } catch (err) {
+      console.error("Error fetching articles:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   const AiMenuChange = () => {
     SetAiStatus(!AiStatus);
@@ -97,7 +137,7 @@ function Home() {
 
         <img className="w-full" src="/mainpic-bottom.png" alt="Footer Visual" />
       </div>
-     {/* <ArticleCarousel articles={articles} /> */}
+     <ArticleCarousel articles={articles} />
 
 
       <div className="bg-[url('/Background_Sections.png')] bg-cover bg-center bg-no-repeat p-10 border-t">
