@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 
-function Header() {
+function Header({ onLogoClick }) {
   const calcmenuref = useRef(null);
   const location = useLocation();
   const [CalcStatus, SetCalcStatus] = useState(false);
@@ -16,11 +16,11 @@ function Header() {
         if (parsedUser && parsedUser.username) {
           setIsLoggedIn(true);
         } else {
-          localStorage.removeItem("user"); // Изчистване на невалидни данни
+          localStorage.removeItem("user"); // Remove invalid data
         }
       } catch (error) {
         console.error("Error parsing user data:", error);
-        localStorage.removeItem("user"); // Изчистване на невалидни данни
+        localStorage.removeItem("user"); // Remove invalid data
       }
     }
   }, []);
@@ -29,7 +29,7 @@ function Header() {
     try {
       const response = await fetch("http://localhost:8000/logout", {
         method: "POST",
-        credentials: "include", // За бисквитки
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -51,11 +51,20 @@ function Header() {
     }
   };
 
+  const handleLogoClick = (e) => {
+    if (onLogoClick) {
+      e.preventDefault();
+      onLogoClick();
+    }
+    // otherwise, let Link work normally
+  };
+
   return (
     <header className="pl-5 pr-5 fixed top-0 left-0 w-full bg-blue-800 border-blue-900 flex justify-between p-4 border-b-4 bg-gradient-to-b from-gray-800 to-transparent items-center z-50">
       <div className="h-[100%] flex flex-row justify-start items-center">
         <Link
           to="/"
+          onClick={handleLogoClick}
           className="bg-blue-100 pr-3 pl-3 pt-1.5 pb-1.5 rounded-xl hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
         >
           <img
@@ -120,6 +129,7 @@ function Header() {
         >
           <img src="/calclogo.png" alt="Calculator" className="h-9" />
         </button>
+
         <div
           ref={calcmenuref}
           className="absolute top-full mt-0 flex-col rounded-bl-xl bg-blue-800 border-b-4 border-r-0 border-l-4 border-blue-950 right-0 p-2 gap-2 w-25 text-center text-blue-100 shadow-lg"

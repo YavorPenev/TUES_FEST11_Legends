@@ -9,8 +9,10 @@ import News from './articles';
 import UsefulSources from './assets/usefulsources';
 import ProfArticles from './assets/professionalarticles';
 import axios from "axios";
+import ArticleDetails from "./assets/ArticleDetails";
 
 function Home() {
+  const [selectedArticle, setSelectedArticle] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const aimenuref = useRef(null);
@@ -24,7 +26,6 @@ function Home() {
     try {
       const response = await axios.get("http://localhost:8000/api/news");
       if (response.data.success) {
-        // Map news data to expected ArticleCarousel shape
         const formattedArticles = response.data.data.map((article) => ({
           id: article.uuid,
           title: article.title,
@@ -65,6 +66,21 @@ function Home() {
 
   //pt-24 - na wsqka stranica za da raboti hedyra
   const hideHeader = location.pathname === '/login' || location.pathname === '/signup';
+
+  if (selectedArticle) {
+    return (
+      <>
+        <Header onLogoClick={() => setSelectedArticle(null)} />
+        <div className="bg-blue-100 h-full m-0 pt-28 pb-28">
+          <ArticleDetails
+            article={selectedArticle}
+            onBack={() => setSelectedArticle(null)}
+          />
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -137,7 +153,27 @@ function Home() {
 
         <img className="w-full" src="/mainpic-bottom.png" alt="Footer Visual" />
       </div>
-     <ArticleCarousel articles={articles} />
+
+      <ArticleCarousel articles={articles} onArticleSelect={setSelectedArticle} />
+
+      {selectedArticle && (
+        <div className="bg-blue-50 p-10 border-t-8 border-blue-900">
+          <h2 className="text-3xl font-bold text-blue-900 mb-4">{selectedArticle.title}</h2>
+          <img src={selectedArticle.image} alt={selectedArticle.title} className="w-full max-h-96 object-cover rounded mb-6" />
+          <p className="text-lg text-gray-800 mb-4">{selectedArticle.content}</p>
+          <a href={selectedArticle.url} target="_blank" rel="noopener noreferrer"
+            className="text-blue-700 font-semibold underline"
+          >
+            Read more at {selectedArticle.source}
+          </a>
+          <button
+            onClick={() => setSelectedArticle(null)}
+            className="block mt-6 bg-blue-800 text-white font-bold py-2 px-4 rounded hover:scale-105 transition-transform"
+          >
+            Back to Articles
+          </button>
+        </div>
+      )}
 
 
       <div className="bg-[url('/Background_Sections.png')] bg-cover bg-center bg-no-repeat p-10 border-t">
@@ -149,7 +185,10 @@ function Home() {
       <TopCompanies />
       <Footer />
     </>
+
   );
+
+
 }
 
 export default Home;
