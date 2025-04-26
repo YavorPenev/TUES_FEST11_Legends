@@ -20,6 +20,7 @@ import './styles/index.css';
 import Sitelinks from './UsefulSourcesPage';
 import LearnMore from './LearnMore';
 import BudgetPlanner from './budgetplanner'
+import StockPrices from './stock';
 
 //tuk se importwa samo home
 // da ne se slusha gorniq komentar, wsi`ko se importwa tuk
@@ -47,6 +48,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/usefulsources" element={<Sitelinks/>}/> 
         <Route path="/learnmore" element={<LearnMore/>}/>
         <Route path="/budgetplanner" element = {<BudgetPlanner />}/>
+        <Route path="/stocks" element={<StockPrices />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

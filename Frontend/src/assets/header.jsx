@@ -69,7 +69,14 @@ function Header() {
         <h1 className="text-white font-bold text-4xl ml-4">SmartBudget</h1>
       </div>
 
+
       <div className="flex flex-row justify-end items-center">
+        <Link
+          to="/stocks"
+          className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+        >
+          Stocks
+        </Link>
         <Link
           to="/articles"
           className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
