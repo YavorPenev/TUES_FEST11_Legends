@@ -165,34 +165,114 @@ async function getStockData(symbol) {
 }*/
 
 app.post("/budgetplanner", async (req, res) => {
-    const { income, expenses, familySize, goals } = req.body;
+    const { income, expenses, familySize, goals, savingsGoalAmount, savingsGoalPeriodMonths } = req.body;
 
     if (!income || !expenses || !familySize || !goals || goals.trim() === "") {
         return res.status(400).json({ error: "Income, expenses, family size, and goals are required." });
     }
 
-    const prompt = `
-    I need you to act as a personal financial advisor. Based on the following information:
-    - Monthly Income: $${income}
-    - Monthly Expenses: $${expenses}
-    - Family Members: ${familySize}
-    - Financial Goals: ${goals || "No specific goals provided"}
-  
-    Create a day-by-day budget plan for a typical 30-day month that is reusable for any month of the year. Each day's entry should give advice on how much to spend, how much to save, and what to focus on (e.g., groceries, entertainment, saving, investing, etc.).
-  
-    Be practical, clear, and structured. Format like this:
-    Day 1: Spend: $X | Save: $Y | Focus: [advice]
-    Day 2: ...
-    ...
-    Day 30: ...
-    `;
+    const availableBudget = income - expenses;
+    const monthlySavingsNeeded = savingsGoalAmount / savingsGoalPeriodMonths;
 
+
+    if (monthlySavingsNeeded > availableBudget) {
+        return res.status(400).json({
+            error: `With the current budget, your financial goal is not achievable. You need $${monthlySavingsNeeded.toFixed(2)} per month, but you only have $${availableBudget.toFixed(2)} available. 
+            
+            Creating a stable budget is currently impossible. Please consider taking a loan, increasing income, or reducing expenses.`,
+        });
+    }
+
+    
+    const foodPerPersonPerDay = 10; 
+    const foodBudgetMonthly = foodPerPersonPerDay * familySize * 30;
+
+    if (foodBudgetMonthly > availableBudget) {
+        return res.status(400).json({
+            error: `With the current budget, you cannot afford basic food expenses for ${familySize} family members. 
+            
+            Budget planning is impossible without taking additional measures such as reducing expenses, increasing income, or considering a small loan.`,
+        });
+    }
+
+    const remainingBudgetAfterFood = availableBudget - foodBudgetMonthly;
+    if (monthlySavingsNeeded > remainingBudgetAfterFood) {
+        return res.status(400).json({
+            error: `After covering food expenses, you cannot meet your savings goal. 
+        
+            Creating a full budget plan is currently not possible. Please review your financial priorities, reduce optional expenses, or consider financial assistance.`,
+        });
+    }
+
+    const prompt = `
+Act as a professional financial advisor.
+
+Based on the following user's data:
+- Monthly Income: $${income}
+- Monthly Fixed Expenses: $${expenses}
+- Available Budget after Fixed Expenses: $${availableBudget}
+- Family Members: ${familySize}
+- Food Budget (fixed): $${foodBudgetMonthly}
+- Remaining Budget After Food: $${remainingBudgetAfterFood}
+- Savings Goal: $${savingsGoalAmount} over ${savingsGoalPeriodMonths} months
+
+Create a clear and detailed financial plan divided into **THREE SECTIONS**:
+
+---
+SECTION 1: Budget Overview
+- Briefly explain:
+  - Monthly income
+  - Monthly fixed expenses
+  - Monthly food budget
+  - Remaining available budget for other purposes (investments, entertainment, savings, etc.)
+  - Monthly savings required to achieve the goal
+
+---
+SECTION 2: Daily Budget Plan (for 30 days)
+- For each day (Day 1 to Day 30), list:
+  - Food: $X.XX
+  - Investments: $X.XX
+  - Entertainment: $X.XX
+  - Other Essentials: $X.XX
+  - Savings: $X.XX
+- Each day must be listed separately (no grouping).
+- The daily values must add up perfectly so that the monthly total matches the available budget after fixed expenses.
+- All numbers must be realistic and rounded to two decimals.
+
+Strict example format:
+
+Day 1:
+  - Food: $X.XX
+  - Investments: $X.XX
+  - Entertainment: $X.XX
+  - Other Essentials: $X.XX
+  - Savings: $X.XX
+
+Day 2:
+  ...
+
+(Continue for all 30 days.)
+
+---
+SECTION 3: Conclusion and Advice
+- If the goal is achievable:
+  - Write a short, motivational paragraph encouraging the user to stay disciplined and consistent with their financial plan.
+- If the goal is NOT achievable (meaning remaining budget is insufficient for the savings goal):
+  - Clearly state that it is impossible to meet the goal under the current conditions.
+  - Suggest practical advice like reducing expenses, increasing income, or adjusting the savings timeline.
+
+---
+Important:
+- Be extremely clear, practical, and well-structured.
+- Never skip a day.
+- Strictly follow the three-section structure.
+`;
     try {
         const response = await openai.chat.completions.create({
             model: "gpt-4",
             messages: [{ role: "user", content: prompt }],
-            temperature: 0.7,
-            max_tokens: 2000,
+            temperature: 0.6,
+            max_tokens: 3500,
         });
 
         const budgetPlan = response.choices[0].message.content;
@@ -202,6 +282,7 @@ app.post("/budgetplanner", async (req, res) => {
         res.status(500).json({ error: "Failed to generate budget plan" });
     }
 });
+
 
 app.post("/model-advice", isAuthenticated, async (req, res) => {
     try {
@@ -228,7 +309,7 @@ app.post("/model-advice", isAuthenticated, async (req, res) => {
             `Timeframe: ${rec.timeframe} months\n` +
             `------------------------`
         ).join('\n');
-        
+
         res.status(200).json({
             success: true,
             advice: formattedAdvice,
@@ -382,54 +463,105 @@ app.post("/advice", isAuthenticated, async (req, res) => {
 
 app.post("/invest", isAuthenticated, async (req, res) => {
     const { investments, goals } = req.body;
-
+  
     if (!Array.isArray(investments) || !Array.isArray(goals)) {
-        return res.status(400).json({ error: "Investments and goals required." });
+      return res.status(400).json({ error: "Investments and goals required." });
     }
-
+  
     try {
-        const stockData = await Promise.all(investments.map(async ({ symbol, amount }) => {
-            const response = await axios.get(
-                `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`
-            );
-
-            return {
-                symbol,
-                amount,
-                currentPrice: response.data.c,
-                high: response.data.h,
-                low: response.data.l,
-                open: response.data.o,
-                close: response.data.pc,
-            };
-        }));
-
-        const prompt = `
-        The user has invested in:
-
-        ${stockData.map(stock => `
-        - ${stock.symbol}
-            - Amount: $${stock.amount}
-            - Price: $${stock.currentPrice}
-            - High: $${stock.high}, Low: $${stock.low}, Open: $${stock.open}, Close: $${stock.close}
-        `).join("")}
-
-        Goals: ${goals.join(", ")}
-
-        What should the user do? Buy, sell, or hold? Base advice on goals and performance.
-        `;
-
-        const gptResponse = await openai.chat.completions.create({
-            model: "gpt-4",
-            messages: [{ role: "user", content: prompt }],
-        });
-
-        const answer = gptResponse.choices[0].message.content;
-        res.status(200).json({ invest: answer });
+      const stockData = await Promise.all(
+        investments.map(async ({ symbol, amount }) => {
+          const quoteResponse = await axios.get(`https://finnhub.io/api/v1/quote`, {
+            params: { symbol, token: FINNHUB_API_KEY },
+          });
+          const profileResponse = await axios.get(`https://finnhub.io/api/v1/stock/profile2`, {
+            params: { symbol, token: FINNHUB_API_KEY },
+          });
+          const metricResponse = await axios.get(`https://finnhub.io/api/v1/stock/metric`, {
+            params: { symbol, metric: "all", token: FINNHUB_API_KEY },
+          });
+          const metric = metricResponse.data.metric || {};
+          const fiftyTwoWeekHigh = metric["52WeekHigh"] ?? null;
+          const fiftyTwoWeekLow = metric["52WeekLow"] ?? null;
+  
+          return {
+            symbol,
+            amount,
+            currentPrice: quoteResponse.data.c,
+            fiftyTwoWeekHigh,
+            fiftyTwoWeekLow,
+            companyName: profileResponse.data.name,
+            companyDescription: profileResponse.data.finnhubIndustry,
+            businessSummary: profileResponse.data.weburl
+              ? `More at ${profileResponse.data.weburl}`
+              : "",
+          };
+        })
+      );
+  
+      const prompt = `
+  You are a professional investment advisor.
+  
+  The user has invested in the following stocks:
+  
+  ${stockData
+    .map(
+      (stock) => `
+  ### ${stock.companyName} (${stock.symbol})
+  
+  - **Sector:** ${stock.companyDescription}
+  - **Business Focus:** Briefly describe what the company sells or produces in one clear sentence.
+  - **Current Stock Price:** $${stock.currentPrice}
+  - **52-Week High:** ${stock.fiftyTwoWeekHigh !== null ? `$${stock.fiftyTwoWeekHigh}` : "Data unavailable"}
+  - **52-Week Low:** ${stock.fiftyTwoWeekLow  !== null ? `$${stock.fiftyTwoWeekLow}`  : "Data unavailable"}
+  `
+    )
+    .join("\n")}
+  
+  ---
+  
+  ### User's Investment Goals:
+  ${goals.map((goal, i) => `${i + 1}. ${goal}`).join("\n")}
+  
+  ---
+  
+  ### Your Task:
+  
+  - **Part 1: Company Overview**
+    - For each company:
+      - Very briefly describe the sector and what the company produces or sells (maximum 2 short sentences).
+  
+  - **Part 2: Stock Information**
+    - For each stock:
+      - Show:
+        - **Current Stock Price** ($)
+        - **52-Week High** ($)
+        - **52-Week Low** ($)
+  
+  - **Part 3: Investment Advice**
+    - If the user's goals seem unrealistic or too high:
+      - Show only this single sentence and end the response: 
+        > **"This goal may be unrealistic or require a very long time to achieve."**
+      - Do not provide any BUY, SELL, or HOLD advice.
+    - Otherwise:
+      - For each stock:
+        - Recommend: **BUY**, **SELL**, or **HOLD** based on the current stock data and user's goals.
+        
+  - Keep the language professional, well-structured with clear sections and bullet points.
+  - Always show actual numerical values where applicable.
+  `;
+  
+      const gptResponse = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [{ role: "user", content: prompt }],
+      });
+  
+      res.status(200).json({ invest: gptResponse.choices[0].message.content });
     } catch (error) {
-        res.status(500).json({ error: "Investment analysis failed." });
+      console.error(error);
+      res.status(500).json({ error: "Investment analysis failed." });
     }
-});
+  });
 
 app.post("/addNote", isAuthenticated, (req, res) => {
     const { title, content } = req.body;
@@ -735,22 +867,22 @@ app.get("/get-investment-advice", isAuthenticated, (req, res) => {
 app.post("/save-budget-plan", (req, res) => {
     const { plan } = req.body;
     console.log("Received plan:", plan);
-  
+
     if (!plan || plan.trim().length === 0) {
-      return res.status(400).json({ error: "Budget plan is required" });
+        return res.status(400).json({ error: "Budget plan is required" });
     }
-  
+
     const sql = "INSERT INTO budgetplannerAi (response) VALUES (?)";
     db.query(sql, [plan], (err, result) => {
-      if (err) {
-        console.error("Error saving budget plan:", err);
-        return res.status(500).json({ error: "Failed to save budget plan" });
-      }
-      res.status(201).json({ message: "Budget plan saved successfully" });
+        if (err) {
+            console.error("Error saving budget plan:", err);
+            return res.status(500).json({ error: "Failed to save budget plan" });
+        }
+        res.status(201).json({ message: "Budget plan saved successfully" });
     });
-  });
+});
 
-  app.get("/get-budget-planner", isAuthenticated, (req, res) => {
+app.get("/get-budget-planner", isAuthenticated, (req, res) => {
     const sql = "SELECT id, response AS fullResponse, LEFT(response, 100) AS summary FROM budgetplannerAi";
     db.query(sql, (err, results) => {
         if (err) {
