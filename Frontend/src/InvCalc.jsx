@@ -17,7 +17,7 @@ function InvestCalc() {
     const div = parseFloat(dividend);
     const sh = parseFloat(shares);
 
-    if (!bp || !cp || !div || !sh || isNaN(bp) || isNaN(cp) || isNaN(div) || isNaN(sh)) {
+    if (!bp || !cp || !sh || isNaN(bp) || isNaN(cp) || isNaN(sh)) {
       alert("Please fill in all fields with valid values!");
       return;
     }

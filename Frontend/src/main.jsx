@@ -13,7 +13,7 @@ import CurrencyCalc from './CurenCalc';
 import Login from './login';
 import SignUP from './signup';
 import News from './articles';
-import ArticleDetails from './ArticleDetails';
+import ArticleDetails from './assets/ArticleDetails';
 import Profile from './profile';
 import PerArticles from './PerArticles';
 import './styles/index.css';

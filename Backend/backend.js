@@ -761,7 +761,6 @@ app.post("/save-budget-plan", (req, res) => {
     });
 });
 
-
 app.post("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy((err) => {
@@ -785,3 +784,15 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+
+
+
+
+
+
+
+
+
+

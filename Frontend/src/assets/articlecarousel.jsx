@@ -1,12 +1,12 @@
-/*import React, { useState } from "react";
-import { Link } from "react-router";
+import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const ArticleCarousel = ({ articles }) => {
+const ArticleCarousel = ({ articles, onArticleSelect }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Group articles in chunks of 3
   const groupedArticles = [];
-  for (let i = 0; i < Math.floor(articles.length / 3) * 3; i += 3) {
+  for (let i = 0; i < articles.length; i += 3) {
     groupedArticles.push(articles.slice(i, i + 3));
   }
 
@@ -33,10 +33,9 @@ const ArticleCarousel = ({ articles }) => {
       <div className="mt-6 px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {groupedArticles[currentSlide].map((article) => (
-            <Link
-              key={article.id}
-              to="/article"
-              state={article}
+            <div
+              key={article.uuid}
+              onClick={() => onArticleSelect(article)}
               className="cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition transform hover:scale-105"
             >
               <div className="bg-white text-black">
@@ -44,6 +43,9 @@ const ArticleCarousel = ({ articles }) => {
                   src={article.image}
                   className="w-full h-40 object-cover"
                   alt={article.title}
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/400x200?text=News+Image';
+                  }}
                 />
                 <div className="p-4 h-32 flex flex-col justify-center">
                   <h3 className="text-xl font-semibold text-center line-clamp-3">
@@ -51,7 +53,7 @@ const ArticleCarousel = ({ articles }) => {
                   </h3>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
@@ -59,4 +61,4 @@ const ArticleCarousel = ({ articles }) => {
   );
 };
 
-export default ArticleCarousel;*/
+export default ArticleCarousel;
