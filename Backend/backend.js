@@ -307,7 +307,7 @@ app.post("/budgetplanner", async (req, res) => {
 });
 
 
-app.post("/model-advice", isAuthenticated, async (req, res) => {
+app.post("/model-advice", async (req, res) => {
     try {
         const { income, expenses, goal, timeframe } = req.body;
 
@@ -474,7 +474,7 @@ app.post("/advice", isAuthenticated, async (req, res) => {
     }
 });
 
-app.post("/invest", isAuthenticated, async (req, res) => {
+app.post("/invest", async (req, res) => {
     const { investments, goals } = req.body;
 
     if (!Array.isArray(investments) || !Array.isArray(goals)) {
