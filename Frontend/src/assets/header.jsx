@@ -82,7 +82,7 @@ function Header({ onLogoClick }) {
       <div className="flex flex-row justify-end items-center">
         <Link
           to="/stocks"
-          className="bg-green-200 pl-3 pr-3 pt-2 pb-2 mr-11 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
+          className="bg-blue-100 pl-3 pr-3 pt-2 pb-2 mr-11 rounded-2xl text-xl text-blue-950 font-bold hover:scale-110 transition-transform hover:duration-200 active:scale-85 active:duration-50"
         >
           Stocks
         </Link>
