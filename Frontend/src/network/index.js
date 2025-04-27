@@ -167,8 +167,6 @@ const Invest = async (investments, goals, setInvest) => {
     const response = await axios.post("http://localhost:8000/invest", {
         investments,
         goals
-    }, {
-        withCredentials: true, // za biskwitki
     });
 
     if (response.status !== 200) {
@@ -180,19 +178,11 @@ const Invest = async (investments, goals, setInvest) => {
     } else {
         throw new Error("No advice received from the backend.");
     }
-} catch (error) {
+  } catch (error) {
     console.error("Error:", error);
-
-
-    if (error.response && error.response.status === 401) {
-        alert("Access denied. Please log in to access this resource.");
-        window.location.href = "/login";
-    } else {
-        alert(`Something went wrong: ${error.message}`);
-    }
-}
+    alert(`Something went wrong: ${error.message}`);
+  }
 };
-
 /////////////////////////////////////////////////////////////////////
 const BudgetPlanner = async (income, expenses, familySize, goals, setPlan) => {
   if (!income || isNaN(income) || !expenses || isNaN(expenses) || !familySize || isNaN(familySize) || !goals || goals.trim() === "") {

@@ -176,7 +176,7 @@ async function getStockData(symbol) {
     }
 }*/
 
-app.post("/budgetplanner", isAuthenticated, async (req, res) => {
+app.post("/budgetplanner", async (req, res) => {
     const { income, expenses, familySize, goals, savingsGoalAmount, savingsGoalPeriodMonths } = req.body;
 
     if (!income || !expenses || !familySize || !goals || goals.trim() === "") {
@@ -188,9 +188,7 @@ app.post("/budgetplanner", isAuthenticated, async (req, res) => {
 
     if (monthlySavingsNeeded > availableBudget) {
         return res.status(400).json({
-            error: `With the current budget, your financial goal is not achievable. You need $${monthlySavingsNeeded.toFixed(2)} per month, but you only have $${availableBudget.toFixed(2)} available. 
-            
-            Creating a stable budget is currently impossible. Please consider taking a loan, increasing income, or reducing expenses.`,
+            error: `With the current budget, your financial goal is not achievable. You need $${monthlySavingsNeeded.toFixed(2)} per month, but you only have $${availableBudget.toFixed(2)} available.`,
         });
     }
 
@@ -199,9 +197,7 @@ app.post("/budgetplanner", isAuthenticated, async (req, res) => {
 
     if (foodBudgetMonthly > availableBudget) {
         return res.status(400).json({
-            error: `With the current budget, you cannot afford basic food expenses for ${familySize} family members. 
-            
-            Budget planning is impossible without taking additional measures such as reducing expenses, increasing income, or considering a small loan.`,
+            error: `With the current budget, you cannot afford basic food expenses for ${familySize} family members.`,
         });
     }
 
@@ -209,9 +205,7 @@ app.post("/budgetplanner", isAuthenticated, async (req, res) => {
 
     if (monthlySavingsNeeded > remainingBudgetAfterFood) {
         return res.status(400).json({
-            error: `After covering food expenses, you cannot meet your savings goal. 
-            
-            Creating a full budget plan is currently not possible. Please review your financial priorities, reduce optional expenses, or consider financial assistance.`,
+            error: `After covering food expenses, you cannot meet your savings goal.`,
         });
     }
 
@@ -232,7 +226,7 @@ app.post("/budgetplanner", isAuthenticated, async (req, res) => {
     const { essentials, entertainment, savings, investments } = distributeRemainingBudget(remainingBudgetAfterFood);
 
     const prompt = `
-    Act as a professional financial advisor.
+  Act as a professional financial advisor.
 
     Based on the following user's data:
     - Monthly Income: $${income}
@@ -305,20 +299,7 @@ app.post("/budgetplanner", isAuthenticated, async (req, res) => {
 
         const budgetPlan = response.choices[0].message.content;
 
-        const stats = {
-            totalIncome: income,
-            totalExpenses: expenses,
-            totalFoodBudget: foodBudgetMonthly,
-            remainingAfterFood: remainingBudgetAfterFood,
-            requiredSavings: monthlySavingsNeeded,
-            availableForOtherCategories: remainingBudgetAfterFood - monthlySavingsNeeded,
-            essentialsBudget: essentials,
-            entertainmentBudget: entertainment,
-            savingsBudget: savings,
-            investmentsBudget: investments,
-        };
-
-        res.status(200).json({ plan: budgetPlan, stats });
+        res.status(200).json({ plan: budgetPlan });
     } catch (err) {
         console.error("Error generating budget plan:", err);
         res.status(500).json({ error: "Failed to generate budget plan" });
